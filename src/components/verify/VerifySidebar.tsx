@@ -7,36 +7,43 @@ import {
   Shuffle,
   Globe,
   Server,
-  Webhook,
-  CheckCircle2,
   Code,
   AlertTriangle,
   ArrowLeft,
   Package,
 } from "lucide-react";
 import valydWordmark from "@/assets/valyd-wordmark.png";
+import { ModeSwitchCompact, type VerifyMode } from "./ModeSwitch";
 
 interface Item {
   id: string;
   label: string;
   icon?: React.ReactNode;
   indent?: boolean;
+  /** Modes this item belongs to. Omit = shown in both modes. */
+  modes?: VerifyMode[];
 }
 
 const guides: Item[] = [
   { id: "intro", label: "Introduction", icon: <BookOpen className="h-4 w-4" /> },
   { id: "quickstart", label: "Quickstart", icon: <Zap className="h-4 w-4" /> },
   { id: "console", label: "Developer Console", icon: <LayoutDashboard className="h-4 w-4" /> },
-  { id: "modes", label: "Hosted vs Standalone", icon: <Shuffle className="h-4 w-4" /> },
-  { id: "hosted", label: "Hosted Verification", icon: <Globe className="h-4 w-4" /> },
-  { id: "hosted-overview", label: "Overview", indent: true },
-  { id: "hosted-products", label: "The two products", indent: true },
-  { id: "hosted-steps", label: "Integration steps", indent: true },
-  { id: "hosted-webhooks", label: "Webhooks", indent: true },
-  { id: "hosted-decision", label: "Reading the decision", indent: true },
-  { id: "hosted-statuses", label: "Statuses", indent: true },
-  { id: "hosted-api", label: "API reference", indent: true },
-  { id: "standalone", label: "Standalone APIs", icon: <Server className="h-4 w-4" /> },
+  { id: "modes", label: "Choose your integration", icon: <Shuffle className="h-4 w-4" /> },
+
+  // Hosted
+  { id: "hosted", label: "Hosted Verification", icon: <Globe className="h-4 w-4" />, modes: ["hosted"] },
+  { id: "hosted-overview", label: "Overview", indent: true, modes: ["hosted"] },
+  { id: "hosted-products", label: "The two products", indent: true, modes: ["hosted"] },
+  { id: "hosted-steps", label: "Integration steps", indent: true, modes: ["hosted"] },
+  { id: "hosted-webhooks", label: "Webhooks", indent: true, modes: ["hosted"] },
+  { id: "hosted-decision", label: "Reading the decision", indent: true, modes: ["hosted"] },
+  { id: "hosted-statuses", label: "Statuses", indent: true, modes: ["hosted"] },
+  { id: "hosted-api", label: "API reference", indent: true, modes: ["hosted"] },
+
+  // Standalone
+  { id: "standalone", label: "Standalone APIs", icon: <Server className="h-4 w-4" />, modes: ["standalone"] },
+
+  // Shared
   { id: "sdk", label: "Node SDK", icon: <Package className="h-4 w-4" /> },
   { id: "sdk-install", label: "Install & init", indent: true },
   { id: "sdk-config", label: "Constructor options", indent: true },
@@ -45,24 +52,26 @@ const guides: Item[] = [
   { id: "sdk-errors", label: "Error handling", indent: true },
   { id: "sdk-quickstarts", label: "Quickstarts", indent: true },
   { id: "sdk-webhook", label: "Express webhook", indent: true },
-  { id: "webhooks", label: "Webhooks", icon: <Webhook className="h-4 w-4" /> },
-  { id: "statuses", label: "Statuses & decisioning", icon: <CheckCircle2 className="h-4 w-4" /> },
 ];
 
 const apiRef: Item[] = [
-  { id: "api-sessions", label: "Sessions", icon: <Code className="h-4 w-4" /> },
-  { id: "api-workflows", label: "Workflows", icon: <Code className="h-4 w-4" /> },
-  { id: "api-standalone", label: "Standalone checks", icon: <Code className="h-4 w-4" /> },
-  { id: "api-decision", label: "Decision", icon: <Code className="h-4 w-4" /> },
+  { id: "api-sessions", label: "Sessions", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
+  { id: "api-workflows", label: "Workflows", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
+  { id: "api-standalone", label: "Standalone checks", icon: <Code className="h-4 w-4" />, modes: ["standalone"] },
+  { id: "api-decision", label: "Decision", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
   { id: "api-errors", label: "Errors & rate limits", icon: <AlertTriangle className="h-4 w-4" /> },
 ];
 
 interface Props {
   active: string;
   onClick: (id: string) => void;
+  mode: VerifyMode;
+  onModeChange: (m: VerifyMode) => void;
 }
 
-export const VerifySidebar = ({ active, onClick }: Props) => {
+const inMode = (item: Item, mode: VerifyMode) => !item.modes || item.modes.includes(mode);
+
+export const VerifySidebar = ({ active, onClick, mode, onModeChange }: Props) => {
   const renderItem = (item: Item) => (
     <li key={item.id}>
       <button
@@ -85,6 +94,9 @@ export const VerifySidebar = ({ active, onClick }: Props) => {
     </li>
   );
 
+  const visibleGuides = guides.filter((i) => inMode(i, mode));
+  const visibleApiRef = apiRef.filter((i) => inMode(i, mode));
+
   return (
     <aside className="w-64 border-r border-border bg-sidebar h-screen sticky top-0 overflow-y-auto">
       <div className="px-6 pt-7 pb-5 border-b border-border">
@@ -106,16 +118,23 @@ export const VerifySidebar = ({ active, onClick }: Props) => {
 
         <div>
           <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
+            Integration
+          </p>
+          <ModeSwitchCompact mode={mode} onModeChange={onModeChange} />
+        </div>
+
+        <div>
+          <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
             Guides
           </p>
-          <ul className="space-y-1">{guides.map(renderItem)}</ul>
+          <ul className="space-y-1">{visibleGuides.map(renderItem)}</ul>
         </div>
 
         <div>
           <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
             API Reference
           </p>
-          <ul className="space-y-1">{apiRef.map(renderItem)}</ul>
+          <ul className="space-y-1">{visibleApiRef.map(renderItem)}</ul>
         </div>
       </nav>
     </aside>

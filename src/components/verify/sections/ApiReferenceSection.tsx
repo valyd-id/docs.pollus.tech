@@ -1,6 +1,7 @@
 import { CodeBlock } from "@/components/docs/CodeBlock";
 import { VERIFY_CONFIG } from "@/lib/verify-config";
 import { Code, AlertTriangle } from "lucide-react";
+import type { VerifyMode } from "../ModeSwitch";
 
 const BASE = VERIFY_CONFIG.API_BASE_URL;
 
@@ -12,8 +13,9 @@ const Row = ({ method, path, desc }: { method: string; path: string; desc: strin
   </tr>
 );
 
-export const ApiReferenceSection = () => (
+export const ApiReferenceSection = ({ mode }: { mode: VerifyMode }) => (
   <div className="space-y-12">
+    {mode === "hosted" && (
     <section id="api-sessions" className="scroll-mt-8 space-y-4">
       <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
         <Code className="h-6 w-6 text-primary" /> Sessions
@@ -29,16 +31,31 @@ export const ApiReferenceSection = () => (
         </table>
       </div>
     </section>
+    )}
 
+    {mode === "hosted" && (
     <section id="api-workflows" className="scroll-mt-8 space-y-4">
       <h2 className="text-2xl font-bold text-foreground">Workflows</h2>
       <p className="text-sm text-muted-foreground">
-        Workflows are configured in the Developer Console. A workflow bundles services
-        (id_verification, liveness, face_match, age, credential) and exposes a stable{" "}
-        <code>workflow_id</code> you pass when creating a session.
+        A workflow bundles services (id_verification, liveness, face_match, age,
+        credential) and exposes a stable <code>workflow_id</code> you pass when creating a
+        session. Create them in the Developer Console, or manage them over the API:
       </p>
+      <div className="border border-border rounded-lg overflow-hidden">
+        <table className="w-full text-sm">
+          <tbody>
+            <Row method="GET"    path="/api/v2/workflows" desc="List workflows" />
+            <Row method="POST"   path="/api/v2/workflows" desc="Create a workflow" />
+            <Row method="GET"    path="/api/v2/workflows/{id}" desc="Retrieve a workflow" />
+            <Row method="PATCH"  path="/api/v2/workflows/{id}" desc="Update a workflow" />
+            <Row method="DELETE" path="/api/v2/workflows/{id}" desc="Delete a workflow" />
+          </tbody>
+        </table>
+      </div>
     </section>
+    )}
 
+    {mode === "standalone" && (
     <section id="api-standalone" className="scroll-mt-8 space-y-4">
       <h2 className="text-2xl font-bold text-foreground">Standalone checks</h2>
       <div className="border border-border rounded-lg overflow-hidden">
@@ -49,11 +66,22 @@ export const ApiReferenceSection = () => (
             <Row method="POST" path="/api/v2/face-match" desc="Selfie vs reference portrait" />
             <Row method="POST" path="/api/v2/age-verification" desc="Age bands from a DOB" />
             <Row method="POST" path="/api/v2/credential-verification" desc="Professional license lookup" />
+            <Row method="POST" path="/api/v2/kyc-credential" desc="ID + liveness + face match, then license matched to the OCR'd name (one call)" />
+          </tbody>
+        </table>
+      </div>
+      <div className="border border-border rounded-lg overflow-hidden">
+        <table className="w-full text-sm">
+          <tbody>
+            <Row method="GET" path="/api/v2/credential/states" desc="List supported states/regions for credentials" />
+            <Row method="GET" path="/api/v2/credential/states/{state}/providers" desc="License types + providers for a state" />
           </tbody>
         </table>
       </div>
     </section>
+    )}
 
+    {mode === "hosted" && (
     <section id="api-decision" className="scroll-mt-8 space-y-4">
       <h2 className="text-2xl font-bold text-foreground">Decision</h2>
       <div className="border border-border rounded-lg overflow-hidden">
@@ -68,6 +96,7 @@ export const ApiReferenceSection = () => (
         code={`curl ${BASE}/api/v2/session/SES_ID/decision -H "X-API-Key: $VALYD_API_KEY"`}
       />
     </section>
+    )}
 
     <section id="api-errors" className="scroll-mt-8 space-y-4">
       <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">

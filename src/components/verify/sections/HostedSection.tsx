@@ -371,6 +371,11 @@ function verifyValydSignature(rawBody, headers, secret) {
         The webhook is a <strong>notification</strong>. For the full check breakdown, call the
         decision endpoint below.
       </p>
+      <p className="text-sm text-muted-foreground">
+        <strong>Delivery:</strong> respond <code>2xx</code> fast (defer heavy work to a queue).
+        Non-2xx responses are retried with exponential backoff; use <code>X-Valyd-Event-Id</code>{" "}
+        to dedupe.
+      </p>
     </div>
 
     {/* Decision */}
