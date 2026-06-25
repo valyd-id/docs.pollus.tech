@@ -1,13 +1,18 @@
 import { Shuffle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ModeSwitch, type VerifyMode } from "../ModeSwitch";
+import { ProductSwitch, type VerifyProduct } from "../ProductSwitch";
 
 export const ModesSection = ({
   mode,
   onModeChange,
+  product,
+  onProductChange,
 }: {
   mode: VerifyMode;
   onModeChange: (m: VerifyMode) => void;
+  product: VerifyProduct;
+  onProductChange: (p: VerifyProduct) => void;
 }) => (
   <section id="modes" className="scroll-mt-8 space-y-6">
     <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -19,6 +24,15 @@ export const ModesSection = ({
     </p>
 
     <ModeSwitch mode={mode} onModeChange={onModeChange} />
+
+    {mode === "hosted" && (
+      <div className="space-y-3">
+        <p className="text-sm font-medium text-foreground">
+          Hosted has two products — pick one:
+        </p>
+        <ProductSwitch product={product} onProductChange={onProductChange} />
+      </div>
+    )}
 
     <div className="border border-border rounded-lg overflow-hidden">
       <table className="w-full text-sm">

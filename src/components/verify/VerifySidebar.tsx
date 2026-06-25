@@ -14,14 +14,17 @@ import {
 } from "lucide-react";
 import valydWordmark from "@/assets/valyd-wordmark.png";
 import { ModeSwitchCompact, type VerifyMode } from "./ModeSwitch";
+import { ProductSwitchCompact, type VerifyProduct } from "./ProductSwitch";
 
 interface Item {
   id: string;
   label: string;
   icon?: React.ReactNode;
   indent?: boolean;
-  /** Modes this item belongs to. Omit = shown in both modes. */
+  /** Modes this item belongs to. Omit = shown in all modes. */
   modes?: VerifyMode[];
+  /** Hosted products this item belongs to. Omit = shown for both products. */
+  products?: VerifyProduct[];
 }
 
 const guides: Item[] = [
@@ -30,15 +33,22 @@ const guides: Item[] = [
   { id: "console", label: "Developer Console", icon: <LayoutDashboard className="h-4 w-4" /> },
   { id: "modes", label: "Choose your integration", icon: <Shuffle className="h-4 w-4" /> },
 
-  // Hosted
-  { id: "hosted", label: "Hosted Verification", icon: <Globe className="h-4 w-4" />, modes: ["hosted"] },
-  { id: "hosted-overview", label: "Overview", indent: true, modes: ["hosted"] },
-  { id: "hosted-products", label: "The two products", indent: true, modes: ["hosted"] },
-  { id: "hosted-steps", label: "Integration steps", indent: true, modes: ["hosted"] },
-  { id: "hosted-webhooks", label: "Webhooks", indent: true, modes: ["hosted"] },
-  { id: "hosted-decision", label: "Reading the decision", indent: true, modes: ["hosted"] },
-  { id: "hosted-statuses", label: "Statuses", indent: true, modes: ["hosted"] },
-  { id: "hosted-api", label: "API reference", indent: true, modes: ["hosted"] },
+  // Hosted · Managed by Valyd
+  { id: "hosted", label: "Managed by Valyd", icon: <Globe className="h-4 w-4" />, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-register", label: "1 · Register your app", indent: true, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-login", label: "2 · Login with Valyd", indent: true, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-callback", label: "3 · Exchange the code", indent: true, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-session", label: "4 · Create a session", indent: true, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-redirect", label: "5 · Redirect the user", indent: true, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-writeback", label: "6 · Write-back", indent: true, modes: ["hosted"], products: ["managed"] },
+  { id: "managed-result", label: "7 · Read the result", indent: true, modes: ["hosted"], products: ["managed"] },
+
+  // Hosted · Verify fresh every time
+  { id: "hosted", label: "Verify fresh every time", icon: <Globe className="h-4 w-4" />, modes: ["hosted"], products: ["fresh"] },
+  { id: "hosted-fresh-workflow", label: "1 · Create a workflow", indent: true, modes: ["hosted"], products: ["fresh"] },
+  { id: "hosted-fresh-session", label: "2 · Create a session", indent: true, modes: ["hosted"], products: ["fresh"] },
+  { id: "hosted-fresh-redirect", label: "3 · Redirect the user", indent: true, modes: ["hosted"], products: ["fresh"] },
+  { id: "hosted-fresh-result", label: "4 · Read the result", indent: true, modes: ["hosted"], products: ["fresh"] },
 
   // Standalone
   { id: "standalone", label: "Standalone APIs", icon: <Server className="h-4 w-4" />, modes: ["standalone"] },
@@ -67,11 +77,18 @@ interface Props {
   onClick: (id: string) => void;
   mode: VerifyMode;
   onModeChange: (m: VerifyMode) => void;
+  product: VerifyProduct;
+  onProductChange: (p: VerifyProduct) => void;
 }
 
-const inMode = (item: Item, mode: VerifyMode) => !item.modes || item.modes.includes(mode);
+const visible = (item: Item, mode: VerifyMode, product: VerifyProduct) => {
+  if (item.modes && !item.modes.includes(mode)) return false;
+  // product filter only applies inside hosted
+  if (mode === "hosted" && item.products && !item.products.includes(product)) return false;
+  return true;
+};
 
-export const VerifySidebar = ({ active, onClick, mode, onModeChange }: Props) => {
+export const VerifySidebar = ({ active, onClick, mode, onModeChange, product, onProductChange }: Props) => {
   const renderItem = (item: Item) => (
     <li key={item.id}>
       <button
@@ -94,8 +111,8 @@ export const VerifySidebar = ({ active, onClick, mode, onModeChange }: Props) =>
     </li>
   );
 
-  const visibleGuides = guides.filter((i) => inMode(i, mode));
-  const visibleApiRef = apiRef.filter((i) => inMode(i, mode));
+  const visibleGuides = guides.filter((i) => visible(i, mode, product));
+  const visibleApiRef = apiRef.filter((i) => visible(i, mode, product));
 
   return (
     <aside className="w-64 border-r border-border bg-sidebar h-screen sticky top-0 overflow-y-auto">
@@ -121,6 +138,11 @@ export const VerifySidebar = ({ active, onClick, mode, onModeChange }: Props) =>
             Integration
           </p>
           <ModeSwitchCompact mode={mode} onModeChange={onModeChange} />
+          {mode === "hosted" && (
+            <div className="mt-2">
+              <ProductSwitchCompact product={product} onProductChange={onProductChange} />
+            </div>
+          )}
         </div>
 
         <div>

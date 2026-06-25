@@ -2,17 +2,19 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { VerifySidebar } from "@/components/verify/VerifySidebar";
 import { ModeSwitchCompact, type VerifyMode } from "@/components/verify/ModeSwitch";
+import { type VerifyProduct } from "@/components/verify/ProductSwitch";
 import valydWordmark from "@/assets/valyd-wordmark.png";
 import { IntroSection } from "@/components/verify/sections/IntroSection";
 import { QuickstartSection } from "@/components/verify/sections/QuickstartSection";
 import { ConsoleSection } from "@/components/verify/sections/ConsoleSection";
 import { ModesSection } from "@/components/verify/sections/ModesSection";
-import { HostedSection } from "@/components/verify/sections/HostedSection";
+import { ManagedSection } from "@/components/verify/sections/ManagedSection";
+import { VerifyFreshSection } from "@/components/verify/sections/VerifyFreshSection";
 import { StandaloneSection } from "@/components/verify/sections/StandaloneSection";
 import { SdkSection } from "@/components/verify/sections/SdkSection";
 import { ApiReferenceSection } from "@/components/verify/sections/ApiReferenceSection";
 
-// Section ids per mode, used for scroll-spy. Shared ids appear in both.
+// Section ids per path, used for scroll-spy. Shared ids appear everywhere.
 const SHARED_IDS = ["intro", "quickstart", "console", "modes"];
 const SDK_IDS = [
   "sdk",
@@ -24,39 +26,52 @@ const SDK_IDS = [
   "sdk-quickstarts",
   "sdk-webhook",
 ];
-const HOSTED_IDS = [
+const HOSTED_API_IDS = ["api-sessions", "api-workflows", "api-decision", "api-errors"];
+const MANAGED_IDS = [
   "hosted",
-  "hosted-overview",
-  "hosted-products",
-  "hosted-steps",
-  "hosted-webhooks",
-  "hosted-decision",
-  "hosted-statuses",
-  "hosted-api",
+  "managed-register",
+  "managed-login",
+  "managed-callback",
+  "managed-session",
+  "managed-redirect",
+  "managed-writeback",
+  "managed-result",
   ...SDK_IDS,
-  "api-sessions",
-  "api-workflows",
-  "api-decision",
-  "api-errors",
+  ...HOSTED_API_IDS,
+];
+const FRESH_IDS = [
+  "hosted",
+  "hosted-fresh-workflow",
+  "hosted-fresh-session",
+  "hosted-fresh-redirect",
+  "hosted-fresh-result",
+  ...SDK_IDS,
+  ...HOSTED_API_IDS,
 ];
 const STANDALONE_IDS = ["standalone", ...SDK_IDS, "api-standalone", "api-errors"];
 
 const readModeFromUrl = (): VerifyMode =>
   new URLSearchParams(window.location.search).get("mode") === "standalone" ? "standalone" : "hosted";
+const readProductFromUrl = (): VerifyProduct =>
+  new URLSearchParams(window.location.search).get("product") === "fresh" ? "fresh" : "managed";
 
 const VerifyDocs = () => {
   const [active, setActive] = useState("intro");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mode, setMode] = useState<VerifyMode>(readModeFromUrl);
+  const [product, setProduct] = useState<VerifyProduct>(readProductFromUrl);
 
-  const sectionIds = [...SHARED_IDS, ...(mode === "hosted" ? HOSTED_IDS : STANDALONE_IDS)];
+  const hostedIds = product === "managed" ? MANAGED_IDS : FRESH_IDS;
+  const sectionIds = [...SHARED_IDS, ...(mode === "hosted" ? hostedIds : STANDALONE_IDS)];
 
-  // Keep ?mode= in the URL so a chosen mode is shareable/bookmarkable.
+  // Keep ?mode=&product= in the URL so a chosen path is shareable/bookmarkable.
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("mode", mode);
+    if (mode === "hosted") url.searchParams.set("product", product);
+    else url.searchParams.delete("product");
     window.history.replaceState({}, "", url);
-  }, [mode]);
+  }, [mode, product]);
 
   const handleClick = (id: string) => {
     setActive(id);
@@ -64,12 +79,18 @@ const VerifyDocs = () => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleModeChange = (m: VerifyMode) => {
-    setMode(m);
-    // Jump to the chooser so the reader sees the content swap in context.
+  const jumpToChooser = () =>
     requestAnimationFrame(() =>
       document.getElementById("modes")?.scrollIntoView({ behavior: "smooth", block: "start" })
     );
+
+  const handleModeChange = (m: VerifyMode) => {
+    setMode(m);
+    jumpToChooser();
+  };
+  const handleProductChange = (p: VerifyProduct) => {
+    setProduct(p);
+    jumpToChooser();
   };
 
   useEffect(() => {
@@ -87,7 +108,7 @@ const VerifyDocs = () => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [mode, product]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -107,7 +128,7 @@ const VerifyDocs = () => {
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileOpen(false)}>
           <div className="w-64 h-full" onClick={(e) => e.stopPropagation()}>
-            <VerifySidebar active={active} onClick={handleClick} mode={mode} onModeChange={handleModeChange} />
+            <VerifySidebar active={active} onClick={handleClick} mode={mode} onModeChange={handleModeChange} product={product} onProductChange={handleProductChange} />
           </div>
         </div>
       )}
@@ -122,9 +143,15 @@ const VerifyDocs = () => {
             <IntroSection />
             <QuickstartSection />
             <ConsoleSection />
-            <ModesSection mode={mode} onModeChange={handleModeChange} />
+            <ModesSection mode={mode} onModeChange={handleModeChange} product={product} onProductChange={handleProductChange} />
 
-            {mode === "hosted" ? <HostedSection /> : <StandaloneSection />}
+            {mode === "standalone" ? (
+              <StandaloneSection />
+            ) : product === "managed" ? (
+              <ManagedSection />
+            ) : (
+              <VerifyFreshSection />
+            )}
 
             <SdkSection />
 
