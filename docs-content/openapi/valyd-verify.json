@@ -1,0 +1,519 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Valyd Verify API",
+    "version": "2.0.0",
+    "summary": "Hosted and server-to-server identity verification: ID checks, liveness, face match, age, and credential verification.",
+    "description": "REST API for Valyd Verify (`/api/v2`).\n\n- **Hosted** — create a session with a `workflow_id`, redirect the user to the returned hosted `url`, receive a signed webhook on a terminal state, then pull the authoritative result from `GET /api/v2/session/{id}/decision`. The redirect-back `?status=` is a hint only — never treat it as final.\n- **Standalone** — call individual check endpoints (`/api/v2/id-verification`, `/liveness`, `/face-match`, `/age-verification`, `/credential-verification`, `/kyc-credential`) directly for a synchronous result.\n\nAll responses use a `{ success, data, error }` envelope. Authenticate with `X-API-Key: <App API key>` (a Bearer token with the same key is also accepted). API keys are created by a human in the Developer Console — not via API.",
+    "contact": { "name": "Valyd Developer Docs", "url": "https://{{DOCS_BASE_URL}}/verify/intro.md" },
+    "license": { "name": "Proprietary", "url": "https://{{DOCS_BASE_URL}}" }
+  },
+  "servers": [
+    { "url": "https://{{VERIFY_BASE_URL}}", "description": "Valyd Verify host" }
+  ],
+  "tags": [
+    { "name": "Sessions", "description": "Hosted verification sessions and their decisions." },
+    { "name": "Standalone", "description": "Synchronous server-to-server checks." },
+    { "name": "Credentials", "description": "Professional-license provider directory." },
+    { "name": "Workflows", "description": "Service bundles for hosted sessions. NOTE: these paths are inferred from the Node SDK; the API reference does not confirm a REST endpoint to manage workflows. Confirm against your tenant before relying on them." }
+  ],
+  "security": [{ "apiKeyAuth": [] }, { "bearerAuth": [] }],
+  "paths": {
+    "/api/v2/session": {
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Create a hosted verification session",
+        "description": "Creates a hosted session and returns a Valyd-hosted `url` to redirect the user to. `workflow_id` selects the bundle of services to run.",
+        "operationId": "createSession",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateSessionRequest" },
+              "example": { "workflow_id": "wf_kyc_license", "redirect_url": "https://app.example.com/verify/callback", "callback": "https://api.example.com/webhooks/valyd", "vendor_data": "user_123", "ttl_seconds": 900, "metadata": { "plan": "pro" } }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session created.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SessionEnvelope" }, "example": { "success": true, "data": { "session_id": "ses_abc123", "status": "NOT_STARTED", "url": "https://{{VERIFY_BASE_URL}}/s/abc123", "session_token": "stk_xyz", "features": ["id_verification", "liveness", "face_match", "credential"], "redirect_url": "https://app.example.com/verify/callback", "expires_at": "2026-06-11T12:00:00Z" }, "error": null } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" }
+        }
+      },
+      "get": {
+        "tags": ["Sessions"],
+        "summary": "List sessions",
+        "description": "Lists session objects. The exact list/pagination schema is not printed in the docs; `data` is an array of session objects.",
+        "operationId": "listSessions",
+        "parameters": [
+          { "name": "status", "in": "query", "required": false, "schema": { "$ref": "#/components/schemas/SessionStatus" }, "description": "Filter by session status." },
+          { "name": "vendor_data", "in": "query", "required": false, "schema": { "type": "string" }, "description": "Filter by your correlation ref (SDK arg `vendorData`)." },
+          { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "examples": [50] } }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of session objects.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/Session" } }, "error": { "type": ["object", "null"] } } } } }
+          },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" }
+        }
+      }
+    },
+    "/api/v2/session/{id}": {
+      "parameters": [{ "$ref": "#/components/parameters/SessionId" }],
+      "get": {
+        "tags": ["Sessions"],
+        "summary": "Retrieve a session",
+        "description": "Retrieves a single session object including its current `status`.",
+        "operationId": "getSession",
+        "responses": {
+          "200": {
+            "description": "Session object.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SessionEnvelope" } } }
+          },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/v2/session/{id}/decision": {
+      "parameters": [{ "$ref": "#/components/parameters/SessionId" }],
+      "get": {
+        "tags": ["Sessions"],
+        "summary": "Get full decision and per-check data",
+        "description": "Returns the authoritative final decision plus the per-check breakdown. Call this after a terminal webhook to retrieve all extracted data.",
+        "operationId": "getSessionDecision",
+        "responses": {
+          "200": {
+            "description": "Decision and per-check data.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DecisionEnvelope" }, "example": { "success": true, "data": { "status": "APPROVED", "decision": "APPROVED", "decided_at": "2026-06-11T12:05:00Z", "checks": [ { "type": "id_verification", "status": "passed", "score": 0.97, "data": {}, "error": null }, { "type": "liveness", "status": "passed", "score": 1.0, "data": { "live_score": 1 }, "error": null }, { "type": "face_match", "status": "passed", "score": 0.97, "data": { "similarity": 0.97, "threshold": 0.95 }, "error": null }, { "type": "credential", "status": "passed", "score": 1.0, "data": { "match": true, "license": { "status": "active", "expires_at": "2027-01-01" } }, "error": null } ] }, "error": null } } }
+          },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/v2/session/{id}/status": {
+      "parameters": [{ "$ref": "#/components/parameters/SessionId" }],
+      "patch": {
+        "tags": ["Sessions"],
+        "summary": "Manually override a session decision",
+        "description": "Forces a terminal decision on a session.",
+        "operationId": "updateSessionStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "required": ["status"], "properties": { "status": { "type": "string", "enum": ["APPROVED", "DECLINED"] } } },
+              "example": { "status": "APPROVED" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated session reflecting the override.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SessionEnvelope" } } }
+          },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/v2/id-verification": {
+      "post": {
+        "tags": ["Standalone"],
+        "summary": "ID verification (OCR + authenticity)",
+        "description": "OCR + authenticity extraction from a government ID. Images may be sent as `multipart/form-data` files or as base64/data-URL strings in a JSON body of the same field names.",
+        "operationId": "idVerification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["front_image"],
+                "properties": {
+                  "front_image": { "type": "string", "format": "binary", "description": "Front of the ID." },
+                  "back_image": { "type": "string", "format": "binary", "description": "Back of the ID, when applicable." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Extracted ID data.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StandaloneEnvelope" }, "example": { "success": true, "data": { "session_id": "ses_abc", "status": "passed", "check": { "type": "id_verification", "status": "passed", "score": 0.96, "data": { "fields": { "full_name": "Jane Doe", "document_number": "X1234567", "date_of_birth": "1990-01-15", "date_of_expiry": "2030-03-10", "issuing_state": "CA", "country": "US", "document_type": "driver_license" }, "portrait": "<base64>", "dob": "1990-01-15", "authenticity": { "score": 0.96 } }, "error": null } }, "error": null } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "422": { "$ref": "#/components/responses/Unprocessable" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/api/v2/liveness": {
+      "post": {
+        "tags": ["Standalone"],
+        "summary": "Passive liveness",
+        "description": "Passive liveness check from a selfie. Passes when `live_score === 1`.",
+        "operationId": "liveness",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": { "type": "object", "required": ["image"], "properties": { "image": { "type": "string", "format": "binary", "description": "A selfie." } } }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Liveness result.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StandaloneEnvelope" }, "example": { "success": true, "data": { "session_id": "ses_abc", "status": "passed", "check": { "type": "liveness", "status": "passed", "score": 1.0, "data": { "live_score": 1, "result": "live" }, "error": null } }, "error": null } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "422": { "$ref": "#/components/responses/Unprocessable" }
+        }
+      }
+    },
+    "/api/v2/face-match": {
+      "post": {
+        "tags": ["Standalone"],
+        "summary": "Face match",
+        "description": "Compares a reference portrait (`image1`) with a selfie (`image2`). Passes when similarity ≥ threshold (default ~0.95).",
+        "operationId": "faceMatch",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["image1", "image2"],
+                "properties": {
+                  "image1": { "type": "string", "format": "binary", "description": "Reference image (typically the ID portrait)." },
+                  "image2": { "type": "string", "format": "binary", "description": "Selfie to compare." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Face-match result.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StandaloneEnvelope" }, "example": { "success": true, "data": { "session_id": "ses_abc", "status": "passed", "check": { "type": "face_match", "status": "passed", "score": 0.973, "data": { "similarity": 0.973, "threshold": 0.95 }, "error": null } }, "error": null } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" }
+        }
+      }
+    },
+    "/api/v2/age-verification": {
+      "post": {
+        "tags": ["Standalone"],
+        "summary": "Age verification",
+        "description": "Computes age from a DOB and verifies requested age bands.",
+        "operationId": "ageVerification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["dob", "bands"],
+                "properties": {
+                  "dob": { "type": "string", "format": "date", "description": "Date of birth (YYYY-MM-DD)." },
+                  "bands": { "type": "array", "items": { "type": "string" }, "description": "Age bands to check, e.g. is_18_plus.", "examples": [["is_18_plus", "is_21_plus"]] }
+                }
+              },
+              "example": { "dob": "1995-06-01", "bands": ["is_18_plus", "is_21_plus"] }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Age result.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StandaloneEnvelope" }, "example": { "success": true, "data": { "session_id": "ses_abc", "status": "passed", "check": { "type": "age", "status": "passed", "data": { "age": 30, "dob": "1995-06-01", "bands": { "is_18_plus": { "verified": true, "min_age": 18 }, "is_21_plus": { "verified": true, "min_age": 21 } } }, "error": null } }, "error": null } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" }
+        }
+      }
+    },
+    "/api/v2/credential-verification": {
+      "post": {
+        "tags": ["Standalone"],
+        "summary": "Credential (professional license) verification",
+        "description": "Looks up a professional license in the provider registry. Lookups can take 10–60s — use a generous timeout. `license_type`/`license_state`/`license_number` accept the aliases `provider_code`/`state`/`license_no`. Supply `first_name`+`last_name` or `full_name`.",
+        "operationId": "credentialVerification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["first_name", "last_name", "license_type", "license_state", "license_number"],
+                "properties": {
+                  "first_name": { "type": "string" },
+                  "last_name": { "type": "string" },
+                  "full_name": { "type": "string", "description": "Alternative to first_name + last_name." },
+                  "license_type": { "type": "string", "description": "Provider code (alias: provider_code)." },
+                  "license_state": { "type": "string", "description": "2-letter state code (alias: state)." },
+                  "license_number": { "type": "string", "description": "Alias: license_no." },
+                  "npi": { "type": "string", "description": "NPI when applicable." }
+                }
+              },
+              "example": { "first_name": "Jane", "last_name": "Doe", "license_type": "MD", "license_state": "CA", "license_number": "A12345", "npi": "1234567890" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Credential result.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StandaloneEnvelope" }, "example": { "success": true, "data": { "session_id": "ses_abc", "status": "passed", "check": { "type": "credential", "status": "passed", "data": { "match": true, "license": { "license_number": "A12345", "status": "active", "issued_at": "2015-01-01", "expires_at": "2027-01-01", "specialty": "Internal Medicine" } }, "error": null } }, "error": null } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/v2/kyc-credential": {
+      "post": {
+        "tags": ["Standalone"],
+        "summary": "Combined KYC + credential",
+        "description": "ID verification + liveness + face match + license lookup in one call. The license is matched against the name OCR'd from the ID (never client-supplied), preventing impersonation. Returns a multi-check `data` object with `identity` and `checks`.",
+        "operationId": "kycCredential",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["front_image", "selfie", "license_type", "license_state", "license_number"],
+                "properties": {
+                  "front_image": { "type": "string", "format": "binary" },
+                  "back_image": { "type": "string", "format": "binary", "description": "When applicable." },
+                  "selfie": { "type": "string", "format": "binary", "description": "Live selfie for liveness + face match." },
+                  "license_type": { "type": "string", "description": "Alias: provider_code." },
+                  "license_state": { "type": "string", "description": "Alias: state." },
+                  "license_number": { "type": "string", "description": "Alias: license_no." },
+                  "npi": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Combined result.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "type": "object", "properties": { "session_id": { "type": "string" }, "status": { "$ref": "#/components/schemas/CheckStatus" }, "identity": { "type": "object", "properties": { "name": { "type": "string" }, "dob": { "type": "string", "format": "date" } } }, "checks": { "type": "array", "items": { "$ref": "#/components/schemas/Check" } } } }, "error": { "type": ["object", "null"] } } } } }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" }
+        }
+      }
+    },
+    "/api/v2/credential/states": {
+      "get": {
+        "tags": ["Credentials"],
+        "summary": "List states",
+        "description": "Lists states for building credential pickers.",
+        "operationId": "listCredentialStates",
+        "responses": {
+          "200": {
+            "description": "States.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "type": "object", "properties": { "states": { "type": "array", "items": { "type": "object", "properties": { "state_name": { "type": "string" }, "state_code": { "type": "string" } } } } } }, "error": { "type": ["object", "null"] } } }, "example": { "success": true, "data": { "states": [{ "state_name": "California", "state_code": "CA" }] }, "error": null } } }
+          },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" }
+        }
+      }
+    },
+    "/api/v2/credential/states/{state}/providers": {
+      "parameters": [{ "name": "state", "in": "path", "required": true, "schema": { "type": "string" }, "description": "2-letter state code (e.g. CA)." }],
+      "get": {
+        "tags": ["Credentials"],
+        "summary": "List providers for a state",
+        "description": "Lists license providers for a state; each provider's `required_fields` tells you which inputs to collect.",
+        "operationId": "listStateProviders",
+        "responses": {
+          "200": {
+            "description": "Providers.",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "type": "object", "properties": { "providers": { "type": "array", "items": { "type": "object", "properties": { "provider_code": { "type": "string" }, "provider_display_name": { "type": "string" }, "credential_name": { "type": "string" }, "required_fields": { "type": "array", "items": { "type": "string" } } } } } } }, "error": { "type": ["object", "null"] } } }, "example": { "success": true, "data": { "providers": [{ "provider_code": "MD", "provider_display_name": "Medical Board of California", "credential_name": "Physician & Surgeon", "required_fields": ["license_number"] }] }, "error": null } } }
+          },
+          "401": { "$ref": "#/components/responses/InvalidApiKey" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/v2/workflows": {
+      "post": {
+        "tags": ["Workflows"],
+        "summary": "Create a workflow (inferred)",
+        "description": "Inferred from the Node SDK (`workflows.create`); not confirmed by the API reference. Bundles a set of services into a reusable `workflow_id`.",
+        "operationId": "createWorkflow",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["name", "services"], "properties": { "name": { "type": "string" }, "services": { "type": "array", "items": { "$ref": "#/components/schemas/CheckType" } } } }, "example": { "name": "KYC + License", "services": ["id_verification", "liveness", "face_match", "credential"] } } }
+        },
+        "responses": { "200": { "description": "Workflow created. Response schema not documented." } }
+      },
+      "get": {
+        "tags": ["Workflows"],
+        "summary": "List workflows (inferred)",
+        "operationId": "listWorkflows",
+        "responses": { "200": { "description": "Workflow list. Response schema not documented." } }
+      }
+    },
+    "/api/v2/workflows/{id}": {
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+      "get": { "tags": ["Workflows"], "summary": "Retrieve a workflow (inferred)", "operationId": "getWorkflow", "responses": { "200": { "description": "Workflow. Response schema not documented." } } },
+      "patch": {
+        "tags": ["Workflows"],
+        "summary": "Update a workflow (inferred)",
+        "operationId": "updateWorkflow",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "name": { "type": "string" }, "services": { "type": "array", "items": { "$ref": "#/components/schemas/CheckType" } } } }, "example": { "name": "KYC + License (v2)" } } } },
+        "responses": { "200": { "description": "Updated workflow. Response schema not documented." } }
+      },
+      "delete": { "tags": ["Workflows"], "summary": "Delete a workflow (inferred)", "operationId": "deleteWorkflow", "responses": { "200": { "description": "Workflow deleted." } } }
+    }
+  },
+  "webhooks": {
+    "verificationEvent": {
+      "post": {
+        "operationId": "verificationEvent",
+        "summary": "Verification event (terminal session state)",
+        "description": "Valyd POSTs this to your app-level or per-session `callback` URL when a session reaches a terminal state. Verify the signature before trusting it: the `X-Valyd-Signature` header is the lowercase hex `HMAC-SHA256` of `\"{timestamp}.{rawBody}\"` keyed by your webhook signing secret. Reject timestamps older than 300s and dedupe on `X-Valyd-Event-Id`. The webhook is a notification only — call the decision endpoint for full data.",
+        "parameters": [
+          { "name": "X-Valyd-Timestamp", "in": "header", "schema": { "type": "string" }, "description": "Unix seconds when the event was signed." },
+          { "name": "X-Valyd-Event-Id", "in": "header", "schema": { "type": "string" }, "description": "Unique event id; equals body `event_id`. Use for idempotency." },
+          { "name": "X-Valyd-Signature", "in": "header", "schema": { "type": "string" }, "description": "Lowercase hex HMAC-SHA256 signature." }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WebhookPayload" },
+              "example": { "event_id": "evt_123", "type": "verification.approved", "session_id": "ses_abc", "status": "APPROVED", "vendor_data": "user_123", "decision": "approved", "occurred_at": "2026-06-11T12:05:00Z" }
+            }
+          }
+        },
+        "responses": { "2XX": { "description": "Return any 2xx quickly to acknowledge. Non-2xx is retried with exponential backoff." } }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": { "type": "apiKey", "in": "header", "name": "X-API-Key", "description": "Your App API key from the Developer Console." },
+      "bearerAuth": { "type": "http", "scheme": "bearer", "description": "The same App API key may be sent as a Bearer token." }
+    },
+    "parameters": {
+      "SessionId": { "name": "id", "in": "path", "required": true, "schema": { "type": "string" }, "description": "Session id (e.g. ses_abc123)." }
+    },
+    "schemas": {
+      "SessionStatus": { "type": "string", "enum": ["NOT_STARTED", "IN_PROGRESS", "IN_REVIEW", "APPROVED", "DECLINED", "ABANDONED", "EXPIRED"], "description": "APPROVED, DECLINED, ABANDONED, and EXPIRED are terminal (a webhook is sent)." },
+      "CheckStatus": { "type": "string", "enum": ["pending", "running", "passed", "failed", "review"], "description": "Lifecycle: pending → running → passed | failed | review. statuses.md lists only the three terminal values; hosted.md adds pending/running." },
+      "CheckType": { "type": "string", "enum": ["id_verification", "liveness", "face_match", "age", "credential"] },
+      "Error": {
+        "type": "object",
+        "required": ["success", "error"],
+        "properties": {
+          "success": { "type": "boolean", "const": false },
+          "data": { "type": "null" },
+          "error": { "type": "object", "required": ["code", "message"], "properties": { "code": { "type": "string", "enum": ["validation_error", "invalid_api_key", "not_found", "unprocessable", "rate_limited", "internal_error"] }, "message": { "type": "string" } } }
+        }
+      },
+      "CreateSessionRequest": {
+        "type": "object",
+        "required": ["workflow_id"],
+        "properties": {
+          "workflow_id": { "type": "string", "description": "Service bundle to run (from the Developer Console)." },
+          "redirect_url": { "type": "string", "format": "uri", "description": "Where Valyd redirects the user's browser after the flow." },
+          "callback": { "type": "string", "format": "uri", "description": "Per-session webhook URL." },
+          "vendor_data": { "type": "string", "description": "Your internal correlation ref; echoed on webhooks and the decision." },
+          "ttl_seconds": { "type": "integer", "description": "Session time-to-live in seconds." },
+          "metadata": { "type": "object", "additionalProperties": true, "description": "Arbitrary key/values." }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "session_id": { "type": "string" },
+          "status": { "$ref": "#/components/schemas/SessionStatus" },
+          "url": { "type": "string", "format": "uri", "description": "Hosted capture URL to redirect the user to." },
+          "session_token": { "type": "string" },
+          "features": { "type": "array", "items": { "$ref": "#/components/schemas/CheckType" } },
+          "redirect_url": { "type": "string", "format": "uri" },
+          "expires_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "SessionEnvelope": {
+        "type": "object",
+        "required": ["success", "data"],
+        "properties": { "success": { "type": "boolean", "const": true }, "data": { "$ref": "#/components/schemas/Session" }, "error": { "type": "null" } }
+      },
+      "Check": {
+        "type": "object",
+        "properties": {
+          "type": { "$ref": "#/components/schemas/CheckType" },
+          "status": { "$ref": "#/components/schemas/CheckStatus" },
+          "score": { "type": "number", "description": "Per-check confidence." },
+          "data": { "type": "object", "additionalProperties": true, "description": "Per-check details; shape varies by check type." },
+          "error": { "type": ["object", "null"], "properties": { "message": { "type": "string" } } }
+        }
+      },
+      "Decision": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["APPROVED", "DECLINED", "IN_REVIEW"], "description": "Session outcome (narrower set than full session status)." },
+          "decision": { "type": "string", "enum": ["APPROVED", "DECLINED"], "description": "Final business outcome." },
+          "decided_at": { "type": "string", "format": "date-time" },
+          "checks": { "type": "array", "items": { "$ref": "#/components/schemas/Check" } }
+        }
+      },
+      "DecisionEnvelope": {
+        "type": "object",
+        "required": ["success", "data"],
+        "properties": { "success": { "type": "boolean", "const": true }, "data": { "$ref": "#/components/schemas/Decision" }, "error": { "type": "null" } }
+      },
+      "StandaloneEnvelope": {
+        "type": "object",
+        "required": ["success", "data"],
+        "description": "Synchronous standalone-check response. `data.check` carries the single check result.",
+        "properties": {
+          "success": { "type": "boolean", "const": true },
+          "data": {
+            "type": "object",
+            "properties": {
+              "session_id": { "type": "string" },
+              "status": { "$ref": "#/components/schemas/CheckStatus" },
+              "check": { "$ref": "#/components/schemas/Check" }
+            }
+          },
+          "error": { "type": "null" }
+        }
+      },
+      "WebhookPayload": {
+        "type": "object",
+        "properties": {
+          "event_id": { "type": "string", "description": "Equals the X-Valyd-Event-Id header; dedupe key." },
+          "type": { "type": "string", "enum": ["verification.approved", "verification.declined", "verification.in_review", "verification.abandoned", "verification.expired"] },
+          "session_id": { "type": "string" },
+          "status": { "$ref": "#/components/schemas/SessionStatus" },
+          "vendor_data": { "type": "string" },
+          "decision": { "description": "Documented inconsistently: a short string (e.g. \"approved\") in webhooks.md, an object matching the decision API in hosted.md.", "oneOf": [{ "type": "string" }, { "$ref": "#/components/schemas/Decision" }] },
+          "occurred_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "responses": {
+      "ValidationError": { "description": "Malformed body or missing required field.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "success": false, "data": null, "error": { "code": "validation_error", "message": "Missing required field: workflow_id" } } } } },
+      "InvalidApiKey": { "description": "Missing or invalid X-API-Key.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "success": false, "data": null, "error": { "code": "invalid_api_key", "message": "Invalid API key" } } } } },
+      "NotFound": { "description": "Session or resource does not exist.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "success": false, "data": null, "error": { "code": "not_found", "message": "Session not found" } } } } },
+      "Unprocessable": { "description": "Input could not be processed (e.g. unreadable image).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "success": false, "data": null, "error": { "code": "unprocessable", "message": "Could not read image" } } } } },
+      "RateLimited": { "description": "Rate limit exceeded.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "success": false, "data": null, "error": { "code": "rate_limited", "message": "Too many requests" } } } } }
+    }
+  }
+}

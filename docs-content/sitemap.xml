@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://{{DOCS_BASE_URL}}/</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/llms.txt</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/llms-full.txt</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/overview.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/create-project.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/quick-start.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/login-sessions.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/authentication.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/oidc.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/endpoints.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/scopes.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/errors.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/docs/changelog.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/intro.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/quickstart.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/console.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/modes.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/hosted.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/standalone.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/sdk.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/webhooks.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/statuses.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/verify/api-reference.md</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/openapi/valyd-id.json</loc></url>
+  <url><loc>https://{{DOCS_BASE_URL}}/openapi/valyd-verify.json</loc></url>
+</urlset>
