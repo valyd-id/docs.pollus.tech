@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
+import { scrollToId } from "@/lib/scroll";
 import {
   CommandDialog,
   CommandEmpty,
@@ -43,8 +44,24 @@ export const DocsSearch = ({ onNavigate }: DocsSearchProps) => {
     return Array.from(map.entries());
   }, []);
 
+  // Derive a clean display path from the href for the right-side pill.
+  // /docs/quick-start#install → /docs/quick-start
+  // /verify?mode=hosted#webhooks → /verify/hosted
+  const displayPath = (href: string): string => {
+    const [pathAndQuery] = href.split("#");
+    const [path, query] = pathAndQuery.split("?");
+    const mode = new URLSearchParams(query ?? "").get("mode");
+    return mode ? `${path}/${mode}` : path;
+  };
+
   const go = (entry: DocsSearchEntry) => {
-    navigate(`/docs/${entry.slug}${entry.anchor ? `#${entry.anchor}` : ""}`);
+    navigate(entry.href);
+    // Fallback scroll: if the URL doesn't change (same page, same hash) navigate()
+    // is a no-op and no effect fires. Directly scrolling covers that case.
+    const anchor = entry.href.split("#")[1];
+    if (anchor) {
+      requestAnimationFrame(() => scrollToId(anchor));
+    }
     setOpen(false);
     onNavigate?.();
   };
@@ -71,13 +88,18 @@ export const DocsSearch = ({ onNavigate }: DocsSearchProps) => {
             <CommandGroup key={group} heading={group}>
               {entries.map((entry) => (
                 <CommandItem
-                  key={`${entry.slug}-${entry.anchor ?? "root"}`}
-                  value={`${entry.title} ${entry.slug} ${entry.anchor ?? ""}`}
+                  key={entry.href}
+                  value={`${entry.title} ${entry.href}`}
                   keywords={entry.keywords}
                   onSelect={() => go(entry)}
                 >
-                  <span className="flex-1">{entry.title}</span>
-                  <span className="text-xs text-muted-foreground">{entry.group}</span>
+                  <span className="shrink-0 w-5 text-center text-sm leading-none" aria-hidden>
+                    {entry.icon}
+                  </span>
+                  <span className="flex-1 ml-1">{entry.title}</span>
+                  <span className="shrink-0 font-mono text-[10px] text-muted-foreground bg-muted border border-border rounded px-1.5 py-0.5">
+                    {displayPath(entry.href)}
+                  </span>
                 </CommandItem>
               ))}
             </CommandGroup>

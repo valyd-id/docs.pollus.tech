@@ -576,7 +576,26 @@ HttpResponse<String> response = client.send(request,
       </section>
 
       {endpoints.map((endpoint) => (
-        <EndpointCard key={endpoint.id} {...endpoint} />
+        <div key={endpoint.id}>
+          {endpoint.id === "endpoint-refresh" && (
+            <div className="mb-4 flex gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed text-foreground">
+              <svg className="h-4 w-4 shrink-0 mt-0.5 text-primary opacity-70" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              <div>
+                <p className="font-semibold mb-1">When to call this</p>
+                <p className="text-muted-foreground">
+                  Access tokens expire after <strong>15 minutes</strong> (<code className="font-mono text-xs">expires_in: 900</code>). Call{" "}
+                  <code className="font-mono text-xs">POST /refresh</code> before the token expires — don't wait for a 401.
+                  In practice: check <code className="font-mono text-xs">expires_in</code> when you store the token and
+                  schedule a refresh ~60 s early. Set <code className="font-mono text-xs">rotate_refresh: true</code> on every
+                  call — the old refresh token is invalidated immediately, which limits the blast radius if it's ever exposed.
+                </p>
+              </div>
+            </div>
+          )}
+          <EndpointCard {...endpoint} />
+        </div>
       ))}
     </div>
   );

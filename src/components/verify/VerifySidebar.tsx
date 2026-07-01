@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   BookOpen,
@@ -7,24 +7,23 @@ import {
   Shuffle,
   Globe,
   Server,
+  KeyRound,
   Code,
   AlertTriangle,
-  ArrowLeft,
   Package,
+  FileCode2,
+  Bot,
+  ChefHat,
 } from "lucide-react";
-import valydWordmark from "@/assets/valyd-wordmark.png";
 import { ModeSwitchCompact, type VerifyMode } from "./ModeSwitch";
-import { ProductSwitchCompact, type VerifyProduct } from "./ProductSwitch";
 
 interface Item {
   id: string;
   label: string;
   icon?: React.ReactNode;
   indent?: boolean;
-  /** Modes this item belongs to. Omit = shown in all modes. */
+  /** Modes this item belongs to. Omit = shown in both modes. */
   modes?: VerifyMode[];
-  /** Hosted products this item belongs to. Omit = shown for both products. */
-  products?: VerifyProduct[];
 }
 
 const guides: Item[] = [
@@ -33,22 +32,27 @@ const guides: Item[] = [
   { id: "console", label: "Developer Console", icon: <LayoutDashboard className="h-4 w-4" /> },
   { id: "modes", label: "Choose your integration", icon: <Shuffle className="h-4 w-4" /> },
 
-  // Hosted · Managed by Valyd
-  { id: "hosted", label: "Managed by Valyd", icon: <Globe className="h-4 w-4" />, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-register", label: "1 · Register your app", indent: true, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-login", label: "2 · Login with Valyd", indent: true, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-callback", label: "3 · Exchange the code", indent: true, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-session", label: "4 · Create a session", indent: true, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-redirect", label: "5 · Redirect the user", indent: true, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-writeback", label: "6 · Write-back", indent: true, modes: ["hosted"], products: ["managed"] },
-  { id: "managed-result", label: "7 · Read the result", indent: true, modes: ["hosted"], products: ["managed"] },
+  // Hosted
+  { id: "hosted", label: "Hosted Verification", icon: <Globe className="h-4 w-4" />, modes: ["hosted"] },
+  { id: "hosted-overview", label: "Overview", indent: true, modes: ["hosted"] },
+  { id: "hosted-products", label: "The two products", indent: true, modes: ["hosted"] },
+  { id: "hosted-steps", label: "Integration steps", indent: true, modes: ["hosted"] },
+  { id: "hosted-webhooks", label: "Webhooks", indent: true, modes: ["hosted"] },
+  { id: "hosted-decision", label: "Reading the decision", indent: true, modes: ["hosted"] },
+  { id: "hosted-statuses", label: "Statuses", indent: true, modes: ["hosted"] },
+  { id: "hosted-api", label: "API reference", indent: true, modes: ["hosted"] },
 
-  // Hosted · Verify fresh every time
-  { id: "hosted", label: "Verify fresh every time", icon: <Globe className="h-4 w-4" />, modes: ["hosted"], products: ["fresh"] },
-  { id: "hosted-fresh-workflow", label: "1 · Create a workflow", indent: true, modes: ["hosted"], products: ["fresh"] },
-  { id: "hosted-fresh-session", label: "2 · Create a session", indent: true, modes: ["hosted"], products: ["fresh"] },
-  { id: "hosted-fresh-redirect", label: "3 · Redirect the user", indent: true, modes: ["hosted"], products: ["fresh"] },
-  { id: "hosted-fresh-result", label: "4 · Read the result", indent: true, modes: ["hosted"], products: ["fresh"] },
+  // Managed by Valyd
+  { id: "managed", label: "Managed by Valyd", icon: <KeyRound className="h-4 w-4" />, modes: ["managed"] },
+  { id: "managed-overview", label: "Overview & SDK", indent: true, modes: ["managed"] },
+  { id: "managed-register", label: "Register your app", indent: true, modes: ["managed"] },
+  { id: "managed-login", label: "Login with Valyd", indent: true, modes: ["managed"] },
+  { id: "managed-exchange", label: "Exchange the code", indent: true, modes: ["managed"] },
+  { id: "managed-kyc", label: "KYC (redirect to Valyd)", indent: true, modes: ["managed"] },
+  { id: "managed-session", label: "Start a verification", indent: true, modes: ["managed"] },
+  { id: "managed-redirect", label: "Hosted page", indent: true, modes: ["managed"] },
+  { id: "managed-result", label: "Read the result", indent: true, modes: ["managed"] },
+  { id: "managed-reuse", label: "Reuse APIs", indent: true, modes: ["managed"] },
 
   // Standalone
   { id: "standalone", label: "Standalone APIs", icon: <Server className="h-4 w-4" />, modes: ["standalone"] },
@@ -77,18 +81,12 @@ interface Props {
   onClick: (id: string) => void;
   mode: VerifyMode;
   onModeChange: (m: VerifyMode) => void;
-  product: VerifyProduct;
-  onProductChange: (p: VerifyProduct) => void;
 }
 
-const visible = (item: Item, mode: VerifyMode, product: VerifyProduct) => {
-  if (item.modes && !item.modes.includes(mode)) return false;
-  // product filter only applies inside hosted
-  if (mode === "hosted" && item.products && !item.products.includes(product)) return false;
-  return true;
-};
+const inMode = (item: Item, mode: VerifyMode) => !item.modes || item.modes.includes(mode);
 
-export const VerifySidebar = ({ active, onClick, mode, onModeChange, product, onProductChange }: Props) => {
+export const VerifySidebar = ({ active, onClick, mode, onModeChange, onNavigate }: Props & { onNavigate?: () => void }) => {
+  const location = useLocation();
   const renderItem = (item: Item) => (
     <li key={item.id}>
       <button
@@ -111,52 +109,110 @@ export const VerifySidebar = ({ active, onClick, mode, onModeChange, product, on
     </li>
   );
 
-  const visibleGuides = guides.filter((i) => visible(i, mode, product));
-  const visibleApiRef = apiRef.filter((i) => visible(i, mode, product));
+  const visibleGuides = guides.filter((i) => inMode(i, mode));
+  const visibleApiRef = apiRef.filter((i) => inMode(i, mode));
 
   return (
-    <aside className="w-64 border-r border-border bg-sidebar h-screen sticky top-0 overflow-y-auto">
-      <div className="px-6 pt-7 pb-5 border-b border-border">
-        <Link to="/" className="block group">
-          <img src={valydWordmark} alt="Valyd" className="h-7 w-auto transition-smooth group-hover:opacity-80" />
-          <p className="mt-2 text-xs text-muted-foreground tracking-wide">VERIFY · Documentation</p>
-        </Link>
-      </div>
-
+    <aside className="w-64 border-r border-border bg-sidebar">
       <nav className="p-4 space-y-6">
-        <div>
-          <Link
-            to="/docs"
-            className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Valyd ID docs
-          </Link>
-        </div>
-
         <div>
           <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
             Integration
           </p>
           <ModeSwitchCompact mode={mode} onModeChange={onModeChange} />
-          {mode === "hosted" && (
-            <div className="mt-2">
-              <ProductSwitchCompact product={product} onProductChange={onProductChange} />
-            </div>
-          )}
         </div>
 
         <div>
           <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
             Guides
           </p>
-          <ul className="space-y-1">{visibleGuides.map(renderItem)}</ul>
+          <ul className="space-y-1">
+            {visibleGuides.map(renderItem)}
+            <li>
+              <Link
+                to="/agents"
+                onClick={() => onNavigate?.()}
+                className={cn(
+                  "group flex items-center gap-2.5 w-full px-3 py-2 text-sm rounded-lg transition-smooth",
+                  location.pathname === "/agents"
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground hover:translate-x-0.5"
+                )}
+              >
+                <Bot
+                  className={cn(
+                    "h-4 w-4 shrink-0 transition-smooth",
+                    location.pathname === "/agents" ? "text-primary" : "group-hover:text-primary"
+                  )}
+                />
+                For AI agents
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
+            Recipes
+          </p>
+          <ul className="space-y-1">
+            {[
+              { to: "/verify/ship-hosted-kyc", label: "Ship Hosted KYC" },
+              { to: "/verify/verify-license",  label: "Verify a professional license" },
+            ].map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  onClick={() => onNavigate?.()}
+                  className={cn(
+                    "group flex items-center gap-2.5 w-full px-3 py-2 text-sm rounded-lg transition-smooth",
+                    location.pathname === to
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground hover:translate-x-0.5"
+                  )}
+                >
+                  <ChefHat
+                    className={cn(
+                      "h-4 w-4 shrink-0 transition-smooth",
+                      location.pathname === to ? "text-primary" : "group-hover:text-primary"
+                    )}
+                  />
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div>
           <p className="px-3 mb-2 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
             API Reference
           </p>
-          <ul className="space-y-1">{visibleApiRef.map(renderItem)}</ul>
+          <ul className="space-y-1">
+            {visibleApiRef.map(renderItem)}
+            <li>
+              <Link
+                to="/verify/api"
+                onClick={() => onNavigate?.()}
+                className={cn(
+                  "group flex items-center gap-2.5 w-full px-3 py-2 text-sm rounded-lg transition-smooth",
+                  location.pathname === "/verify/api"
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground hover:translate-x-0.5"
+                )}
+              >
+                <FileCode2
+                  className={cn(
+                    "h-4 w-4 shrink-0 transition-smooth",
+                    location.pathname === "/verify/api"
+                      ? "text-primary"
+                      : "group-hover:text-primary"
+                  )}
+                />
+                Full OpenAPI spec
+              </Link>
+            </li>
+          </ul>
         </div>
       </nav>
     </aside>

@@ -141,7 +141,7 @@ const verify = new VerifyClient({
           <Method sig="liveness({ image }): Promise<CheckEnvelope>" desc="Passive liveness on a selfie." />
           <Method sig="faceMatch({ idImage, selfie }): Promise<CheckEnvelope>" desc="1:1 face match." />
           <Method sig="ageVerification({ dob, bands? }): Promise<CheckEnvelope>" desc='Age + bands (e.g. ["is_18_plus"]).' />
-          <Method sig="credentialVerification({ firstName, lastName, providerCode, licenseState, licenseNumber, npi? }): Promise<CheckEnvelope>" desc="Professional license lookup." />
+          <Method sig="credentialVerification({ licenseState, licenseType?, licenseNumber, fullName, providerCode? }): Promise<CheckEnvelope>" desc="License lookup — just state + type (default MD) + number; provider auto-resolved (no provider_code)." />
           <Method sig="kycCredential({ frontImage, selfie, backImage?, providerCode, licenseState, licenseNumber, npi? }): Promise<KycCredentialResult>" desc="ID + liveness + face match + license, matched against the OCR'd name." />
         </ul>
         <p className="text-xs text-muted-foreground pt-2">See Standalone APIs for full field details.</p>
@@ -232,7 +232,7 @@ const verify = new VerifyClient({ apiKey: process.env.VALYD_API_KEY!, timeoutMs:
 try {
   const { check } = await verify.standalone.credentialVerification({
     firstName: "Jane", lastName: "Doe",
-    providerCode: "MD", licenseState: "CA", licenseNumber: "A12345",
+    licenseState: "CA", licenseType: "MD", licenseNumber: "A12345", fullName: "Jane Doe",
   });
 } catch (err) {
   if (err instanceof ValydVerifyError) {
@@ -295,7 +295,7 @@ const { providers } = await verify.credentials.providers("CA");
 const result = await verify.standalone.kycCredential({
   frontImage:    readImage("./id_front.jpg"),
   selfie:        readImage("./selfie.jpg"),
-  providerCode:  "MD",
+  licenseType:   "MD",   // provider auto-resolved
   licenseState:  "CA",
   licenseNumber: "A12345",
 });

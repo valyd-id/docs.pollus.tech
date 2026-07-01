@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, BookOpen, Key, Shield, Code, RefreshCw, User, FileCheck, BadgeCheck, Zap, Link2, Play, ExternalLink } from "lucide-react";
-import valydWordmark from "@/assets/valyd-wordmark.png";
-import { DocsSearch } from "./DocsSearch";
+import { ChevronDown, ChevronRight, BookOpen, Key, Shield, Code, RefreshCw, User, FileCheck, BadgeCheck, Zap, Link2, Play, ExternalLink, FileCode2, Bot } from "lucide-react";
 
 interface SidebarProps {
   /** slug of the docs group currently shown (from the URL) */
@@ -18,7 +16,10 @@ interface NavItem {
   id: string;
   label: string;
   icon: React.ReactNode;
+  /** Cross-product link — renders with the special gradient border style */
   href?: string;
+  /** Same-product route — renders like a normal nav button with active state */
+  routeHref?: string;
   children?: { id: string; label: string }[];
 }
 
@@ -34,6 +35,12 @@ const navItems: NavItem[] = [
     label: "Valyd Verify docs",
     icon: <Shield className="h-4 w-4" />,
     href: "/verify",
+  },
+  {
+    id: "agents",
+    label: "For AI agents",
+    icon: <Bot className="h-4 w-4" />,
+    href: "/agents",
   },
   {
     id: "overview",
@@ -90,6 +97,12 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    id: "api-reference",
+    label: "Full OpenAPI spec",
+    icon: <FileCode2 className="h-4 w-4" />,
+    routeHref: "/docs/api-reference",
+  },
+  {
     id: "errors",
     label: "Errors & troubleshooting",
     icon: <FileCheck className="h-4 w-4" />,
@@ -130,6 +143,7 @@ const navItems: NavItem[] = [
 
 export const Sidebar = ({ activeGroup, activeChild, onNavigate }: SidebarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>([activeGroup]);
 
   // Accordion: when you navigate to a section, expand it and collapse the rest.
@@ -153,23 +167,7 @@ export const Sidebar = ({ activeGroup, activeChild, onNavigate }: SidebarProps) 
   const isGroupActive = (id: string) => activeGroup === id;
 
   return (
-    <aside className="w-64 border-r border-border bg-sidebar h-screen sticky top-0 overflow-y-auto">
-      <div className="px-6 pt-7 pb-5 border-b border-border">
-        <Link to="/" className="block group">
-          <img
-            src={valydWordmark}
-            alt="Valyd"
-            className="h-7 w-auto transition-smooth group-hover:opacity-80"
-          />
-          <p className="mt-2 text-xs text-muted-foreground tracking-wide">ID · Documentation</p>
-        </Link>
-      </div>
-
-      {/* Search (⌘K command palette) */}
-      <div className="px-4 py-3 border-b border-border">
-        <DocsSearch onNavigate={onNavigate} />
-      </div>
-
+    <aside className="w-64 border-r border-border bg-sidebar">
       <nav className="p-4">
         <ul className="space-y-1">
           {navItems.map((item) => (
@@ -231,6 +229,29 @@ export const Sidebar = ({ activeGroup, activeChild, onNavigate }: SidebarProps) 
                     </ul>
                   )}
                 </div>
+              ) : item.routeHref ? (
+                <Link
+                  to={item.routeHref}
+                  onClick={() => onNavigate?.()}
+                  className={cn(
+                    "group flex items-center gap-2.5 w-full px-3 py-2 text-sm rounded-lg transition-smooth",
+                    location.pathname === item.routeHref
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground hover:translate-x-0.5"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "transition-smooth",
+                      location.pathname === item.routeHref
+                        ? "text-primary"
+                        : "group-hover:text-primary"
+                    )}
+                  >
+                    {item.icon}
+                  </span>
+                  {item.label}
+                </Link>
               ) : item.href ? (
                 <Link
                   to={item.href}

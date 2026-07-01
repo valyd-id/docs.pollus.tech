@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
+import { ArrowRight, Server } from "lucide-react";
 import { CodeBlock } from "@/components/docs/CodeBlock";
 import { LanguageTabs } from "@/components/docs/LanguageTabs";
 import { VERIFY_CONFIG } from "@/lib/verify-config";
-import { Server } from "lucide-react";
 
 const BASE = VERIFY_CONFIG.API_BASE_URL;
 
@@ -63,10 +64,13 @@ export const StandaloneSection = () => (
       <Server className="h-6 w-6 text-primary" /> Standalone APIs
     </h2>
     <p className="text-muted-foreground">
-      Direct, synchronous, server-to-server checks. You build your own UI and call our endpoints from
-      your backend. Every request uses <code>X-API-Key: &lt;App API key&gt;</code> — keep this
-      server-side, never ship it to the browser. Every response uses the standard envelope and
-      includes a <code>check</code> object:
+      Direct, synchronous, server-to-server checks — the <strong>non-account ("verify fresh")</strong> surface:
+      <strong> no Valyd login, nothing stored</strong>. You build your own UI and call our endpoints from your
+      backend. Every request uses <code>X-API-Key: &lt;App API key&gt;</code> — keep this server-side, never ship
+      it to the browser. The full non-account set: <code>id-verification</code>, <code>liveness</code>,
+      <code>face-match</code>, <code>age-verification</code>, <code>credential-verification</code> (state + type,
+      auto-resolved), <code>location</code> / <code>location-match</code>, <code>evv-presence</code>, and the combined
+      <code>kyc-credential</code>. Every response uses the standard envelope with a <code>check</code> object:
     </p>
     <CodeBlock
       language="json"
@@ -240,14 +244,14 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);`}
       method="POST"
       path="/api/v2/credential-verification"
       title="Credential Verification"
-      description="Look up a professional license in the provider registry. Registry lookups can take 10–60s — use a generous timeout."
+      description="Look up a professional license in the state board — just state + license type + number. The provider is auto-resolved (no provider_code needed). Registry lookups can take 10–60s — use a generous timeout."
       fields={
         <ul className="space-y-1.5">
-          <Field name="first_name" required type="string" desc="Required even when required_fields omits it — the registry always needs a name." />
-          <Field name="last_name" required type="string" desc="Or supply full_name instead of first/last." />
-          <Field name="license_type" required type="string" desc="Provider code, e.g. 'MD'. Alias: provider_code." />
           <Field name="license_state" required type="string" desc="2-letter state code. Alias: state." />
+          <Field name="license_type" type="string" desc="Friendly type — 'MD' (default), 'DO', 'RN', 'NP', 'PA'. The provider is auto-resolved from state + type." />
           <Field name="license_number" required type="string" desc="Alias: license_no." />
+          <Field name="full_name" required type="string" desc="Or first_name + last_name. The board matches on name + number." />
+          <Field name="provider_code" type="string" desc="Optional — only if you want to pin a specific board. Normally omit it." />
           <Field name="npi" type="string" desc="Optional NPI when applicable." />
         </ul>
       }
@@ -255,22 +259,18 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);`}
   -H "X-API-Key: $VALYD_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "first_name": "Jane",
-    "last_name":  "Doe",
-    "license_type":   "MD",
     "license_state":  "CA",
+    "license_type":   "MD",
     "license_number": "A12345",
-    "npi": "1234567890"
+    "full_name":      "Jane Doe"
   }'`}
       sdk={`const { check } = await verify.standalone.credentialVerification({
-  firstName: "Jane",
-  lastName:  "Doe",
-  providerCode: "MD",
-  licenseState: "CA",
+  licenseState:  "CA",
+  licenseType:   "MD",       // default MD; provider auto-resolved — no provider_code
   licenseNumber: "A12345",
-  npi: "1234567890", // optional
+  fullName:      "Jane Doe",
 });
-// check.data.match, check.data.license`}
+// check.status === "passed" · check.data.match · check.data.license`}
       response={`{
   "match": true,
   "license": {
@@ -329,6 +329,94 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);`}
     { "type": "face_match",      "status": "passed", "data": { "similarity": 0.97 } },
     { "type": "credential",      "status": "passed", "data": { "match": true, "license": { /* … */ } } }
   ]
+}`}
+    />
+
+    {/* 7. Location Match */}
+    <Endpoint
+      method="POST"
+      path="/api/v2/location-match"
+      title="Location Match"
+      description="Compare a captured GPS position against an expected point → { match, distance_m }. Coarse fixes (accuracy missing or >100m) return `review`, not pass. Capture with the SDK's captureLocation() to get a trustworthy high-accuracy fix. Anti-spoof note: Core-API coordinates are client-supplied (your trust boundary); the Hosted flow additionally cross-checks the user's real IP against the GPS and flags gross mismatches."
+      fields={
+        <ul className="space-y-1.5">
+          <Field name="latitude" required type="number" desc="Captured latitude (where the person is)." />
+          <Field name="longitude" required type="number" desc="Captured longitude." />
+          <Field name="expected_latitude" required type="number" desc="Expected latitude (where they should be)." />
+          <Field name="expected_longitude" required type="number" desc="Expected longitude." />
+          <Field name="radius_m" type="number" desc="Allowed radius in metres. Default 200." />
+          <Field name="accuracy" type="number" desc="Captured GPS accuracy radius (metres), optional." />
+        </ul>
+      }
+      curl={`curl -X POST ${BASE}/api/v2/location-match \\
+  -H "X-API-Key: $VALYD_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "latitude": 37.3382, "longitude": -121.8863,
+    "expected_latitude": 37.3382, "expected_longitude": -121.8863,
+    "radius_m": 200
+  }'`}
+      sdk={`const { check } = await verify.standalone.locationMatch({
+  latitude: 37.3382, longitude: -121.8863,
+  expectedLatitude: 37.3382, expectedLongitude: -121.8863,
+  radiusM: 200,
+});
+// check.status === "passed" when within radius; check.data.distance_m`}
+      responseTitle="data.check"
+      response={`{
+  "type": "location_match",
+  "status": "passed",
+  "score": 0,
+  "data": {
+    "captured": { "latitude": 37.3382, "longitude": -121.8863 },
+    "expected": { "latitude": 37.3382, "longitude": -121.8863 },
+    "distance_m": 0, "radius_m": 200, "match": true
+  }
+}`}
+    />
+
+    {/* 8. EVV Presence (bundle) */}
+    <Endpoint
+      method="POST"
+      path="/api/v2/evv-presence"
+      title="EVV Presence  ·  face + location bundle"
+      description="Face match (reference vs selfie) + location match in one call — proves the right person is at the right place. Billed once as evv_presence (below the sum of the parts)."
+      fields={
+        <ul className="space-y-1.5">
+          <Field name="image1" required type="image" desc="Reference face (ID portrait or account photo). Alias: id_image." />
+          <Field name="image2" required type="image" desc="Live selfie. Alias: selfie." />
+          <Field name="latitude" required type="number" desc="Captured latitude." />
+          <Field name="longitude" required type="number" desc="Captured longitude." />
+          <Field name="expected_latitude" required type="number" desc="Expected latitude." />
+          <Field name="expected_longitude" required type="number" desc="Expected longitude." />
+          <Field name="radius_m" type="number" desc="Allowed radius in metres. Default 200." />
+        </ul>
+      }
+      curl={`curl -X POST ${BASE}/api/v2/evv-presence \\
+  -H "X-API-Key: $VALYD_API_KEY" \\
+  -F "image1=@./reference.jpg" \\
+  -F "image2=@./selfie.jpg" \\
+  -F "latitude=37.3382"  -F "longitude=-121.8863" \\
+  -F "expected_latitude=37.3382" -F "expected_longitude=-121.8863" \\
+  -F "radius_m=200"`}
+      sdk={`const { check } = await verify.standalone.evvPresence({
+  idImage: readImage("./reference.jpg"),
+  selfie:  readImage("./selfie.jpg"),
+  latitude: 37.3382, longitude: -121.8863,
+  expectedLatitude: 37.3382, expectedLongitude: -121.8863,
+  radiusM: 200,
+});
+// check.status === "passed" only when BOTH face + location pass
+// check.data.face_match, check.data.location_match, check.data.verified`}
+      responseTitle="data.check"
+      response={`{
+  "type": "evv_presence",
+  "status": "passed",
+  "data": {
+    "face_match":     { "status": "passed", "data": { "similarity": 0.97 } },
+    "location_match": { "status": "passed", "data": { "distance_m": 12, "match": true } },
+    "verified": true
+  }
 }`}
     />
 
@@ -452,5 +540,20 @@ try {
 }`}
       />
     </div>
+
+    {/* Recipe card */}
+    <Link
+      to="/verify/verify-license"
+      className="group mt-6 flex items-center justify-between gap-4 rounded-xl border border-primary/30 bg-primary/5 px-5 py-4 transition-colors hover:border-primary/60 hover:bg-primary/10"
+    >
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1">Recipe</p>
+        <p className="font-semibold text-foreground">Verify a professional license</p>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          Step-by-step: discover providers, call the credential-verification endpoint, and handle every result status.
+        </p>
+      </div>
+      <ArrowRight className="h-5 w-5 shrink-0 text-primary opacity-60 transition-transform group-hover:translate-x-1" />
+    </Link>
   </section>
 );

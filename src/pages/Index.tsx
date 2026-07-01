@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Navigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { scrollToElement } from "@/lib/scroll";
 import { Sidebar } from "@/components/docs/Sidebar";
-import valydWordmark from "@/assets/valyd-wordmark.png";
+import { Layout } from "@/components/Layout";
 
 import { OverviewSection } from "@/components/docs/sections/OverviewSection";
 import { QuickStartSection } from "@/components/docs/sections/QuickStartSection";
@@ -85,7 +85,6 @@ const Index = () => {
   const location = useLocation();
   const slug = section ?? DEFAULT_SLUG;
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeChild, setActiveChild] = useState(slug);
 
   const group = SECTION_GROUPS.find((g) => g.slug === slug);
@@ -99,7 +98,7 @@ const Index = () => {
       if (hash) {
         const el = document.getElementById(hash);
         if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          scrollToElement(el);
           setActiveChild(hash);
           return;
         }
@@ -136,68 +135,31 @@ const Index = () => {
   }
 
   const SectionComponent = group.Component;
-  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Mobile Header */}
-      <header className="lg:hidden sticky top-0 z-50 bg-background border-b border-border px-4 py-3">
-        <div className="flex items-center justify-between">
-          <a href="/" className="flex items-center">
-            <img src={valydWordmark} alt="Valyd" className="h-6 w-auto" />
-          </a>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 hover:bg-muted rounded-lg"
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black/50" onClick={closeMobileMenu}>
-          <div className="w-64 h-full" onClick={(e) => e.stopPropagation()}>
-            <Sidebar
-              activeGroup={slug}
-              activeChild={activeChild}
-              onNavigate={closeMobileMenu}
-            />
-          </div>
-        </div>
+    <Layout
+      product="id"
+      renderSidebar={({ onNavigate }) => (
+        <Sidebar activeGroup={slug} activeChild={activeChild} onNavigate={onNavigate} />
       )}
+    >
+      <div key={slug} className="max-w-4xl mx-auto px-6 py-10 lg:py-14 animate-fade-in">
+        <SectionComponent />
 
-      <div className="flex">
-        {/* Desktop Sidebar */}
-        <div className="hidden lg:block">
-          <Sidebar
-            activeGroup={slug}
-            activeChild={activeChild}
-          />
-        </div>
-
-        {/* Main Content */}
-        <main className="flex-1 min-w-0">
-          <div key={slug} className="max-w-4xl mx-auto px-6 py-10 lg:py-14 animate-fade-in">
-            <SectionComponent />
-
-            {/* Footer */}
-            <footer className="border-t border-border pt-8 mt-16">
-              <div className="text-center text-muted-foreground text-sm">
-                <p>© 2025 Valyd. All rights reserved.</p>
-                <p className="mt-2">
-                  Need help? Contact us at{" "}
-                  <a href="mailto:support@valyd.id" className="text-primary hover:underline">
-                    support@valyd.id
-                  </a>
-                </p>
-              </div>
-            </footer>
+        {/* Footer */}
+        <footer className="border-t border-border pt-8 mt-16">
+          <div className="text-center text-muted-foreground text-sm">
+            <p>© 2025 Valyd. All rights reserved.</p>
+            <p className="mt-2">
+              Need help? Contact us at{" "}
+              <a href="mailto:support@valyd.id" className="text-primary hover:underline">
+                support@valyd.id
+              </a>
+            </p>
           </div>
-        </main>
+        </footer>
       </div>
-    </div>
+    </Layout>
   );
 };
 

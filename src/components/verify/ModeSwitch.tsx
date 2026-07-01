@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Globe, Server } from "lucide-react";
+import { Globe, Server, KeyRound, Check } from "lucide-react";
 
-export type VerifyMode = "hosted" | "standalone";
+export type VerifyMode = "hosted" | "standalone" | "managed";
 
 const OPTIONS: {
   id: VerifyMode;
@@ -17,6 +17,14 @@ const OPTIONS: {
     blurb:
       "Create a session, redirect the user to a Valyd-hosted page, get the result by webhook + decision API. Fastest to ship.",
     icon: <Globe className="h-5 w-5" />,
+  },
+  {
+    id: "managed",
+    label: "Managed by Valyd",
+    tagline: "Login required",
+    blurb:
+      "Users sign in with Valyd, then verify once and reuse everywhere. Pass their access token to a session; returning users re-verify with a selfie only.",
+    icon: <KeyRound className="h-5 w-5" />,
   },
   {
     id: "standalone",
@@ -36,7 +44,7 @@ export const ModeSwitch = ({
   mode: VerifyMode;
   onModeChange: (m: VerifyMode) => void;
 }) => (
-  <div className="grid gap-4 sm:grid-cols-2">
+  <div className="grid gap-4 sm:grid-cols-3">
     {OPTIONS.map((opt) => {
       const selected = mode === opt.id;
       return (
@@ -71,7 +79,11 @@ export const ModeSwitch = ({
   </div>
 );
 
-/** Compact segmented control for the sidebar / sticky bars. */
+/**
+ * Compact selector for the sidebar / sticky bars. Stacked vertically (one option
+ * per row) so the labels stay readable in the narrow sidebar — the mode is the
+ * primary choice, so all options stay visible rather than hidden in a dropdown.
+ */
 export const ModeSwitchCompact = ({
   mode,
   onModeChange,
@@ -79,23 +91,29 @@ export const ModeSwitchCompact = ({
   mode: VerifyMode;
   onModeChange: (m: VerifyMode) => void;
 }) => (
-  <div className="flex rounded-lg border border-border p-0.5 bg-muted/40">
-    {OPTIONS.map((opt) => (
-      <button
-        key={opt.id}
-        type="button"
-        aria-pressed={mode === opt.id}
-        onClick={() => onModeChange(opt.id)}
-        className={cn(
-          "flex-1 flex items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-smooth",
-          mode === opt.id
-            ? "bg-background text-primary shadow-soft"
-            : "text-muted-foreground hover:text-foreground"
-        )}
-      >
-        {opt.icon}
-        {opt.label}
-      </button>
-    ))}
+  <div className="flex flex-col gap-1 rounded-lg border border-border p-1 bg-muted/40">
+    {OPTIONS.map((opt) => {
+      const selected = mode === opt.id;
+      return (
+        <button
+          key={opt.id}
+          type="button"
+          aria-pressed={selected}
+          onClick={() => onModeChange(opt.id)}
+          className={cn(
+            "flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs font-medium transition-smooth",
+            selected
+              ? "bg-background text-primary shadow-soft"
+              : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+          )}
+        >
+          <span className={cn("shrink-0", selected ? "text-primary" : "text-muted-foreground")}>
+            {opt.icon}
+          </span>
+          <span className="min-w-0 flex-1 truncate">{opt.label}</span>
+          {selected && <Check className="h-3.5 w-3.5 shrink-0" />}
+        </button>
+      );
+    })}
   </div>
 );
