@@ -9,6 +9,15 @@ import { CodeBlock } from "@/components/docs/CodeBlock";
 
 const DEMO_URL = "https://homehealth.pollus.tech";
 
+// Build the `new Valyd({...})` line for the CURRENT environment only — production
+// is the SDK default (no env flag), other environments pass their own env.
+function initBlock(c: EnvCfg, webhook: boolean): string {
+  const fields = webhook ? "clientId, clientSecret, apiKey, webhookSecret" : "clientId, clientSecret, apiKey";
+  return c.key === "production"
+    ? `const valyd = new Valyd({ ${fields} });   // → ${c.idp} / ${c.verify}`
+    : `const valyd = new Valyd({\n  ${fields},\n  env: "${c.env}",   // → ${c.idp} / ${c.verify}\n});`;
+}
+
 const checks = [
   { icon: Fingerprint, title: "Identity (KYC)", desc: "Verified once on the clinician's Valyd account. Reused after — never re-done." },
   { icon: BadgeCheck, title: "Medical license", desc: "Checked live against the state board, then stored on the account and re-checked over time." },
@@ -20,11 +29,8 @@ function Pill({ children }: { children: React.ReactNode }) {
   return <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{children}</span>;
 }
 
-const HOSTED_CODE = `import { Valyd } from "valyd-verify-sdk";
-const valyd = new Valyd({
-  clientId, clientSecret, apiKey, webhookSecret,
-  env: process.env.VALYD_ENV,   // "development" | "staging" | "production" — sets ALL Valyd URLs
-});
+const hostedCode = (c: EnvCfg) => `import { Valyd } from "valyd-verify-sdk";
+${initBlock(c, true)}
 
 // 1) "Connect Valyd" — log the clinician in (OAuth)
 app.get("/evv/login", (req, res) =>
@@ -59,11 +65,8 @@ connectButton("#connect", { loginUrl: "/evv/login" });
 const { url } = await fetch("/evv/session").then(r => r.json());
 await open({ url, onComplete: (r) => console.log("EVV:", r.status) }); // modal, no redirect`;
 
-const CORE_CODE = `import { Valyd } from "valyd-verify-sdk";
-const valyd = new Valyd({
-  clientId, clientSecret, apiKey,
-  env: process.env.VALYD_ENV,   // dev → *.pollus.tech, prod → valyd.id (default)
-});
+const coreCode = (c: EnvCfg) => `import { Valyd } from "valyd-verify-sdk";
+${initBlock(c, false)}
 
 // 1) "Connect Valyd" — SAME OAuth step as hosted; this is how you get the token.
 app.get("/evv/login", (req, res) =>
@@ -387,13 +390,13 @@ npm i valyd-verify-js@^0.2.0`} />
         {mode === "hosted" ? (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">Valyd renders the UI in a modal. Already-verified clinicians skip KYC + license and do <strong>only the face scan</strong>.</p>
-            <CodeBlock language="javascript" title="Backend (Node) — Connect Valyd → session → decision" code={HOSTED_CODE} />
+            <CodeBlock language="javascript" title="Backend (Node) — Connect Valyd → session → decision" code={hostedCode(envCfg)} />
             <CodeBlock language="javascript" title="Browser — the Connect button + the modal" code={HOSTED_BROWSER} />
           </div>
         ) : (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">Your own UI calls Verify directly. It still begins with Connect Valyd (to get the token); KYC is a redirect to Valyd (no KYC API); the license and face+location run as Core API calls.</p>
-            <CodeBlock language="javascript" title="Backend (Node) — Connect Valyd → KYC gate → license → EVV Presence" code={CORE_CODE} />
+            <CodeBlock language="javascript" title="Backend (Node) — Connect Valyd → KYC gate → license → EVV Presence" code={coreCode(envCfg)} />
             <CodeBlock language="javascript" title="Browser — the Connect Valyd button" code={CONNECT_NOTE} />
             <CodeBlock language="javascript" title="Browser — capture a trustworthy GPS fix" code={CAPTURE_CODE} />
           </div>
