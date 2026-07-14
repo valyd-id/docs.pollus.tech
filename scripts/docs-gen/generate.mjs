@@ -97,8 +97,19 @@ async function main() {
     written++;
   }
 
-  // Guardrail: the dead docs domain must never reappear in output.
-  await assertAbsent("pollus.online");
+  // Guardrail: no OTHER environment's hosts may leak into the output. Every host must come from
+  // the tokens above, so a build for one env can never ship another env's URLs.
+  //
+  // `pollus.online` used to be asserted absent unconditionally, on the belief it was a dead domain.
+  // It is not — it is STAGING (dev = *.pollus.tech, staging = *.pollus.online, prod = *.valyd.id).
+  // So a staging build injected its own correct hosts and then failed its own check. Compare
+  // against what this build actually targets rather than hardcoding one domain as dead.
+  const targeted = Object.values(TOKENS);
+  for (const domain of ["pollus.tech", "pollus.online", "valyd.id"]) {
+    const isThisEnv = targeted.some((h) => String(h).endsWith(domain));
+    if (!isThisEnv) await assertAbsent(domain);
+  }
+
   // Guardrail: the retired standalone Verify host + its dashboard must never reappear.
   // Verify runs on the IdP, and the dev portal is the one console.
   await assertAbsent("verify.pollus.tech");
