@@ -9,24 +9,24 @@
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WORKFLOW_ID (Hosted only)
 - Files an integrator edits: .env (to store VALYD_API_KEY and VALYD_WORKFLOW_ID), server route handler (to make the API call and, for Hosted, handle the webhook)
 - Estimated steps: 6
-- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). The API call itself (steps 5-6) can be automated once credentials exist.
+- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Portal (https://{{DEV_PORTAL_URL}}). The API call itself (steps 5-6) can be automated once credentials exist.
 - Prerequisites:
-  - A Valyd SSO account able to sign in to the Developer Console
+  - A Valyd SSO account able to sign in to the Developer Portal
   - An App API key copied from the Console (shown once at creation)
   - For Hosted: a `workflow_id` from a created Workflow
   - For Hosted: a publicly reachable webhook URL and signing secret
 
 ### Prerequisites
-- Access to the Developer Console at https://{{VERIFY_BASE_URL}}/dashboard (sign in with Valyd SSO).
+- Access to the Developer Portal at https://{{DEV_PORTAL_URL}} (sign in with Valyd SSO).
 - The App API key, copied at App creation (shown once). Store it server-side only.
 - For the Hosted snippet: a `workflow_id` from a Workflow you created in the Console.
 
 ### Steps
 
-1. Sign in to the Developer Console with Valyd SSO. A default App is created on first login. (Human-only step.)
+1. Sign in to the Developer Portal with Valyd SSO. The Developer Portal is the ONE console: the same sign-in issues your OAuth app (client_id / client_secret), your Verify app (API key) and your workflows. (Human-only step.)
 
    ```text
-   Open https://{{VERIFY_BASE_URL}}/dashboard and sign in with Valyd SSO.
+   Open https://{{DEV_PORTAL_URL}} and sign in with Valyd SSO.
    ```
 
    **Expected output:** You are signed in and a default App is visible in the Console.
@@ -37,7 +37,7 @@
    export VALYD_API_KEY="paste-the-one-time-app-api-key-here"
    ```
 
-   (Get the API key from the Developer Console → your App → it is shown once at creation: https://{{VERIFY_BASE_URL}}/dashboard)
+   (Get the API key from the Developer Portal → your App → it is shown once at creation: https://{{DEV_PORTAL_URL}})
 
    **Expected output:** `VALYD_API_KEY` is set in your shell/`.env`. The key cannot be retrieved again after creation — rotate it in the Console if lost.
 
@@ -47,7 +47,7 @@
    export VALYD_WORKFLOW_ID="paste-your-workflow-id-here"
    ```
 
-   (Get the `workflow_id` from the Developer Console → Workflows → your Workflow: https://{{VERIFY_BASE_URL}}/dashboard)
+   (Get the `workflow_id` from the Developer Portal → Workflows → your Workflow: https://{{DEV_PORTAL_URL}})
 
    **Expected output:** `VALYD_WORKFLOW_ID` is set. Required only for the Hosted session call in step 6.
 
@@ -60,7 +60,7 @@
 
    **Expected output:** Valyd will POST signed events to your URL when a session reaches a terminal state.
 
-5. Run your first Standalone call (age verification) to confirm your API key works.
+5. Run your first Core APIs call (age verification) to confirm your API key works.
 
    ```bash
    curl -X POST https://{{VERIFY_BASE_URL}}/api/v2/age-verification \
@@ -94,7 +94,7 @@
    **Expected output:** HTTP `200` with `{ "success": true, "data": { "url": "https://..." } }`. Redirect the user's browser to `data.url`. The verification result arrives later via your configured webhook (step 4).
 
 ### Verification
-- Standalone: the curl in step 5 returns HTTP `200` and a body where `success` is `true`.
+- Core APIs: the curl in step 5 returns HTTP `200` and a body where `success` is `true`.
 
   ```bash
   curl -s -o /dev/null -w "%{http_code}\n" -X POST https://{{VERIFY_BASE_URL}}/api/v2/age-verification \

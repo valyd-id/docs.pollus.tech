@@ -11,8 +11,8 @@
 - Estimated steps: 0
 - Can complete without human input: YES — this is a reference page; no actions required.
 - Prerequisites:
-  - An App API key from the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard)
-  - For workflow-based sessions, a `workflow_id` configured in the Developer Console
+  - An App API key from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}})
+  - For workflow-based sessions, a `workflow_id` configured in the Developer Portal
 
 Base URL for all endpoints: `https://{{VERIFY_BASE_URL}}`
 
@@ -29,7 +29,7 @@ A Bearer token is also accepted:
 Authorization: Bearer <App API key>
 ```
 
-Get your App API key from the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). Authenticated endpoints are billed per call against your App.
+Get your App API key from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}). Authenticated endpoints are billed per call against your App.
 
 ## Sessions
 
@@ -51,7 +51,7 @@ curl -X POST https://{{VERIFY_BASE_URL}}/api/v2/session \
   -d '{ "workflow_id": "WORKFLOW_ID", "vendor_data": "user-123" }'
 ```
 
-`workflow_id` (get it from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
+`workflow_id` (get it from the Developer Portal: https://{{DEV_PORTAL_URL}}) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
 
 **Expected output:** HTTP 200/201 with a created session object including its session id and a hosted verification URL to send the user to.
 
@@ -94,7 +94,7 @@ curl -X PATCH https://{{VERIFY_BASE_URL}}/api/v2/session/SES_ID/status \
 
 ## Workflows
 
-Workflows are configured in the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
+Workflows are configured in the Developer Portal (https://{{DEV_PORTAL_URL}}). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
 
 Available services that a workflow can bundle:
 - `id_verification`
@@ -103,9 +103,9 @@ Available services that a workflow can bundle:
 - `age`
 - `credential`
 
-There is no REST endpoint to create a workflow from this reference — workflows are defined in the Developer Console, and you reference the resulting `workflow_id` in `POST /api/v2/session`.
+There is no REST endpoint to create a workflow from this reference — workflows are defined in the Developer Portal, and you reference the resulting `workflow_id` in `POST /api/v2/session`.
 
-## Standalone checks
+## Core checks
 
 Run a single check directly without a hosted session.
 
@@ -149,6 +149,59 @@ curl https://{{VERIFY_BASE_URL}}/api/v2/session/SES_ID/decision -H "X-API-Key: $
 
 **Expected output:** HTTP 200 with the full decision and per-check data for the session. Call this after a terminal webhook to retrieve all extracted data (the webhook is only a notification).
 
+## POST /api/v2/location — the location check
+
+A **real GPS fix is always mandatory**. This step can never be skipped: a blocked permission or
+missing coordinates is a hard `failed` (never a pass, never a review).
+
+What the `status` means depends on what you asked for:
+
+| You send | `status` | `data.match` | Notes |
+| --- | --- | --- | --- |
+| `expected_latitude` + `expected_longitude` + `radius_m` | **`passed` inside the radius, `failed` outside it** | `true` / `false` | The status **is** the verdict. `error` reads e.g. `"You are 119.3 km from the required location (must be within 200 m)."` |
+| `expected_latitude` + `expected_longitude`, **no** `radius_m` | `passed` | `null` | We cannot judge without a threshold — we just report `data.distance_m`; you decide. |
+| No expected point | `passed` | absent | Capture-only: returns the captured coordinates + accuracy. |
+
+Request:
+
+```bash
+curl -X POST https://{{VERIFY_BASE_URL}}/api/v2/location \
+  -H "X-API-Key: $VALYD_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "latitude": 37.3382, "longitude": -121.8863, "accuracy": 12,
+    "expected_latitude": 37.3390, "expected_longitude": -121.8850,
+    "radius_m": 200
+  }'
+```
+
+Response (`data.check`):
+
+```json
+{
+  "type": "location",
+  "status": "passed",
+  "score": 137.4,
+  "data": {
+    "latitude": 37.3382, "longitude": -121.8863, "accuracy": 12,
+    "source": "gps", "captured_at": "2026-07-13T18:04:10+00:00",
+    "expected_latitude": 37.339, "expected_longitude": -121.885,
+    "distance_m": 137.4, "radius_m": 200, "match": true
+  }
+}
+```
+
+Outside the radius the same call returns `"status": "failed"`, `"match": false` and the human-readable
+`error`. There is no separate `location-match` endpoint and no `evv_presence` bundle — `location` is the
+single location check (feature key `location`), and it does the geofence verdict itself.
+
+```text
+IF you need a yes/no "is the user at the place?":  → send expected_latitude + expected_longitude + radius_m and read `status`
+IF you only want the distance:                     → send the expected point WITHOUT radius_m and read `data.distance_m`
+IF you only want the coordinates:                  → send just latitude/longitude/accuracy
+IF status is failed with reason permission_denied: → the user blocked location; ask them to allow it and retry (it cannot be skipped)
+```
+
 ## Errors & rate limits
 
 Errors use the same response envelope with `success: false` and an HTTP status that reflects the error class.
@@ -177,7 +230,7 @@ Rate limits and billing:
 
 ```text
 IF HTTP 400 (validation_error):  → fix the request body / add the missing required field, then retry.
-IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://{{VERIFY_BASE_URL}}/dashboard); do not retry until fixed.
+IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://{{DEV_PORTAL_URL}}); do not retry until fixed.
 IF HTTP 404 (not_found):         → verify the session/resource id; do not retry the same id.
 IF HTTP 422 (unprocessable):     → the input could not be processed (e.g. unreadable image); collect new/clearer input and retry.
 IF HTTP 429 (rate_limited):      → back off and retry later; you have exceeded public/demo limits.

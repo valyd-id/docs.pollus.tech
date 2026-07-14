@@ -24,7 +24,7 @@ This file concatenates every Valyd documentation page. Each page is delimited by
   - Valyd ID / OAuth / OIDC: `https://{{IDP_BASE_URL}}`
   - Valyd Verify API: `https://{{VERIFY_BASE_URL}}`
   - Developer Portal (Valyd ID): `https://{{DEV_PORTAL_URL}}`
-  - Verify Developer Console: `https://{{VERIFY_BASE_URL}}/dashboard`
+  - Developer Portal: `https://{{DEV_PORTAL_URL}}`
 - **Credentials cannot be created via API.** A human must sign up and generate them in the portal
   (see "Human-only steps" at the bottom). Pause and request these values rather than guessing:
   `client_id`, `client_secret` (Valyd ID); App `API key`, `workflow_id`, webhook signing secret
@@ -55,19 +55,20 @@ This file concatenates every Valyd documentation page. Each page is delimited by
 
 ## Valyd Verify — Guides
 
-- [Introduction](https://{{DOCS_BASE_URL}}/verify/intro.md): What Valyd Verify is, Hosted vs Standalone modes, services, base URL, response envelope.
-- [Quickstart](https://{{DOCS_BASE_URL}}/verify/quickstart.md): Get an API key, create a workflow/webhook, make a first standalone call and a hosted session.
-- [Developer Console](https://{{DOCS_BASE_URL}}/verify/console.md): Apps, API keys, workflows, webhooks, SSO. (Human-only UI steps.)
-- [Hosted vs Standalone](https://{{DOCS_BASE_URL}}/verify/modes.md): Decision tree and comparison to choose an integration mode.
+- [Introduction](https://{{DOCS_BASE_URL}}/verify/intro.md): What Valyd Verify is, Hosted vs Core APIs modes, services, base URL, response envelope.
+- [Quickstart](https://{{DOCS_BASE_URL}}/verify/quickstart.md): Get an API key, create a workflow/webhook, make a first Core API call and a hosted session.
+- [Developer Portal](https://{{DOCS_BASE_URL}}/verify/console.md): Apps, API keys, workflows, webhooks, SSO. (Human-only UI steps.)
+- [Hosted vs Core APIs](https://{{DOCS_BASE_URL}}/verify/modes.md): Decision tree and comparison to choose an integration mode.
+- [Account (Managed by Valyd)](https://{{DOCS_BASE_URL}}/verify/managed.md): Account vs Non-account model, the proofs-only data rule, hosted + core account APIs, reuse, and the consent Core API for raw KYC.
 - [Hosted Verification](https://{{DOCS_BASE_URL}}/verify/hosted.md): Create session, redirect, signed webhooks, decision API, statuses. Base URL https://{{VERIFY_BASE_URL}}.
-- [Standalone APIs](https://{{DOCS_BASE_URL}}/verify/standalone.md): Server-to-server checks — ID, liveness, face match, age, credential, KYC+credential.
+- [Core APIs](https://{{DOCS_BASE_URL}}/verify/standalone.md): Server-to-server checks — ID, liveness, face match, age, credential, KYC+credential.
 - [Node SDK](https://{{DOCS_BASE_URL}}/verify/sdk.md): Install/init valyd-verify-sdk, resources, types, error handling, Express webhook handler.
 - [Webhooks](https://{{DOCS_BASE_URL}}/verify/webhooks.md): Register a callback URL and verify HMAC-SHA256 signatures over the raw request body.
 - [Statuses & decisioning](https://{{DOCS_BASE_URL}}/verify/statuses.md): Every session/check status, what it means, and how to act on it.
 
 ## Valyd Verify — API Reference
 
-- [API Reference](https://{{DOCS_BASE_URL}}/verify/api-reference.md): Sessions, Workflows, Standalone checks, Decision, and Errors & rate limits. All calls use `X-API-Key`.
+- [API Reference](https://{{DOCS_BASE_URL}}/verify/api-reference.md): Sessions, Workflows, Core checks, Decision, and Errors & rate limits. All calls use `X-API-Key`.
 
 ## Downloads & tooling
 
@@ -79,7 +80,7 @@ This file concatenates every Valyd documentation page. Each page is delimited by
 - Sign up for a Valyd account and log in to the Developer Portal: https://{{DEV_PORTAL_URL}} (no KYC required).
 - Create a Valyd ID project; copy `client_id` and `client_secret` (secret shown once — regenerate if lost).
 - Register the exact redirect/callback URL on the project (must match what you send; no trailing slash).
-- Sign in to the Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) with Valyd SSO; copy the App API key (shown once).
+- Sign in to the Developer Portal (https://{{DEV_PORTAL_URL}}) with Valyd SSO; copy the App API key (shown once).
 - Create a Verify workflow and copy its `workflow_id`; set the webhook URL and signing secret.
 
 ================================================================================
@@ -1485,7 +1486,7 @@ HttpResponse<String> response = client.send(request,
       "email": "user@example.com",
       "username": "john_doe",
       "name": "John Doe",
-      "pollus_id": "pl_9s8d7f",
+      "valyd_id": "valyd_225c7f2ac450496f97bbbc57354a5898",
       "avatar_url": null,
       "created_at": "2025-09-11T10:15:00Z"
     }
@@ -1600,12 +1601,12 @@ HttpResponse<String> response = client.send(request,
 {
   "success": true,
   "data": {
-    "sub": "123",
+    "sub": "valyd_225c7f2ac450496f97bbbc57354a5898",
     "email": "user@example.com",
     "first_name": "John",
     "last_name": "Doe",
     "full_name": "John Doe",
-    "anon_id": "anon_x1y2z3",
+    "valyd_id": "valyd_225c7f2ac450496f97bbbc57354a5898",
     "id_verified": true,
     "created_at": "2025-09-10T12:00:00Z"
   }
@@ -2130,7 +2131,7 @@ User profile information including name, photo, and age verification status.
 | `first_name` | User's first name |
 | `last_name` | User's last name |
 | `full_name` | User's full name |
-| `anon_id` | Anonymous identifier |
+| `valyd_id` | The user's unique Valyd account identifier |
 | `id_verified` | Whether ID is verified (boolean) |
 | `created_at` | Account creation timestamp |
 
@@ -2486,20 +2487,20 @@ This page tracks releases of the Valyd SDK. Tags: **Added** (new functionality),
 
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#intro
-- Credentials / env vars needed: none (this is an overview; you need an App API key from the Developer Console before making calls — get it at https://{{VERIFY_BASE_URL}}/dashboard)
+- Credentials / env vars needed: none (this is an overview; you need an App API key from the Developer Portal before making calls — get it at https://{{DEV_PORTAL_URL}})
 - Files an integrator edits: none — reference only
 - Estimated steps: 0 (conceptual overview)
 - Can complete without human input: YES — reading/reference only, no actions required
 - Prerequisites: none
 
-Valyd Verify is an identity-verification platform with two integration modes. Pick Hosted if you want Valyd to handle the camera capture and UI, or Standalone if you want to call REST endpoints server-to-server with your own UI and data.
+Valyd Verify is an identity-verification platform with two integration modes. Pick Hosted if you want Valyd to handle the camera capture and UI, or Core APIs if you want to call REST endpoints server-to-server with your own UI and data.
 
 ## Integration modes
 
 ### Hosted
 Redirect your user to Valyd's hosted page for ID + selfie capture. Receive the result via a signed webhook and a decision API call. No UI to build.
 
-### Standalone
+### Core APIs
 Call per-capability REST endpoints server-to-server with your own UI and data. Synchronous JSON result returned on the same request.
 
 To choose between them, see https://{{DOCS_BASE_URL}}/verify#modes (modes.md).
@@ -2552,24 +2553,24 @@ Note: the `error` object is only included in the response when `success` is `fal
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WORKFLOW_ID (Hosted only)
 - Files an integrator edits: .env (to store VALYD_API_KEY and VALYD_WORKFLOW_ID), server route handler (to make the API call and, for Hosted, handle the webhook)
 - Estimated steps: 6
-- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). The API call itself (steps 5-6) can be automated once credentials exist.
+- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Portal (https://{{DEV_PORTAL_URL}}). The API call itself (steps 5-6) can be automated once credentials exist.
 - Prerequisites:
-  - A Valyd SSO account able to sign in to the Developer Console
+  - A Valyd SSO account able to sign in to the Developer Portal
   - An App API key copied from the Console (shown once at creation)
   - For Hosted: a `workflow_id` from a created Workflow
   - For Hosted: a publicly reachable webhook URL and signing secret
 
 ### Prerequisites
-- Access to the Developer Console at https://{{VERIFY_BASE_URL}}/dashboard (sign in with Valyd SSO).
+- Access to the Developer Portal at https://{{DEV_PORTAL_URL}} (sign in with Valyd SSO).
 - The App API key, copied at App creation (shown once). Store it server-side only.
 - For the Hosted snippet: a `workflow_id` from a Workflow you created in the Console.
 
 ### Steps
 
-1. Sign in to the Developer Console with Valyd SSO. A default App is created on first login. (Human-only step.)
+1. Sign in to the Developer Portal with Valyd SSO. The Developer Portal is the ONE console: the same sign-in issues your OAuth app (client_id / client_secret), your Verify app (API key) and your workflows. (Human-only step.)
 
    ```text
-   Open https://{{VERIFY_BASE_URL}}/dashboard and sign in with Valyd SSO.
+   Open https://{{DEV_PORTAL_URL}} and sign in with Valyd SSO.
    ```
 
    **Expected output:** You are signed in and a default App is visible in the Console.
@@ -2580,7 +2581,7 @@ Note: the `error` object is only included in the response when `success` is `fal
    export VALYD_API_KEY="paste-the-one-time-app-api-key-here"
    ```
 
-   (Get the API key from the Developer Console → your App → it is shown once at creation: https://{{VERIFY_BASE_URL}}/dashboard)
+   (Get the API key from the Developer Portal → your App → it is shown once at creation: https://{{DEV_PORTAL_URL}})
 
    **Expected output:** `VALYD_API_KEY` is set in your shell/`.env`. The key cannot be retrieved again after creation — rotate it in the Console if lost.
 
@@ -2590,7 +2591,7 @@ Note: the `error` object is only included in the response when `success` is `fal
    export VALYD_WORKFLOW_ID="paste-your-workflow-id-here"
    ```
 
-   (Get the `workflow_id` from the Developer Console → Workflows → your Workflow: https://{{VERIFY_BASE_URL}}/dashboard)
+   (Get the `workflow_id` from the Developer Portal → Workflows → your Workflow: https://{{DEV_PORTAL_URL}})
 
    **Expected output:** `VALYD_WORKFLOW_ID` is set. Required only for the Hosted session call in step 6.
 
@@ -2603,7 +2604,7 @@ Note: the `error` object is only included in the response when `success` is `fal
 
    **Expected output:** Valyd will POST signed events to your URL when a session reaches a terminal state.
 
-5. Run your first Standalone call (age verification) to confirm your API key works.
+5. Run your first Core APIs call (age verification) to confirm your API key works.
 
    ```bash
    curl -X POST https://{{VERIFY_BASE_URL}}/api/v2/age-verification \
@@ -2637,7 +2638,7 @@ Note: the `error` object is only included in the response when `success` is `fal
    **Expected output:** HTTP `200` with `{ "success": true, "data": { "url": "https://..." } }`. Redirect the user's browser to `data.url`. The verification result arrives later via your configured webhook (step 4).
 
 ### Verification
-- Standalone: the curl in step 5 returns HTTP `200` and a body where `success` is `true`.
+- Core APIs: the curl in step 5 returns HTTP `200` and a body where `success` is `true`.
 
   ```bash
   curl -s -o /dev/null -w "%{http_code}\n" -X POST https://{{VERIFY_BASE_URL}}/api/v2/age-verification \
@@ -2671,24 +2672,34 @@ Note: the `error` object is only included in the response when `success` is `fal
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ConsoleSection.tsx
 
-# The Developer Console
+# The Developer Portal
 
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#console
 - Credentials / env vars needed: none to read this page; using the Console produces the App ID, App API key, `workflow_id`, and webhook signing secret your integration will need
 - Files an integrator edits: none — reference only (the Console is a web UI)
 - Estimated steps: 0 (reference; the actions described are human-only UI steps)
-- Can complete without human input: NO — every action here is performed by a human in the web UI at https://{{VERIFY_BASE_URL}}/dashboard (Valyd SSO sign-in, creating Apps/Workflows, configuring webhooks, copying secrets)
+- Can complete without human input: NO — every action here is performed by a human in the web UI at https://{{DEV_PORTAL_URL}} (Valyd SSO sign-in, creating Apps/Workflows, configuring webhooks, copying secrets)
 - Prerequisites:
   - A Valyd SSO account
-  - A browser to reach https://{{VERIFY_BASE_URL}}/dashboard
+  - A browser to reach https://{{DEV_PORTAL_URL}}
 
-The console lives at https://{{VERIFY_BASE_URL}}/dashboard. Sign in with Valyd SSO — your first sign-in auto-creates an App.
+The console lives at https://{{DEV_PORTAL_URL}} — **the Developer Portal is the one and only console**. There is no
+separate Verify dashboard: one sign-in issues **everything** your integration needs.
+
+| What you get | Where |
+| --- | --- |
+| `client_id` + `client_secret` (Login with Valyd / OAuth2) | Developer Portal → your app |
+| Verify **API key** (`vrf_…`, shown once) + webhook signing secret (`whsec_…`) | Developer Portal → Verify projects |
+| `workflow_id` — create / edit / delete workflows | Developer Portal → Verify projects → Workflows |
+| Balance, top-ups, session history | Developer Portal |
 
 The actions below are performed by a human in the Console web UI; they cannot be automated by an agent. The values they produce (App ID, API key, `workflow_id`, signing secret) are what your code then uses.
 
 ## Apps
-Each App has a unique `App ID` and a secret API key (shown once at creation, rotatable). Create multiple apps such as Test and Production.
+One app in the Developer Portal carries both identities: the OAuth `client_id` / `client_secret` for **Login with Valyd**,
+and a Verify **API key** (`vrf_…`) for the verification APIs. The API key is shown **once** at creation. Create multiple
+apps such as Test and Production.
 
 - The API key is shown **once** at creation. Copy it immediately and store it server-side.
 - If lost, rotate the key in the Console to generate a new one.
@@ -2711,14 +2722,14 @@ The console uses Valyd SSO. Your developer account is separate from end-users yo
 
 ```text
 IF you do not yet have an App API key:
-  → Sign in at https://{{VERIFY_BASE_URL}}/dashboard with Valyd SSO (first sign-in auto-creates an App)
+  → Sign in at https://{{DEV_PORTAL_URL}} with Valyd SSO (one sign-in covers OAuth apps, Verify apps and workflows)
   → Open your App and copy the API key shown once at creation; store it server-side
 IF you lost the API key:
   → In the Console, rotate the App API key to generate a new one
 IF you will use Hosted mode:
   → Create a Workflow bundling the services you need and copy its workflow_id
   → Under Webhooks, set the endpoint URL and copy the signing secret
-IF you will use Standalone mode only:
+IF you will use Core APIs mode only:
   → You only need the App API key; Workflows and Webhooks are not required
 ```
 
@@ -2730,11 +2741,11 @@ IF you will use Standalone mode only:
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ModesSection.tsx
 
-# Hosted vs Standalone
+# Hosted vs Core APIs
 
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#modes
-- Credentials / env vars needed: none to choose a mode (each mode later needs an App API key from https://{{VERIFY_BASE_URL}}/dashboard; Hosted also needs a `workflow_id`)
+- Credentials / env vars needed: none to choose a mode (each mode later needs an App API key from https://{{DEV_PORTAL_URL}}; Hosted also needs a `workflow_id`)
 - Files an integrator edits: none — reference only (decision aid for picking a mode)
 - Estimated steps: 0 (decision aid)
 - Can complete without human input: YES — choosing a mode is a decision based on your requirements; no actions required
@@ -2750,20 +2761,20 @@ IF you need an end-user KYC flow with live camera/ID + selfie capture, and you d
   → Next: create a Workflow (get workflow_id) and configure a webhook in the Console (https://{{DOCS_BASE_URL}}/verify#console), then create a session (https://{{DOCS_BASE_URL}}/verify#quickstart).
 
 IF you want to call individual capabilities server-to-server from your backend with your own UI and data, and want a synchronous result:
-  → Use Standalone. Call the per-endpoint REST API (e.g. POST /api/v2/age-verification) with your App API key.
+  → Use Core APIs. Call the per-endpoint REST API (e.g. POST /api/v2/age-verification) with your App API key.
   → Next: get an App API key from the Console (https://{{DOCS_BASE_URL}}/verify#console), then call the endpoint (https://{{DOCS_BASE_URL}}/verify#quickstart).
 
 IF your use case is backoffice, batch processing, or a fully custom UX (no camera redirect):
-  → Use Standalone.
+  → Use Core APIs.
 
 IF unsure:
   → If a human end-user must take a live selfie/photo of their ID in a browser, choose Hosted.
-  → Otherwise choose Standalone.
+  → Otherwise choose Core APIs.
 ```
 
 ## Comparison
 
-| Aspect | Hosted | Standalone |
+| Aspect | Hosted | Core APIs |
 | --- | --- | --- |
 | UI | Valyd-hosted capture page | You build it |
 | Trigger | Redirect user to session URL | Server-to-server REST call |
@@ -2783,14 +2794,14 @@ IF unsure:
 
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#hosted
-- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard), APP_URL
+- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Portal: https://{{DEV_PORTAL_URL}}), APP_URL
 - Files an integrator edits: .env (credentials), server route handlers (session create, redirect callback, webhook receiver)
 - Estimated steps: 4 (create session → redirect → handle redirect-back → read authoritative result)
-- Can complete without human input: NO — a human must create the App API key, the webhook signing secret, and a workflow in the Developer Console to obtain a `workflow_id`.
+- Can complete without human input: NO — a human must create the App API key, the webhook signing secret, and a workflow in the Developer Portal to obtain a `workflow_id`.
 - Prerequisites:
-  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard
-  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard
-  - A `workflow_id` — create the workflow in the Developer Console (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy its `workflow_id`.
+  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Portal: https://{{DEV_PORTAL_URL}}
+  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Portal: https://{{DEV_PORTAL_URL}}
+  - A `workflow_id` — create the workflow in the Developer Portal (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy its `workflow_id`.
   - Node.js project with `valyd-verify-sdk` installed (for the SDK examples).
 
 > ALL server-to-server calls use the header `X-API-Key: <App API key>`. Keep this key SERVER-SIDE ONLY — never expose it to the browser. Every response uses the envelope `{ success, data, error: { code, message } }`.
@@ -2833,12 +2844,12 @@ Hosted flow at a glance:
 
 ## The two hosted products
 
-Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
+Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Portal (https://{{DEV_PORTAL_URL}}) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
 
 ```text
 IF you only need to verify a professional license (no ID scan):  → use the "License Verification" workflow_id
 IF you need identity + credential (ID scan + selfie + license):  → use the "KYC + License" workflow_id
-IF unsure which workflow_id to use:                              → open the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) → Workflows, and copy the workflow_id of the preset you created
+IF unsure which workflow_id to use:                              → open the Developer Portal (https://{{DEV_PORTAL_URL}}) → Workflows, and copy the workflow_id of the preset you created
 ```
 
 ### License Verification (badge: Credential only)
@@ -2858,9 +2869,9 @@ IF unsure which workflow_id to use:                              → open the De
 The steps are identical for both products. Swap the `workflow_id` to switch between License Verification and KYC + License.
 
 ### Prerequisites
-- `VALYD_API_KEY` set server-side (App API key — get from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard).
-- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard).
-- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard, or create via the Workflows API below).
+- `VALYD_API_KEY` set server-side (App API key — get from the Developer Portal: https://{{DEV_PORTAL_URL}}).
+- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Portal: https://{{DEV_PORTAL_URL}}).
+- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Portal: https://{{DEV_PORTAL_URL}}, or create via the Workflows API below).
 - `APP_URL` — your application's public base URL (used to build `redirect_url` and `callback`).
 
 ### Steps
@@ -2915,7 +2926,7 @@ Expected output: HTTP 200 with the envelope `{ success: true, data: { … } }`. 
 }
 ```
 
-> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
+> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Portal (https://{{DEV_PORTAL_URL}} → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
 
 #### Step 2 — Redirect the user to the hosted page
 
@@ -3268,7 +3279,7 @@ app.listen(3000);
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: StandaloneSection.tsx
 
-# Standalone APIs (server-to-server verification)
+# Core APIs (server-to-server verification)
 
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#standalone
@@ -3783,10 +3794,10 @@ try {
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET (for hosted/webhook flows), VALYD_WORKFLOW_ID (for hosted sessions)
 - Files an integrator edits: .env, your server bootstrap (VerifyClient init), and a webhook route handler (e.g. Express)
 - Estimated steps: 3 (install, initialise, call resources)
-- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Verify dashboard (https://{{VERIFY_BASE_URL}}/dashboard); these cannot be generated programmatically here.
+- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}); these cannot be generated programmatically here.
 - Prerequisites:
   - Node 18+ (the SDK relies on the built-in `fetch` and `crypto`)
-  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://{{VERIFY_BASE_URL}}/dashboard
+  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://{{DEV_PORTAL_URL}}
   - For hosted/webhook flows: a webhook secret and a workflow ID from the dashboard
   - Server-side runtime only — the API key must never reach the browser
 
@@ -3802,7 +3813,7 @@ The official Node SDK for Valyd Verify: `valyd-verify-sdk` on npm (https://www.n
   node --version
   ```
   **Expected output:** `v18.x.x` or higher. If lower, upgrade Node before continuing.
-- Credentials from the Valyd Verify dashboard (https://{{VERIFY_BASE_URL}}/dashboard):
+- Credentials from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}):
   - `VALYD_API_KEY` — sent as the `X-API-Key` header on every request.
   - `VALYD_WEBHOOK_SECRET` — needed to verify webhook signatures (hosted flow).
   - `VALYD_WORKFLOW_ID` — needed when creating hosted sessions.
@@ -3810,10 +3821,10 @@ The official Node SDK for Valyd Verify: `valyd-verify-sdk` on npm (https://www.n
 ```text
 IF you are building a hosted flow (redirect the user to a Valyd-hosted page):
   → you need VALYD_API_KEY, VALYD_WEBHOOK_SECRET, and VALYD_WORKFLOW_ID
-IF you are building a standalone flow (call individual checks server-side):
+IF you are building a Core APIs flow (call individual checks server-side):
   → you only need VALYD_API_KEY
 IF unsure which credentials you have:
-  → log in to https://{{VERIFY_BASE_URL}}/dashboard and check your project's API keys / webhooks / workflows
+  → log in to https://{{DEV_PORTAL_URL}} and check your project's API keys / webhooks / workflows
 ```
 
 ### Steps
@@ -3824,7 +3835,7 @@ IF unsure which credentials you have:
    ```
    **Expected output:** npm adds `valyd-verify-sdk` to `dependencies` in `package.json` and reports `added 1 package`. Versions follow semver and are pinned per release — lock to `^x.y.z` for backwards-compatible upgrades.
 
-2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Verify dashboard: https://{{VERIFY_BASE_URL}}/dashboard.
+2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Developer Portal: https://{{DEV_PORTAL_URL}}.
    ```bash
    VALYD_API_KEY=your_api_key_here          # X-API-Key for every request
    VALYD_WEBHOOK_SECRET=your_webhook_secret  # required for hosted/webhook flows
@@ -3878,7 +3889,7 @@ After initialising `verify`, use these resource namespaces.
 - `credentialVerification({ firstName, lastName, providerCode, licenseState, licenseNumber, npi? }): Promise<CheckEnvelope>` — Professional license lookup.
 - `kycCredential({ frontImage, selfie, backImage?, providerCode, licenseState, licenseNumber, npi? }): Promise<KycCredentialResult>` — ID + liveness + face match + license, matched against the OCR'd name.
 
-See the Standalone APIs guide for full field details.
+See the Core APIs guide for full field details.
 
 #### `verify.credentials`
 - `states(): Promise<{ states: CredentialState[] }>` — List supported states.
@@ -3981,7 +3992,7 @@ const decision = await verify.sessions.decision(event.session_id);
 
 **Expected output:** `verify.sessions.create(...)` resolves to a `Session` with `.url` (redirect the user here) and `.sessionId`. After the user finishes, your webhook fires; `constructEvent` returns the parsed `WebhookEvent`, and `verify.sessions.decision(...)` resolves to a `Decision` with `.status` and `.checks[]`.
 
-#### Standalone quickstart
+#### Core APIs quickstart
 
 ```javascript
 import { VerifyClient, readImage } from "valyd-verify-sdk";
@@ -4046,7 +4057,7 @@ app.post(
   npm ls valyd-verify-sdk
   ```
   **Expected output:** a line like `valyd-verify-sdk@x.y.z`.
-- Confirm credentials are wired (standalone path, only needs `VALYD_API_KEY`):
+- Confirm credentials are wired (Core APIs path, only needs `VALYD_API_KEY`):
   ```javascript
   import { VerifyClient } from "valyd-verify-sdk";
   const verify = new VerifyClient({ apiKey: process.env.VALYD_API_KEY! });
@@ -4084,10 +4095,10 @@ app.post(
 - Credentials / env vars needed: VALYD_WEBHOOK_SECRET (the webhook signing secret), VALYD_API_KEY (App API key, to fetch the full decision)
 - Files an integrator edits: server route handler (e.g. an Express handler), .env (to store VALYD_WEBHOOK_SECRET and VALYD_API_KEY)
 - Estimated steps: 4
-- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard), which is a human/portal action.
+- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}), which is a human/portal action.
 - Prerequisites:
   - A publicly reachable HTTPS endpoint to receive POST callbacks
-  - A webhook signing secret configured on your App or session (from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard)
+  - A webhook signing secret configured on your App or session (from the Developer Portal: https://{{DEV_PORTAL_URL}})
   - An App API key to call the decision endpoint
   - Ability to read the raw (unparsed) request body in your web framework
 
@@ -4099,12 +4110,12 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
 ### Prerequisites
 - A publicly reachable HTTPS URL for your webhook handler.
-- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). Store it as `VALYD_WEBHOOK_SECRET`.
+- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}). Store it as `VALYD_WEBHOOK_SECRET`.
 - An App API key stored as `VALYD_API_KEY`, used to fetch the full decision after a webhook arrives.
 
 ### Steps
 
-1. **Register your callback URL.** In the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
+1. **Register your callback URL.** In the Developer Portal (https://{{DEV_PORTAL_URL}}) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
 
    **Expected output:** The console shows your callback URL saved and a signing secret. There is no HTTP response to capture for this step — it is a portal action.
 
@@ -4112,8 +4123,8 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
    ```bash
    # .env
-   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://{{VERIFY_BASE_URL}}/dashboard)
-   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://{{VERIFY_BASE_URL}}/dashboard)
+   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://{{DEV_PORTAL_URL}})
+   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://{{DEV_PORTAL_URL}})
    ```
 
    **Expected output:** Both variables are available to your process via `process.env`.
@@ -4318,8 +4329,8 @@ Relationship between check status and session status:
 - Estimated steps: 0
 - Can complete without human input: YES — this is a reference page; no actions required.
 - Prerequisites:
-  - An App API key from the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard)
-  - For workflow-based sessions, a `workflow_id` configured in the Developer Console
+  - An App API key from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}})
+  - For workflow-based sessions, a `workflow_id` configured in the Developer Portal
 
 Base URL for all endpoints: `https://{{VERIFY_BASE_URL}}`
 
@@ -4336,7 +4347,7 @@ A Bearer token is also accepted:
 Authorization: Bearer <App API key>
 ```
 
-Get your App API key from the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). Authenticated endpoints are billed per call against your App.
+Get your App API key from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}). Authenticated endpoints are billed per call against your App.
 
 ## Sessions
 
@@ -4358,7 +4369,7 @@ curl -X POST https://{{VERIFY_BASE_URL}}/api/v2/session \
   -d '{ "workflow_id": "WORKFLOW_ID", "vendor_data": "user-123" }'
 ```
 
-`workflow_id` (get it from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
+`workflow_id` (get it from the Developer Portal: https://{{DEV_PORTAL_URL}}) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
 
 **Expected output:** HTTP 200/201 with a created session object including its session id and a hosted verification URL to send the user to.
 
@@ -4401,7 +4412,7 @@ curl -X PATCH https://{{VERIFY_BASE_URL}}/api/v2/session/SES_ID/status \
 
 ## Workflows
 
-Workflows are configured in the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
+Workflows are configured in the Developer Portal (https://{{DEV_PORTAL_URL}}). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
 
 Available services that a workflow can bundle:
 - `id_verification`
@@ -4410,9 +4421,9 @@ Available services that a workflow can bundle:
 - `age`
 - `credential`
 
-There is no REST endpoint to create a workflow from this reference — workflows are defined in the Developer Console, and you reference the resulting `workflow_id` in `POST /api/v2/session`.
+There is no REST endpoint to create a workflow from this reference — workflows are defined in the Developer Portal, and you reference the resulting `workflow_id` in `POST /api/v2/session`.
 
-## Standalone checks
+## Core checks
 
 Run a single check directly without a hosted session.
 
@@ -4456,6 +4467,59 @@ curl https://{{VERIFY_BASE_URL}}/api/v2/session/SES_ID/decision -H "X-API-Key: $
 
 **Expected output:** HTTP 200 with the full decision and per-check data for the session. Call this after a terminal webhook to retrieve all extracted data (the webhook is only a notification).
 
+## POST /api/v2/location — the location check
+
+A **real GPS fix is always mandatory**. This step can never be skipped: a blocked permission or
+missing coordinates is a hard `failed` (never a pass, never a review).
+
+What the `status` means depends on what you asked for:
+
+| You send | `status` | `data.match` | Notes |
+| --- | --- | --- | --- |
+| `expected_latitude` + `expected_longitude` + `radius_m` | **`passed` inside the radius, `failed` outside it** | `true` / `false` | The status **is** the verdict. `error` reads e.g. `"You are 119.3 km from the required location (must be within 200 m)."` |
+| `expected_latitude` + `expected_longitude`, **no** `radius_m` | `passed` | `null` | We cannot judge without a threshold — we just report `data.distance_m`; you decide. |
+| No expected point | `passed` | absent | Capture-only: returns the captured coordinates + accuracy. |
+
+Request:
+
+```bash
+curl -X POST https://{{VERIFY_BASE_URL}}/api/v2/location \
+  -H "X-API-Key: $VALYD_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "latitude": 37.3382, "longitude": -121.8863, "accuracy": 12,
+    "expected_latitude": 37.3390, "expected_longitude": -121.8850,
+    "radius_m": 200
+  }'
+```
+
+Response (`data.check`):
+
+```json
+{
+  "type": "location",
+  "status": "passed",
+  "score": 137.4,
+  "data": {
+    "latitude": 37.3382, "longitude": -121.8863, "accuracy": 12,
+    "source": "gps", "captured_at": "2026-07-13T18:04:10+00:00",
+    "expected_latitude": 37.339, "expected_longitude": -121.885,
+    "distance_m": 137.4, "radius_m": 200, "match": true
+  }
+}
+```
+
+Outside the radius the same call returns `"status": "failed"`, `"match": false` and the human-readable
+`error`. There is no separate `location-match` endpoint and no `evv_presence` bundle — `location` is the
+single location check (feature key `location`), and it does the geofence verdict itself.
+
+```text
+IF you need a yes/no "is the user at the place?":  → send expected_latitude + expected_longitude + radius_m and read `status`
+IF you only want the distance:                     → send the expected point WITHOUT radius_m and read `data.distance_m`
+IF you only want the coordinates:                  → send just latitude/longitude/accuracy
+IF status is failed with reason permission_denied: → the user blocked location; ask them to allow it and retry (it cannot be skipped)
+```
+
 ## Errors & rate limits
 
 Errors use the same response envelope with `success: false` and an HTTP status that reflects the error class.
@@ -4484,7 +4548,7 @@ Rate limits and billing:
 
 ```text
 IF HTTP 400 (validation_error):  → fix the request body / add the missing required field, then retry.
-IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://{{VERIFY_BASE_URL}}/dashboard); do not retry until fixed.
+IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://{{DEV_PORTAL_URL}}); do not retry until fixed.
 IF HTTP 404 (not_found):         → verify the session/resource id; do not retry the same id.
 IF HTTP 422 (unprocessable):     → the input could not be processed (e.g. unreadable image); collect new/clearer input and retry.
 IF HTTP 429 (rate_limited):      → back off and retry later; you have exceeded public/demo limits.

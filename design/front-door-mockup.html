@@ -1,0 +1,264 @@
+<title>Valyd Docs — Front Door & Nav Mockup</title>
+<style>
+  /* Transcribed from the project's design system (src/index.css + tailwind.config.ts).
+     Production uses Inter + JetBrains Mono; the artifact CSP blocks the web-font @import,
+     so system stacks stand in — color, radius, shadow, and spacing carry the brand. */
+  :root{
+    --ground:#FFFFFF;
+    --ground-2:#F4F7FA;
+    --ink:#0F1729;            /* foreground 222 47% 11% */
+    --muted:#6B7787;          /* muted-foreground 215 16% 47% */
+    --border:#E5EAF0;         /* border 214 32% 92% */
+    --cyan:#00A6E1;           /* primary 196 100% 48% */
+    --blue:#2A7DFF;           /* 210 100% 56% */
+    --navy:#04207A;           /* brand-navy 222 100% 18% */
+    --accent-bg:#EAF9FF;      /* accent 196 100% 96% */
+    --grad:linear-gradient(135deg,#00A6E1 0%,#2A7DFF 100%);
+    --radius:12px;
+    --shadow-soft:0 1px 3px rgba(15,23,41,.06),0 1px 2px rgba(15,23,41,.04);
+    --shadow-elegant:0 18px 50px -16px rgba(0,166,225,.35);
+    --shadow-lift:0 24px 60px -20px rgba(15,23,41,.16);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;}
+
+  /* annotation ribbon */
+  .ribbon{background:var(--navy);color:#CFE6FF;font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-align:center;padding:7px 16px;}
+  .ribbon b{color:#fff;font-weight:600;}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--border);}
+  .nav-in{display:flex;align-items:center;gap:22px;height:62px;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.02em;}
+  .logo{width:24px;height:24px;border-radius:7px;background:var(--grad);box-shadow:var(--shadow-elegant);}
+  .nav-links{display:flex;align-items:center;gap:4px;}
+  .nav-links a{padding:7px 12px;border-radius:8px;font-size:14.5px;font-weight:500;color:#33415A;}
+  .nav-links a:hover{background:var(--ground-2);color:var(--ink);}
+  .nav-links a.active{color:var(--navy);font-weight:600;}
+  .nav-spacer{flex:1;}
+  .kbar{display:flex;align-items:center;gap:10px;min-width:208px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:13.5px;background:var(--ground);cursor:text;}
+  .kbar:hover{border-color:#CBD6E4;}
+  .kbar .kbd{margin-left:auto;font-family:var(--mono);font-size:11px;border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:#8492A6;}
+  .btn{font-size:14px;font-weight:600;padding:9px 16px;border-radius:10px;border:1px solid transparent;cursor:pointer;white-space:nowrap;}
+  .btn-ghost{color:var(--navy);border-color:var(--border);background:var(--ground);}
+  .btn-ghost:hover{background:var(--ground-2);}
+  .btn-primary{color:#fff;background:var(--grad);box-shadow:var(--shadow-elegant);}
+  .btn-primary:hover{filter:brightness(1.04);}
+  .agents{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--cyan);padding:8px 12px;border-radius:9px;border:1px dashed #9BD9F2;background:var(--accent-bg);}
+  .nav-mobileonly{display:none;}
+  @media(max-width:880px){
+    .nav-links,.agents{display:none;}
+    .kbar{min-width:0;}
+  }
+  @media(max-width:560px){
+    .kbar span.kt{display:none;} .btn-ghost{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{text-align:center;padding:74px 0 18px;position:relative;overflow:hidden;}
+  .hero::before{content:"";position:absolute;inset:-40% 0 auto 0;height:420px;background:radial-gradient(60% 100% at 50% 0,rgba(0,166,225,.12),transparent 70%);pointer-events:none;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin:0 0 18px;position:relative;}
+  h1{font-size:clamp(33px,5.3vw,58px);line-height:1.03;letter-spacing:-.03em;font-weight:800;margin:0 auto;max-width:16ch;position:relative;}
+  h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:clamp(15px,1.9vw,18.5px);color:#46566E;max-width:60ch;margin:22px auto 0;position:relative;}
+  .herobar{display:flex;align-items:center;gap:12px;max-width:560px;margin:30px auto 6px;padding:14px 18px;border:1px solid var(--border);border-radius:14px;background:var(--ground);box-shadow:var(--shadow-lift);position:relative;}
+  .herobar .q{color:var(--muted);font-size:15.5px;flex:1;text-align:left;}
+  .herobar .kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:#8492A6;}
+  .hint{font-size:12.5px;color:var(--muted);margin:12px 0 0;position:relative;}
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{padding:46px 0;}
+  .band{background:var(--ground-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .sec-label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 22px;display:flex;align-items:center;gap:10px;}
+  .sec-label::after{content:"";flex:1;height:1px;background:var(--border);}
+
+  /* ---------- JOB CARDS ---------- */
+  .jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media(max-width:820px){.jobs{grid-template-columns:1fr;}}
+  .job{display:flex;flex-direction:column;gap:12px;padding:24px;background:var(--ground);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-soft);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;}
+  .job:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);border-color:#CBD6E4;}
+  .job .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--accent-bg);color:var(--cyan);}
+  .job h3{margin:2px 0 0;font-size:19px;letter-spacing:-.02em;}
+  .job p{margin:0;color:var(--muted);font-size:14px;flex:1;}
+  .job .go{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;color:var(--navy);}
+  .job .go .route{font-family:var(--mono);font-size:12.5px;color:var(--cyan);}
+  .job.soon{background:repeating-linear-gradient(135deg,#fff,#fff 10px,#FAFCFE 10px,#FAFCFE 20px);border-style:dashed;box-shadow:none;}
+  .job.soon .ico{background:#F1F4F8;color:#9AA7B8;}
+  .job.soon h3{color:#5C6B80;}
+  .tag{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#A0791F;background:#FBF3DD;border:1px solid #EBD9A8;border-radius:6px;padding:2px 7px;}
+
+  /* ---------- CODE ---------- */
+  .runrow{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:center;}
+  @media(max-width:820px){.runrow{grid-template-columns:1fr;}}
+  .runrow h2{font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin:8px 0 10px;}
+  .runrow p{color:var(--muted);margin:0 0 16px;font-size:15px;}
+  .keychip{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;color:var(--navy);background:var(--accent-bg);border:1px solid #C7ECFA;border-radius:8px;padding:6px 11px;}
+  .keychip b{color:var(--cyan);}
+  .editor{border-radius:14px;overflow:hidden;box-shadow:var(--shadow-lift);border:1px solid #0c1322;}
+  .tabs{display:flex;gap:2px;background:#0B1120;padding:8px 10px 0;}
+  .tab{font-family:var(--mono);font-size:12.5px;color:#8FA0B5;padding:8px 14px;border-radius:8px 8px 0 0;cursor:pointer;}
+  .tab.on{background:#0F1729;color:#fff;}
+  .code{background:#0F1729;padding:18px 18px 20px;overflow-x:auto;}
+  .code pre{margin:0;font-family:var(--mono);font-size:13px;line-height:1.7;color:#D7DEE9;white-space:pre;}
+  .code .tok-cmd{color:#5BC8F5;} .code .tok-flag{color:#9BB4D4;} .code .tok-str{color:#7FE0B6;} .code .tok-key{color:#E0B978;}
+  .resp{display:flex;align-items:center;gap:9px;background:#0B1120;padding:10px 18px;font-family:var(--mono);font-size:12.5px;color:#8FA0B5;border-top:1px solid #1B2740;}
+  .dot200{display:inline-block;width:8px;height:8px;border-radius:50%;background:#36D399;box-shadow:0 0 0 3px rgba(54,211,153,.18);}
+  .resp b{color:#36D399;}
+
+  /* ---------- ONE NAV EVERYWHERE (mini preview) ---------- */
+  .preview{border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-lift);background:var(--ground);}
+  .pv-nav{display:flex;align-items:center;gap:14px;padding:11px 16px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.9);}
+  .pv-nav .b{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13.5px;}
+  .pv-nav .b .lg{width:17px;height:17px;border-radius:5px;background:var(--grad);}
+  .pv-switch{display:flex;gap:3px;margin-left:6px;background:var(--ground-2);border:1px solid var(--border);border-radius:9px;padding:3px;}
+  .pv-switch span{font-size:12px;font-weight:600;padding:4px 11px;border-radius:6px;color:var(--muted);}
+  .pv-switch span.on{background:#fff;color:var(--navy);box-shadow:var(--shadow-soft);}
+  .pv-right{margin-left:auto;display:flex;gap:9px;align-items:center;}
+  .pv-right .mk{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);border-radius:7px;padding:4px 9px;}
+  .pv-body{display:grid;grid-template-columns:178px 1fr;min-height:188px;}
+  .pv-side{border-right:1px solid var(--border);padding:14px 12px;background:var(--ground-2);font-size:12.5px;}
+  .pv-side .grp{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;margin:10px 6px 6px;}
+  .pv-side .it{padding:6px 10px;border-radius:7px;color:#41506A;}
+  .pv-side .it.on{background:var(--accent-bg);color:var(--navy);font-weight:600;}
+  .pv-main{padding:20px 22px;}
+  .pv-main .crumb{font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+  .pv-main h4{margin:9px 0 8px;font-size:19px;letter-spacing:-.02em;}
+  .pv-main .ln{height:9px;border-radius:5px;background:#EDF1F6;margin:9px 0;}
+  .pv-main .ln.s{width:62%;} .pv-main .ln.m{width:84%;}
+  .cap-note{font-size:13.5px;color:var(--muted);margin:14px 0 0;max-width:62ch;}
+
+  footer{padding:34px 0 70px;color:var(--muted);font-size:13px;}
+  footer code{font-family:var(--mono);color:#46566E;}
+  .ann{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--cyan);border:1px dashed #9BD9F2;border-radius:6px;padding:2px 8px;margin-bottom:14px;}
+</style>
+
+<div class="ribbon">MOCKUP · front door + unified nav · <b>not wired up</b> — design only, on branch <b>design/front-door-nav</b></div>
+
+<!-- ===================== GLOBAL NAV ===================== -->
+<div class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#"><span class="logo"></span>Valyd</a>
+    <nav class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#">Valyd ID</a>
+      <a href="#">Valyd Verify</a>
+      <a href="#">API Reference</a>
+      <a href="#">Guides</a>
+    </nav>
+    <span class="nav-spacer" style="flex:1"></span>
+    <div class="kbar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span class="kt">Search docs, endpoints, errors…</span><span class="kbd">⌘K</span></div>
+    <span class="agents"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M9 7V4M15 7V4M9 13h.01M15 13h.01"/></svg>Agents</span>
+    <a class="btn btn-ghost" href="#">Sign in</a>
+    <a class="btn btn-primary" href="#">Get API keys</a>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Developer documentation</p>
+    <h1>Identity &amp; verification APIs, <span class="grad">live in minutes</span>.</h1>
+    <p class="sub">Sign users in with Valyd, or verify who they are. One platform, two products — documented for the humans who build with them and the agents that build alongside them.</p>
+    <div class="herobar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8492A6" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+      <span class="q">Search the docs — “create a hosted session”, “refresh token”, error codes…</span>
+      <span class="kbd">⌘K</span>
+    </div>
+    <p class="hint">One search across both products and the API reference — the same index agents read.</p>
+  </div>
+</section>
+
+<!-- ===================== START BY JOB ===================== -->
+<section>
+  <div class="wrap">
+    <p class="sec-label">Start by job</p>
+    <div class="jobs">
+      <a class="job" href="#">
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.2-2.9 7.4-7 8.5C7.9 18.4 5 15.2 5 11V6l7-3z"/><path d="M9 11.5l2 2 4-4.5"/></svg></span>
+        <h3>Verify a person</h3>
+        <p>Run KYC — hosted capture or server-to-server checks for ID, liveness, face match, age, and licenses.</p>
+        <span class="go">Go to Valyd Verify <span class="route">/verify</span> →</span>
+      </a>
+      <a class="job" href="#">
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg></span>
+        <h3>Sign in with Valyd</h3>
+        <p>Add “Sign in with Valyd” over OAuth2 / OpenID Connect — verified profiles, licenses, and identity claims.</p>
+        <span class="go">Go to Valyd ID <span class="route">/docs</span> →</span>
+      </a>
+      <div class="job soon">
+        <span class="tag">Coming soon</span>
+        <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16"/><path d="M15 9h4a1 1 0 0 1 1 1v11"/><path d="M8 8h3M8 12h3M8 16h3"/></svg></span>
+        <h3>Screen a business</h3>
+        <p>KYB &amp; AML for company onboarding. Not documented yet — tell us what you need.</p>
+        <span class="go" style="color:#8492A6">Talk to us →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COPY-PASTE RUNS NOW ===================== -->
+<section class="band">
+  <div class="wrap">
+    <div class="runrow">
+      <div>
+        <p class="sec-label" style="margin-bottom:14px">Copy, paste, runs now</p>
+        <h2>A 200 before you commit to anything.</h2>
+        <p>Every quickstart opens with a request that works against a shared sandbox — a test key is filled in for you, so the first call happens before signup, not after.</p>
+        <span class="keychip">🔑 Prefilled: <b>vk_test_…</b> &nbsp;sandbox key</span>
+      </div>
+      <div class="editor">
+        <div class="tabs"><span class="tab on">cURL</span><span class="tab">Node</span><span class="tab">Python</span></div>
+        <div class="code"><pre><span class="tok-cmd">curl</span> https://verify.pollus.tech/api/v2/age-verification <span class="tok-flag">\</span>
+  <span class="tok-flag">-H</span> <span class="tok-str">"X-API-Key: vk_test_demo"</span> <span class="tok-flag">\</span>
+  <span class="tok-flag">-H</span> <span class="tok-str">"Content-Type: application/json"</span> <span class="tok-flag">\</span>
+  <span class="tok-flag">-d</span> <span class="tok-str">'{"dob":"1995-06-01","bands":["is_18_plus"]}'</span></pre></div>
+        <div class="resp"><span class="dot200"></span><b>200 OK</b> &nbsp;·&nbsp; { "success": true, "data": { "check": { "status": "passed" } } }</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ONE NAV EVERYWHERE ===================== -->
+<section>
+  <div class="wrap">
+    <p class="sec-label">One nav, everywhere</p>
+    <span class="ann">the same top bar persists on every docs page</span>
+    <div class="preview">
+      <div class="pv-nav">
+        <span class="b"><span class="lg"></span>Valyd</span>
+        <span class="pv-switch"><span>ID</span><span class="on">Verify</span></span>
+        <span class="pv-right"><span class="mk">⌘K</span><span class="mk">Agents</span><span class="mk">Sign in</span></span>
+      </div>
+      <div class="pv-body">
+        <div class="pv-side">
+          <div class="grp">Guides</div>
+          <div class="it">Introduction</div>
+          <div class="it">Hosted vs Standalone</div>
+          <div class="it on">Ship Hosted KYC</div>
+          <div class="it">Webhooks</div>
+          <div class="grp">Reference</div>
+          <div class="it">Sessions</div>
+          <div class="it">Standalone checks</div>
+        </div>
+        <div class="pv-main">
+          <div class="crumb">Verify / Guides / Ship Hosted KYC</div>
+          <h4>Ship Hosted KYC</h4>
+          <div class="ln m"></div><div class="ln"></div><div class="ln s"></div>
+          <div class="ln m"></div><div class="ln s"></div>
+        </div>
+      </div>
+    </div>
+    <p class="cap-note">Switching between Valyd ID and Valyd Verify is a tab in the nav, not a different URL you have to know. The highlighted “Ship Hosted KYC” is the single consolidated recipe that replaces today’s five split pages.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Mockup for the Phase 2 front-door &amp; unified-nav proposal · colors and radius transcribed from <code>src/index.css</code> · production renders in Inter + JetBrains Mono. Interactions (search, tabs, switch) are illustrative — no code is wired up. KYB/AML is shown as a stub, not a shipped product.
+  </div>
+</footer>

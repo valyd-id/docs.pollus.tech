@@ -7,10 +7,63 @@ export const IntroSection = () => (
     <div>
       <h1 className="text-4xl font-bold text-foreground">Valyd Verify</h1>
       <p className="text-lg text-muted-foreground mt-4 max-w-3xl">
-        Valyd Verify is an identity-verification platform with two integration modes. Pick
-        Hosted if you want Valyd to handle the camera capture and UI, or Standalone if you
-        want to call REST endpoints server-to-server with your own UI and data.
+        Valyd Verify has <strong>two API types</strong> — <strong>Account (Managed by Valyd)</strong>,
+        where the user has a Valyd account and their verified identity is stored and reused, and{" "}
+        <strong>Non-account (Fresh)</strong>, a one-shot check with nothing retained. Each is available
+        two ways: <strong>Hosted</strong> (Valyd renders the capture page) or <strong>Core APIs</strong>{" "}
+        (you call REST directly with your own UI).
       </p>
+    </div>
+
+    {/* The 2×2 */}
+    <div className="border border-border rounded-lg overflow-hidden">
+      <table className="w-full text-sm">
+        <thead className="bg-muted">
+          <tr>
+            <th className="text-left px-4 py-3 font-medium"></th>
+            <th className="text-left px-4 py-3 font-medium">Hosted</th>
+            <th className="text-left px-4 py-3 font-medium">Core APIs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-t border-border">
+            <td className="px-4 py-3 font-medium text-foreground">
+              Account<br />
+              <span className="text-xs text-muted-foreground">Managed by Valyd</span>
+            </td>
+            <td className="px-4 py-3 text-muted-foreground">
+              Login with Valyd → run a workflow on the hosted page. Steps are stored on the account and
+              reuse skips already-done steps. <strong>Proofs only.</strong>
+            </td>
+            <td className="px-4 py-3 text-muted-foreground">
+              Call REST with the user's token — license (badge on the account), face (vs their stored
+              vector), reuse read. KYC redirects to Valyd. <strong>Proofs only.</strong>
+            </td>
+          </tr>
+          <tr className="border-t border-border">
+            <td className="px-4 py-3 font-medium text-foreground">
+              Non-account<br />
+              <span className="text-xs text-muted-foreground">Fresh</span>
+            </td>
+            <td className="px-4 py-3 text-muted-foreground">
+              One-shot hosted capture, nothing retained. <strong>Raw data.</strong>
+            </td>
+            <td className="px-4 py-3 text-muted-foreground">
+              Per-endpoint REST capture in your own UI. <strong>Raw data.</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 text-sm text-muted-foreground">
+      <strong className="text-foreground">Data-sharing rule.</strong> Account APIs return{" "}
+      <strong>proofs only</strong> — a pseudonym, <code>id_verified</code>, verified license badges and
+      age bands — and <strong>never</strong> raw KYC (legal name, date of birth, document images). Raw
+      account attributes are released solely through the <strong>consent Core API</strong>, where the user
+      approves the release in their Valyd app and the values are sealed to your public key. Non-account
+      (Fresh) APIs return the captured <strong>raw data as-is</strong> — you did the capture and Valyd
+      retains nothing.
     </div>
 
     <div className="grid md:grid-cols-2 gap-4">
@@ -24,7 +77,7 @@ export const IntroSection = () => (
       </div>
       <div className="p-5 rounded-lg border border-border bg-card">
         <Server className="h-6 w-6 text-primary mb-2" />
-        <h3 className="font-semibold text-foreground">Standalone</h3>
+        <h3 className="font-semibold text-foreground">Core APIs</h3>
         <p className="text-sm text-muted-foreground mt-1">
           Call per-capability REST endpoints server-to-server with your own UI and data.
           Synchronous JSON result returned on the same request.

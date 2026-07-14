@@ -81,9 +81,9 @@ export const HostedKycRecipe = () => (
           </thead>
           <tbody>
             {[
-              ["VALYD_API_KEY", "Developer Console → your App → Credentials"],
-              ["VALYD_WEBHOOK_SECRET", "Developer Console → your App → Webhooks"],
-              ["VALYD_WORKFLOW_ID", "Developer Console → Workflows → copy workflow_id"],
+              ["VALYD_API_KEY", "Developer Portal → your Verify project → API key (shown once)"],
+              ["VALYD_WEBHOOK_SECRET", "Developer Portal → your Verify project → Webhooks"],
+              ["VALYD_WORKFLOW_ID", "Developer Portal → Workflows → copy workflow_id"],
               ["APP_URL", "Your public server URL (e.g. https://api.example.com)"],
             ].map(([v, where]) => (
               <tr key={v} className="border-t border-border">
@@ -296,7 +296,7 @@ if (credential?.status === "failed") {
           {
             title: "Invalid webhook signature",
             cause: "Verifying against a re-serialised JSON body, or using the wrong secret.",
-            fix: "Pass the raw Buffer from express.raw() directly to constructEvent(). Confirm VALYD_WEBHOOK_SECRET matches the secret in the Developer Console.",
+            fix: "Pass the raw Buffer from express.raw() directly to constructEvent(). Confirm VALYD_WEBHOOK_SECRET matches the secret in the Developer Portal.",
           },
           {
             title: "Trusting ?status= as final",

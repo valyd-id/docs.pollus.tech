@@ -70,7 +70,7 @@
 					"_postman_previewlanguage": "json",
 					"header": [],
 					"cookie": [],
-					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"access_token\": \"eyJhbGciOi...\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 900,\n    \"refresh_token\": \"rfrsh_abc123...\",\n    \"user\": {\n      \"id\": 123,\n      \"email\": \"candidate@example.com\",\n      \"username\": \"candidate123\",\n      \"name\": \"Candidate Example\",\n      \"pollus_id\": \"pl_9s8d7f\",\n      \"avatar_url\": null,\n      \"created_at\": \"2025-09-11T10:15:00Z\"\n    }\n  }\n}"
+					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"access_token\": \"eyJhbGciOi...\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 900,\n    \"refresh_token\": \"rfrsh_abc123...\",\n    \"user\": {\n      \"id\": 123,\n      \"email\": \"candidate@example.com\",\n      \"username\": \"candidate123\",\n      \"name\": \"Candidate Example\",\n      \"valyd_id\": \"valyd_225c7f2ac450496f97bbbc57354a5898\",\n      \"avatar_url\": null,\n      \"created_at\": \"2025-09-11T10:15:00Z\"\n    }\n  }\n}"
 				},
 				{
 					"name": "401 invalid_client",
@@ -114,7 +114,7 @@
 						"userinfo"
 					]
 				},
-				"description": "Get user profile and identity fields for the bearer `access_token`.\n\nTypical fields: `sub` (subject ID), `email`, `first_name`, `last_name`, `full_name`, `anon_id`, `id_verified`, `created_at`.\n"
+				"description": "Get user profile and identity fields for the bearer `access_token`.\n\nTypical fields: `sub` (subject ID), `email`, `first_name`, `last_name`, `full_name`, `valyd_id`, `id_verified`, `created_at`.\n"
 			},
 			"response": [
 				{
@@ -131,7 +131,7 @@
 					"_postman_previewlanguage": "json",
 					"header": [],
 					"cookie": [],
-					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"sub\": \"123\",\n    \"email\": \"candidate@example.com\",\n    \"first_name\": \"Candidate\",\n    \"last_name\": \"Example\",\n    \"full_name\": \"Candidate Example\",\n    \"anon_id\": \"anon_x1y2z3\",\n    \"id_verified\": true,\n    \"created_at\": \"2025-09-10T12:00:00Z\"\n  }\n}"
+					"body": "{\n  \"success\": true,\n  \"data\": {\n    \"sub\": \"valyd_225c7f2ac450496f97bbbc57354a5898\",\n    \"email\": \"candidate@example.com\",\n    \"first_name\": \"Candidate\",\n    \"last_name\": \"Example\",\n    \"full_name\": \"Candidate Example\",\n    \"valyd_id\": \"valyd_225c7f2ac450496f97bbbc57354a5898\",\n    \"id_verified\": true,\n    \"created_at\": \"2025-09-10T12:00:00Z\"\n  }\n}"
 				},
 				{
 					"name": "401 invalid_token",

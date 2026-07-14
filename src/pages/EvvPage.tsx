@@ -7,22 +7,20 @@ import {
 import { GlobalNav } from "@/components/GlobalNav";
 import { CodeBlock } from "@/components/docs/CodeBlock";
 
-const DEMO_URL = "https://homehealth.pollus.tech";
-
 // Build the `new Valyd({...})` line for the CURRENT environment only — production
 // is the SDK default (no env flag), other environments pass their own env.
 function initBlock(c: EnvCfg, webhook: boolean): string {
   const fields = webhook ? "clientId, clientSecret, apiKey, webhookSecret" : "clientId, clientSecret, apiKey";
   return c.key === "production"
-    ? `const valyd = new Valyd({ ${fields} });   // → ${c.idp} / ${c.verify}`
-    : `const valyd = new Valyd({\n  ${fields},\n  env: "${c.env}",   // → ${c.idp} / ${c.verify}\n});`;
+    ? `const valyd = new Valyd({ ${fields} });   // → ${c.idp} (login + Verify)`
+    : `const valyd = new Valyd({\n  ${fields},\n  env: "${c.env}",   // → ${c.idp} (login + Verify)\n});`;
 }
 
 const checks = [
   { icon: Fingerprint, title: "Identity (KYC)", desc: "Verified once on the clinician's Valyd account. Reused after — never re-done." },
   { icon: BadgeCheck, title: "Medical license", desc: "Checked live against the state board, then stored on the account and re-checked over time." },
   { icon: ScanFace, title: "Face at the door", desc: "A live selfie matched against the clinician's stored Valyd face vector." },
-  { icon: MapPin, title: "Location", desc: "Captured GPS matched to the assigned home (geofence + accuracy gate)." },
+  { icon: MapPin, title: "Location", desc: "A real GPS fix is mandatory. Inside the geofence → passed; outside it → failed." },
 ];
 
 function Pill({ children }: { children: React.ReactNode }) {
@@ -41,8 +39,8 @@ app.get("/evv/callback", async (req, res) => {
   const { accessToken, user } = await valyd.auth.exchangeCode(req.query.code);
   const session = await valyd.verify.sessions.create({
     workflowId: EVV_WORKFLOW_ID,          // id + liveness + face_match + credential + location
-    valydAccessToken: accessToken,        // ← identifies the person (→ pollus_id)
-    vendorData: user.pollus_id,
+    valydAccessToken: accessToken,        // ← identifies the person (→ valyd_id)
+    vendorData: user.valyd_id,
     metadata: { expected_lat: home.lat, expected_lng: home.lng }, // the assigned home
   });
   res.json({ url: session.url });         // returning, verified users → just a face scan
@@ -88,15 +86,22 @@ app.get("/evv/callback", async (req, res) => {
   res.json({ ok: true });
 });
 
-// 4) EVV Presence at each visit — ACCOUNT mode: selfie only (matched to the stored
-//    Valyd face vector) + location. No ID image; the browser captures both:
+// 4) The visit itself — ACCOUNT mode: selfie only (matched to the stored Valyd face
+//    vector) + the location check. No ID image; the browser captures both:
 //    import { captureVisit } from "valyd-verify-js";  const v = await captureVisit();
-await valyd.verify.standalone.evvPresence({
+const face = await valyd.verify.standalone.faceMatch({
   valydAccessToken: accessToken,               // ← selfie matched to the stored vector
   selfie: v.selfie,
+});
+
+const loc = await valyd.verify.standalone.locationMatch({
   latitude: v.latitude, longitude: v.longitude, accuracy: v.accuracy,
   expectedLatitude: home.lat, expectedLongitude: home.lng, radiusM: 200,
-});`;
+});
+// A radius was given, so the STATUS is the verdict:
+//   loc.check.status === "passed"  → inside the geofence  (loc.check.data.match === true)
+//   loc.check.status === "failed"  → too far away, with loc.check.error explaining by how much
+const atTheHome = face.check.status === "passed" && loc.check.status === "passed";`;
 
 const CONNECT_NOTE = `// The "Connect Valyd" button is just a link to your /evv/login route:
 //   <a href="/evv/login">Connect Valyd</a>
@@ -121,7 +126,7 @@ const WEBHOOK_EVENT = `// OPTIONAL. Webhooks are set per APP in the console (or 
   "type":        "verification.completed",
   "session_id":  "ses_8f…",
   "status":      "APPROVED",      // APPROVED | DECLINED | IN_REVIEW | EXPIRED | ABANDONED
-  "vendor_data": "pollus_123",
+  "vendor_data": "valyd_225c7f2ac450496f97bbbc57354a5898",
   "occurred_at": "2026-07-01T18:04:11Z"
 }
 // Signature: HMAC-SHA256 over "timestamp.rawBody" — verify it with
@@ -132,14 +137,16 @@ const DECISION_JSON = `// GET /api/v2/session/{id}/decision   →   valyd.verify
 {
   "session_id": "ses_8f…",
   "status":     "APPROVED",
-  "vendor_data":"pollus_123",
-  "pollus_id":  "pollus_123",
+  "vendor_data":"valyd_225c7f2ac450496f97bbbc57354a5898",
+  "valyd_id":  "valyd_225c7f2ac450496f97bbbc57354a5898",
   "checks": [
     { "type": "id_verification", "status": "passed", "data": { "reused": true } },
     { "type": "liveness",        "status": "passed" },
     { "type": "face_match",      "status": "passed", "score": 0.98 },
     { "type": "credential",      "status": "passed", "data": { "license": { "status": "active" } } },
-    { "type": "location_match",  "status": "passed", "data": { "distance_m": 12, "match": true } }
+    // location: a real GPS fix is mandatory. An expected point + radius_m was given, so the
+    // status IS the verdict — "failed" (with an error message) if the clinician is outside it.
+    { "type": "location",        "status": "passed", "data": { "distance_m": 12, "radius_m": 200, "match": true } }
   ],
   "identity": {
     "full_name": "Grace Lee Casado",
@@ -149,12 +156,14 @@ const DECISION_JSON = `// GET /api/v2/session/{id}/decision   →   valyd.verify
 }`;
 
 type EnvKey = "development" | "staging" | "production";
-interface EnvCfg { key: EnvKey; env: string; idp: string; verify: string; dev: string; console_: string; docs: string; }
+// CONSOLE UNIFICATION: `dev` is the ONE console — it issues the OAuth client_id/client_secret,
+// the Verify API key and the workflows. Verify itself is served by the IdP (no verify.* host).
+interface EnvCfg { key: EnvKey; env: string; idp: string; verify: string; dev: string; docs: string; demo: string; }
 
 const ENVIRONMENTS: Record<EnvKey, EnvCfg> = {
-  development: { key: "development", env: "development", idp: "idp.pollus.tech", verify: "verify.pollus.tech", dev: "dev.pollus.tech", console_: "verify.pollus.tech/dashboard", docs: "docs.pollus.tech" },
-  staging:     { key: "staging",     env: "staging",     idp: "idp.pollus.online", verify: "verify.pollus.online", dev: "dev.pollus.online", console_: "verify.pollus.online/dashboard", docs: "docs.pollus.online" },
-  production:  { key: "production",  env: "production",  idp: "idp.valyd.id", verify: "verify.valyd.id", dev: "dev.valyd.id", console_: "verify.valyd.id/dashboard", docs: "docs.valyd.id" },
+  development: { key: "development", env: "development", idp: "idp.pollus.tech", verify: "idp.pollus.tech", dev: "dev.pollus.tech", docs: "docs.pollus.tech", demo: "homehealth.pollus.tech" },
+  staging:     { key: "staging",     env: "staging",     idp: "idp.pollus.online", verify: "idp.pollus.online", dev: "dev.pollus.online", docs: "docs.pollus.online", demo: "homehealth.pollus.online" },
+  production:  { key: "production",  env: "production",  idp: "idp.valyd.id", verify: "idp.valyd.id", dev: "dev.valyd.id", docs: "docs.valyd.id", demo: "homehealth.valyd.id" },
 };
 
 /** Detect the environment from the docs hostname (tech / online / valyd.id). */
@@ -186,22 +195,29 @@ SDKs (install):
 
 ${envBlock}
 
-Credentials (ask me for these; keep all server-side, never in the browser):
-- VALYD_CLIENT_ID / VALYD_CLIENT_SECRET  — OAuth app from ${c.dev}
-- VALYD_API_KEY / VALYD_WEBHOOK_SECRET    — Verify app from ${c.console_}
+Credentials — ALL from ONE console, the dev portal at ${c.dev} (there is no separate Verify
+console). Ask me for these; keep all server-side, never in the browser:
+- VALYD_CLIENT_ID / VALYD_CLIENT_SECRET    — your OAuth app
+- VALYD_API_KEY / VALYD_WEBHOOK_SECRET     — your Verify project (API key vrf_…, shown once)
 - VALYD_WORKFLOW_ID                        — a "Home Health · EVV" workflow (id+liveness+face_match+credential+location)
 
 Rules:
 - new Valyd({...}) generates nothing — it only holds config; env picks the environment URLs.
 - Get the Valyd token with valyd.auth.exchangeCode(code) AFTER the user logs in.
 - Pass that token to sessions.create({ valydAccessToken }) — it goes in the SESSION, not the workflow;
-  it identifies the person (pollus_id) and unlocks KYC/license reuse.
+  it identifies the person (valyd_id) and unlocks KYC/license reuse.
 - KYC is NOT an API: if valyd.verify.kyc.isRequired(verifications) -> redirect to
   valyd.verify.kyc.redirectUrl({ returnTo }). The user completes KYC on Valyd and returns.
-- Expected (patient-home) location is passed PER SESSION via metadata.expected_lat / expected_lng.
+- Expected (patient-home) location is passed PER SESSION via metadata.expected_lat / expected_lng (+ radius_m).
 - Capture GPS in the browser with captureLocation({ maxAccuracyM: 100 }).
+- LOCATION SEMANTICS: a real GPS fix is ALWAYS mandatory — it can never be skipped, and a blocked
+  permission or missing coordinates is a hard "failed". If you pass an expected point AND radius_m, the
+  STATUS IS THE VERDICT: "passed" inside the radius, "failed" outside it (data.match true/false,
+  data.distance_m the distance). Expected point but NO radius -> "passed" with data.match === null and only
+  distance_m reported (you decide). No expected point -> capture-only "passed" with the coordinates.
+  Do NOT treat location as report-only / always-passing.
 - KYC + license are ONE-TIME onboarding steps (redirect to Valyd for KYC, verify license once). Do NOT put a
-  KYC/license button on every visit. The recurring visit action is only: captureVisit() -> evvPresence.
+  KYC/license button on every visit. The recurring visit action is only: captureVisit() -> faceMatch + locationMatch.
 - Use the SDK capture UI: captureVisit() (selfie + GPS), captureSelfie(), captureLocation() — no file inputs.
 - ACCOUNT face = selfie only (matched to the stored Valyd vector); never ask the user for an ID/reference image.
 - Webhooks are OPTIONAL. Default = poll sessions.decision(id) when the user returns. Add a webhook
@@ -211,7 +227,7 @@ Flow A — Hosted (Valyd renders the UI in a modal):
 1. "Connect Valyd" button -> GET /evv/login -> res.redirect(valyd.auth.getAuthorizationUrl({ scope:["profile","verifications","doctor_license"] }))
 2. GET /evv/callback?code= -> const { accessToken, user } = await valyd.auth.exchangeCode(code)
 3. const s = await valyd.verify.sessions.create({ workflowId: VALYD_WORKFLOW_ID, valydAccessToken: accessToken,
-     vendorData: user.pollus_id, metadata: { expected_lat, expected_lng }, redirectUrl, callback }); send s.url to the browser
+     vendorData: user.valyd_id, metadata: { expected_lat, expected_lng }, redirectUrl, callback }); send s.url to the browser
 4. Browser: import { open } from "valyd-verify-js"; await open({ url })  // returning users do only the face scan
 5. Webhook POST /webhooks/valyd: const e = valyd.verify.webhooks.constructEvent(raw, headers);
      const decision = await valyd.verify.sessions.decision(e.sessionId)   // source of truth
@@ -223,11 +239,14 @@ Flow B — Core APIs (your own UI):
      Provider is auto-resolved from state+type (default MD); the NAME comes from the account (don't pass it).
 4. Visit (ACCOUNT = selfie only, matched to the stored Valyd face vector — NO idImage):
      import { captureVisit } from "valyd-verify-js"; const v = await captureVisit(); // camera + GPS UI
-     await valyd.verify.standalone.evvPresence({ valydAccessToken: accessToken, selfie: v.selfie,
+     const face = await valyd.verify.standalone.faceMatch({ valydAccessToken: accessToken, selfie: v.selfie })
+     const loc  = await valyd.verify.standalone.locationMatch({
        latitude: v.latitude, longitude: v.longitude, accuracy: v.accuracy,
-       expectedLatitude, expectedLongitude, radiusM: 200 })
+       expectedLatitude, expectedLongitude, radiusM: 200 })   // POST /api/v2/location
+     // radius given => loc.check.status is the verdict: "passed" inside, "failed" outside.
+     const verified = face.check.status === "passed" && loc.check.status === "passed"
 
-Reference: docs https://${c.docs}/evv · live demo https://homehealth.pollus.tech ·
+Reference: docs https://${c.docs}/evv · live demo https://${c.demo} ·
 Verify API base https://${c.verify}/api/v2 (header X-API-Key).
 
 Now: ask me for the credentials, then scaffold the server routes + a minimal UI for BOTH flows.
@@ -244,6 +263,7 @@ const v = await captureVisit({ maxAccuracyM: 100 });
 export default function EvvPage() {
   const [mode, setMode] = useState<"hosted" | "core">("hosted");
   const envCfg = ENVIRONMENTS[detectEnv()];
+  const DEMO_URL = `https://${envCfg.demo}`;
   const aiPrompt = buildAiPrompt(envCfg);
   return (
     <div className="min-h-screen bg-background">
@@ -271,7 +291,7 @@ export default function EvvPage() {
           </Link>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Live demo: <a href={DEMO_URL} target="_blank" rel="noreferrer" className="text-primary underline">homehealth.pollus.tech</a>
+          Live demo: <a href={DEMO_URL} target="_blank" rel="noreferrer" className="text-primary underline">{envCfg.demo}</a>
           {" "}· admin + clinician portals, both flows wired end-to-end.
         </p>
       </section>
@@ -297,7 +317,7 @@ export default function EvvPage() {
           <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-sm">
             {[
               { n: 1, t: "Connect Valyd", d: "Clinician logs in — your backend gets their access token." },
-              { n: 2, t: "Create session", d: "Pass the token + workflow to Verify → binds the pollus_id." },
+              { n: 2, t: "Create session", d: "Pass the token + workflow to Verify → binds the valyd_id." },
               { n: 3, t: "Capture", d: "Returning users just do the face + GPS in the hosted modal." },
               { n: 4, t: "Read decision", d: "Your backend reads the result by session id (API key)." },
             ].map((s) => (
@@ -317,20 +337,23 @@ export default function EvvPage() {
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-5">
             <h3 className="font-semibold text-foreground flex items-center gap-2"><Fingerprint className="h-5 w-5 text-primary" /> 1 · Get your keys</h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              <strong className="text-foreground">One console.</strong> Sign in at{" "}
+              <a href={`https://${envCfg.dev}`} target="_blank" rel="noreferrer" className="text-primary underline">{envCfg.dev}</a>{" "}
+              — the dev portal issues <em>everything</em>. There is no separate Verify console.
+            </p>
             <ul className="mt-3 space-y-3 text-sm text-muted-foreground">
               <li>
-                <span className="font-semibold text-foreground">OAuth client</span> (for “Connect Valyd”) —
-                register an app at{" "}
-                <a href={`https://${envCfg.dev}`} target="_blank" rel="noreferrer" className="text-primary underline">{envCfg.dev}</a>.
-                You get a <code>client_id</code> + <code>client_secret</code>; add your redirect URI and the
-                scopes <code>profile</code>, <code>verifications</code>, <code>doctor_license</code>.
+                <span className="font-semibold text-foreground">OAuth client</span> (for “Connect Valyd”) — register an
+                app → <code>client_id</code> + <code>client_secret</code>; add your redirect URI and the scopes{" "}
+                <code>profile</code>, <code>verifications</code>, <code>doctor_license</code>.
               </li>
               <li>
-                <span className="font-semibold text-foreground">Verify API key + workflow</span> — sign in at{" "}
-                <a href={`https://${envCfg.console_}`} target="_blank" rel="noreferrer" className="text-primary underline">{envCfg.console_}</a>{" "}
-                (Valyd SSO). Create an App → copy the <code>API key</code> (shown once) + <code>webhook secret</code>.
-                Then <strong>New workflow → pick the “Home Health · EVV” campaign</strong> (pre-selects ID, liveness,
-                face match, license & location) → copy its <code>workflow_id</code>.
+                <span className="font-semibold text-foreground">Verify API key + workflow</span> — in the{" "}
+                <strong>same portal</strong>, create a Verify project → copy the <code>API key</code> (
+                <code>vrf_…</code>, shown once) + <code>webhook secret</code>. Then{" "}
+                <strong>New workflow → “Home Health · EVV”</strong> (pre-selects ID, liveness, face match, license &
+                location) → copy its <code>workflow_id</code>.
               </li>
             </ul>
             <p className="mt-3 text-xs text-muted-foreground">Keep <code>client_secret</code> and the <code>API key</code> server-side only.</p>
@@ -372,9 +395,11 @@ npm i valyd-verify-js@^0.2.0`} />
         <div className="rounded-xl border border-border bg-card p-4 mb-4 text-sm text-muted-foreground flex items-start gap-2">
           <Building2 className="h-4 w-4 mt-0.5 text-primary shrink-0" />
           <span>
-            <strong>One-time setup:</strong> in the console, register an app (get <code>client_id</code>,
-            <code> client_secret</code>, <code>API key</code>) and build a workflow — pick the
-            <strong> “Home Health · EVV”</strong> campaign (ID + liveness + face_match + credential + location) → <code>workflow_id</code>.
+            <strong>One-time setup, one console:</strong> at{" "}
+            <a href={`https://${envCfg.dev}`} target="_blank" rel="noreferrer" className="text-primary underline">{envCfg.dev}</a>{" "}
+            register an app (get <code>client_id</code>, <code>client_secret</code>, <code>API key</code>) and build a
+            workflow — pick the <strong>“Home Health · EVV”</strong> campaign (ID + liveness + face_match + credential
+            + location) → <code>workflow_id</code>.
           </span>
         </div>
 

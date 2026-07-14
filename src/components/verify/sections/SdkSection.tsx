@@ -143,15 +143,32 @@ const verify = new VerifyClient({
           <Method sig="ageVerification({ dob, bands? }): Promise<CheckEnvelope>" desc='Age + bands (e.g. ["is_18_plus"]).' />
           <Method sig="credentialVerification({ licenseState, licenseType?, licenseNumber, fullName, providerCode? }): Promise<CheckEnvelope>" desc="License lookup — just state + type (default MD) + number; provider auto-resolved (no provider_code)." />
           <Method sig="kycCredential({ frontImage, selfie, backImage?, providerCode, licenseState, licenseNumber, npi? }): Promise<KycCredentialResult>" desc="ID + liveness + face match + license, matched against the OCR'd name." />
+          <Method
+            sig="locationMatch({ latitude, longitude, accuracy?, expectedLatitude?, expectedLongitude?, radiusM? }): Promise<CheckEnvelope>"
+            desc={<>POSTs <code>/api/v2/location</code>. A real GPS fix is mandatory. With an expected point <strong>+ radiusM</strong> the status is the verdict (<code>passed</code> inside / <code>failed</code> outside); without a radius it passes and only reports <code>data.distance_m</code>.</>}
+          />
         </ul>
-        <p className="text-xs text-muted-foreground pt-2">See Standalone APIs for full field details.</p>
+        <p className="text-xs text-muted-foreground pt-2">
+          Every check also accepts <code>valydAccessToken</code> / <code>valydId</code> to run in Account mode
+          (proofs only). See Core APIs for full field details.
+        </p>
+      </div>
+
+      <div className="rounded-lg border border-border bg-card p-5 space-y-2">
+        <p className="font-semibold text-foreground"><code>verify.kyc</code> · <code>verify.identity</code></p>
+        <ul className="space-y-1.5 list-disc pl-5">
+          <Method sig="kyc.isRequired(verifications): boolean" desc="True when the account is not human-verified yet." />
+          <Method sig="kyc.redirectUrl({ returnTo, state?, valydId? }): string" desc="Where to send the user to complete KYC on Valyd. KYC is never an API call in the Account model." />
+          <Method sig="identity.get({ vendorData?, valydId? }): Promise<ReusableIdentity | null>" desc="Read a previously-verified user's proofs + licenses — no session needed." />
+          <Method sig="identity.revoke(valydId): Promise<void>" desc="Revoke the stored identity so the user must verify fully again." />
+        </ul>
       </div>
 
       <div className="rounded-lg border border-border bg-card p-5 space-y-2">
         <p className="font-semibold text-foreground"><code>verify.credentials</code></p>
         <ul className="space-y-1.5 list-disc pl-5">
-          <Method sig="states(): Promise<{ states: CredentialState[] }>" desc="List supported states." />
-          <Method sig="providers(state): Promise<{ providers: CredentialProvider[] }>" desc="List providers (license types) in a state, with required_fields." />
+          <Method sig="states(): Promise<CredentialState[]>" desc="List supported states." />
+          <Method sig="providers(state): Promise<CredentialProvider[]>" desc="List providers (license types) in a state, with requiredFields." />
         </ul>
       </div>
 

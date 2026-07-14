@@ -196,7 +196,7 @@ HttpResponse<String> response = client.send(request,
       "email": "user@example.com",
       "username": "john_doe",
       "name": "John Doe",
-      "pollus_id": "pl_9s8d7f",
+      "valyd_id": "valyd_225c7f2ac450496f97bbbc57354a5898",
       "avatar_url": null,
       "created_at": "2025-09-11T10:15:00Z"
     }
@@ -311,12 +311,12 @@ HttpResponse<String> response = client.send(request,
 {
   "success": true,
   "data": {
-    "sub": "123",
+    "sub": "valyd_225c7f2ac450496f97bbbc57354a5898",
     "email": "user@example.com",
     "first_name": "John",
     "last_name": "Doe",
     "full_name": "John Doe",
-    "anon_id": "anon_x1y2z3",
+    "valyd_id": "valyd_225c7f2ac450496f97bbbc57354a5898",
     "id_verified": true,
     "created_at": "2025-09-10T12:00:00Z"
   }

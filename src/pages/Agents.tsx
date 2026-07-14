@@ -224,7 +224,7 @@ const Agents = () => (
             title="Valyd Verify OpenAPI"
             badge="OpenAPI 3.1"
             badgeColor="emerald"
-            description="Full OpenAPI 3.1 spec for Sessions, Standalone checks, Credentials, and Workflows — including the HMAC-SHA256 webhook schema."
+            description="Full OpenAPI 3.1 spec for Sessions, Core checks, Credentials, and Workflows — including the HMAC-SHA256 webhook schema."
             primaryHref="/verify/api"
             primaryLabel="Browse in docs"
             secondaryHref="/openapi/valyd-verify.json"

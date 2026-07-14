@@ -29,12 +29,13 @@ interface Item {
 const guides: Item[] = [
   { id: "intro", label: "Introduction", icon: <BookOpen className="h-4 w-4" /> },
   { id: "quickstart", label: "Quickstart", icon: <Zap className="h-4 w-4" /> },
-  { id: "console", label: "Developer Console", icon: <LayoutDashboard className="h-4 w-4" /> },
+  { id: "console", label: "Developer Portal", icon: <LayoutDashboard className="h-4 w-4" /> },
   { id: "modes", label: "Choose your integration", icon: <Shuffle className="h-4 w-4" /> },
 
   // Hosted
   { id: "hosted", label: "Hosted Verification", icon: <Globe className="h-4 w-4" />, modes: ["hosted"] },
   { id: "hosted-overview", label: "Overview", indent: true, modes: ["hosted"] },
+  { id: "hosted-flow", label: "How the hosted flow works", indent: true, modes: ["hosted"] },
   { id: "hosted-products", label: "The two products", indent: true, modes: ["hosted"] },
   { id: "hosted-steps", label: "Integration steps", indent: true, modes: ["hosted"] },
   { id: "hosted-webhooks", label: "Webhooks", indent: true, modes: ["hosted"] },
@@ -45,6 +46,7 @@ const guides: Item[] = [
   // Managed by Valyd
   { id: "managed", label: "Managed by Valyd", icon: <KeyRound className="h-4 w-4" />, modes: ["managed"] },
   { id: "managed-overview", label: "Overview & SDK", indent: true, modes: ["managed"] },
+  { id: "managed-flow", label: "How the hosted flow works", indent: true, modes: ["managed"] },
   { id: "managed-register", label: "Register your app", indent: true, modes: ["managed"] },
   { id: "managed-login", label: "Login with Valyd", indent: true, modes: ["managed"] },
   { id: "managed-exchange", label: "Exchange the code", indent: true, modes: ["managed"] },
@@ -53,9 +55,11 @@ const guides: Item[] = [
   { id: "managed-redirect", label: "Hosted page", indent: true, modes: ["managed"] },
   { id: "managed-result", label: "Read the result", indent: true, modes: ["managed"] },
   { id: "managed-reuse", label: "Reuse APIs", indent: true, modes: ["managed"] },
+  { id: "consent", label: "Consent Core API", indent: true, modes: ["managed"] },
 
-  // Standalone
-  { id: "standalone", label: "Standalone APIs", icon: <Server className="h-4 w-4" />, modes: ["standalone"] },
+  // Core APIs
+  { id: "standalone", label: "Core APIs", icon: <Server className="h-4 w-4" />, modes: ["standalone"] },
+  { id: "core-account-vs-fresh", label: "Account vs Non-account", indent: true, modes: ["standalone"] },
 
   // Shared
   { id: "sdk", label: "Node SDK", icon: <Package className="h-4 w-4" /> },
@@ -71,7 +75,7 @@ const guides: Item[] = [
 const apiRef: Item[] = [
   { id: "api-sessions", label: "Sessions", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
   { id: "api-workflows", label: "Workflows", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
-  { id: "api-standalone", label: "Standalone checks", icon: <Code className="h-4 w-4" />, modes: ["standalone"] },
+  { id: "api-standalone", label: "Core checks", icon: <Code className="h-4 w-4" />, modes: ["standalone"] },
   { id: "api-decision", label: "Decision", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
   { id: "api-errors", label: "Errors & rate limits", icon: <AlertTriangle className="h-4 w-4" /> },
 ];

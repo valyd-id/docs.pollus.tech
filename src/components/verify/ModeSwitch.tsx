@@ -11,27 +11,27 @@ const OPTIONS: {
   icon: React.ReactNode;
 }[] = [
   {
-    id: "hosted",
-    label: "Hosted",
-    tagline: "We host the UI",
-    blurb:
-      "Create a session, redirect the user to a Valyd-hosted page, get the result by webhook + decision API. Fastest to ship.",
-    icon: <Globe className="h-5 w-5" />,
-  },
-  {
     id: "managed",
-    label: "Managed by Valyd",
-    tagline: "Login required",
+    label: "Account · Managed by Valyd",
+    tagline: "Login with Valyd · proofs only",
     blurb:
-      "Users sign in with Valyd, then verify once and reuse everywhere. Pass their access token to a session; returning users re-verify with a selfie only.",
+      "The user signs in with Valyd and verifies once — the result is stored on their account and reused everywhere. Returning users re-verify with a selfie only. You receive proofs (never raw KYC). Available hosted and as Core APIs.",
     icon: <KeyRound className="h-5 w-5" />,
   },
   {
-    id: "standalone",
-    label: "Standalone",
-    tagline: "You build the UI",
+    id: "hosted",
+    label: "Non-account · Hosted",
+    tagline: "Fresh · we host the UI",
     blurb:
-      "Call each capability directly (ID, liveness, face match, age, credential) and get a synchronous JSON result. Full control.",
+      "No account. Create a session, redirect the user to a Valyd-hosted page, get the result by webhook + decision API. Nothing retained; you receive the raw result.",
+    icon: <Globe className="h-5 w-5" />,
+  },
+  {
+    id: "standalone",
+    label: "Non-account · Core APIs",
+    tagline: "Fresh · you build the UI",
+    blurb:
+      "No account. Call each capability directly (ID, liveness, face match, age, credential, location) and get a synchronous JSON result. Nothing retained; you receive the raw result.",
     icon: <Server className="h-5 w-5" />,
   },
 ];

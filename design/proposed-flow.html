@@ -1,0 +1,307 @@
+<title>Valyd Docs — Proposed Flow (old vs new)</title>
+<style>
+  :root{
+    --ground:#FFFFFF; --ground-2:#F4F7FA; --ink:#0F1729; --muted:#6B7787;
+    --border:#E5EAF0; --cyan:#00A6E1; --blue:#2A7DFF; --navy:#04207A;
+    --accent-bg:#EAF9FF; --grad:linear-gradient(135deg,#00A6E1,#2A7DFF);
+    --old:#E5484D; --oldink:#B4434A; --new:#2AA775; --newink:#1F7A52;
+    --shadow-soft:0 1px 3px rgba(15,23,41,.06),0 1px 2px rgba(15,23,41,.04);
+    --shadow-lift:0 24px 60px -20px rgba(15,23,41,.16);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#EEF2F7;color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;}
+  a{color:inherit;text-decoration:none;}
+  code{font-family:var(--mono);font-size:.88em;}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+  .ribbon{background:var(--navy);color:#CFE6FF;font-family:var(--mono);font-size:12px;text-align:center;padding:7px 16px;}
+  .ribbon b{color:#fff;}
+
+  .intro{padding:54px 0 8px;}
+  .intro .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin:0 0 14px;}
+  .intro h1{font-size:clamp(28px,4.4vw,44px);letter-spacing:-.03em;font-weight:800;margin:0;max-width:20ch;}
+  .intro p{color:#46566E;max-width:70ch;margin:16px 0 0;font-size:16px;}
+  .keys{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .keys span{font-family:var(--mono);font-size:11.5px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 12px;color:#41506A;display:inline-flex;align-items:center;gap:7px;}
+  .tg{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;border-radius:6px;padding:2px 8px;}
+  .tg.ex{color:var(--newink);background:#E6F7EF;border:1px solid #B6E6CE;}
+  .tg.nw{color:#0E63A8;background:#E5F1FF;border:1px solid #BBD9F6;}
+  .tg.en{color:#8A6D1E;background:#FBF3DD;border:1px solid #EBD9A8;}
+  .pip{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  section{padding:30px 0;border-top:1px solid #E1E7EE;}
+  .sec-head{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin:0 0 6px;}
+  .sec-num{font-family:var(--mono);font-weight:700;font-size:14px;color:#fff;background:var(--grad);border-radius:7px;padding:3px 10px;}
+  .sec-title{font-size:21px;font-weight:700;letter-spacing:-.02em;}
+  .sec-route{font-family:var(--mono);font-size:12.5px;color:var(--cyan);background:var(--accent-bg);border:1px solid #C7ECFA;border-radius:7px;padding:3px 9px;}
+  .sec-cap{color:var(--muted);font-size:14.5px;max-width:74ch;margin:6px 0 18px;}
+  .sec-cap b{color:#33415A;}
+
+  /* browser frame */
+  .frame{background:#fff;border:1px solid #D8E0EA;border-radius:13px;box-shadow:var(--shadow-lift);overflow:hidden;}
+  .chrome{display:flex;align-items:center;gap:9px;padding:9px 13px;background:#F0F3F7;border-bottom:1px solid var(--border);}
+  .lights{display:flex;gap:5px;} .lights i{width:10px;height:10px;border-radius:50%;display:block;}
+  .urlbar{flex:1;background:#fff;border:1px solid var(--border);border-radius:7px;padding:4px 11px;font-family:var(--mono);font-size:11.5px;color:#5C6B80;}
+  .fscroll{overflow-x:auto;}
+
+  /* old vs new layout */
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}
+  @media(max-width:900px){.cmp{grid-template-columns:1fr;}}
+  .lab{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px;}
+  .pane.old .lab{color:var(--oldink);} .pane.new .lab{color:var(--newink);}
+  .old .pip{background:var(--old);} .new .pip{background:var(--new);}
+  .frame.muted{filter:grayscale(.34);}
+  .lab .note{margin-left:auto;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);font-size:11.5px;}
+
+  /* shared nav */
+  .gn{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--border);background:#fff;min-width:680px;}
+  .gn .b{display:flex;align-items:center;gap:7px;font-weight:700;font-size:15px;letter-spacing:-.02em;}
+  .gn .b .lg{width:18px;height:18px;border-radius:5px;background:var(--grad);}
+  .sw{display:flex;gap:3px;background:var(--ground-2);border:1px solid var(--border);border-radius:8px;padding:3px;}
+  .sw span{font-size:12px;font-weight:600;padding:4px 11px;border-radius:6px;color:var(--muted);}
+  .sw span.on{background:#fff;color:var(--navy);box-shadow:var(--shadow-soft);}
+  .gn .lk{display:flex;gap:1px;} .gn .lk a{font-size:13px;font-weight:500;color:#41506A;padding:5px 9px;border-radius:7px;} .gn .lk a.on{color:var(--navy);font-weight:600;}
+  .gn .sp{flex:1;} .gn .mk{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);border-radius:7px;padding:4px 9px;}
+  .gn .cta{font-size:12px;font-weight:600;color:#fff;background:var(--grad);border-radius:7px;padding:5px 11px;}
+  .gn .agents{font-size:12px;font-weight:600;color:var(--cyan);border:1px dashed #9BD9F2;background:var(--accent-bg);border-radius:7px;padding:4px 9px;}
+
+  /* landing pieces */
+  .lhero{text-align:center;padding:30px 24px 8px;}
+  .lhero .eb{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);font-weight:600;}
+  .lhero h2{font-size:30px;letter-spacing:-.03em;margin:12px auto 0;max-width:17ch;}
+  .lhero .gr{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .lhero p{color:#46566E;max-width:52ch;margin:12px auto 16px;font-size:14.5px;}
+  .lsearch{display:flex;align-items:center;gap:10px;max-width:460px;margin:0 auto;border:1px solid var(--border);border-radius:11px;padding:11px 15px;box-shadow:var(--shadow-lift);color:var(--muted);font-size:13.5px;}
+  .lsearch .kbd{margin-left:auto;font-family:var(--mono);font-size:11px;border:1px solid var(--border);border-radius:5px;padding:1px 7px;}
+  .seclbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:10px;margin:0 0 14px;}
+  .seclbl::after{content:"";flex:1;height:1px;background:var(--border);}
+  .jrow{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+  @media(max-width:680px){.jrow{grid-template-columns:1fr;}}
+  .jt{padding:16px;border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow-soft);}
+  .jt .ic{width:36px;height:36px;border-radius:10px;background:var(--accent-bg);color:var(--cyan);display:grid;place-items:center;margin-bottom:9px;}
+  .jt h3{margin:0 0 4px;font-size:15.5px;letter-spacing:-.02em;} .jt p{margin:0;color:var(--muted);font-size:12.5px;}
+  .jt .r{font-family:var(--mono);font-size:11px;color:var(--cyan);margin-top:8px;display:block;}
+  .jt.soon{border-style:dashed;background:#FAFCFE;} .jt.soon .ic{background:#F1F4F8;color:#9AA7B8;}
+
+  /* embedded sandbox (the correction) */
+  .embed{margin-top:8px;border:1px solid #C7ECFA;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#F5FCFF,#fff);}
+  .embed .top{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid #DCEFF8;}
+  .embed .top .badge{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--navy);background:#fff;border:1px solid #C7ECFA;border-radius:7px;padding:3px 9px;}
+  .embed .top h3{margin:0;font-size:16px;letter-spacing:-.02em;}
+  .embed .top .live{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--newink);display:flex;align-items:center;gap:6px;}
+  .embed .body{display:grid;grid-template-columns:230px 1fr;}
+  @media(max-width:680px){.embed .body{grid-template-columns:1fr;}}
+  .embed .cfg{padding:15px;border-right:1px solid #E5EAF0;background:rgba(255,255,255,.6);font-size:12.5px;}
+  .embed .cfg .ll{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;margin:12px 0 6px;} .embed .cfg .ll.f{margin-top:0;}
+  .embed .selbox{display:flex;align-items:center;border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 10px;}
+  .embed .selbox .av{width:18px;height:18px;border-radius:50%;background:var(--grad);margin-right:8px;} .embed .selbox .ch{margin-left:auto;color:#9AA7B8;}
+  .chk{display:flex;align-items:center;gap:8px;padding:5px 2px;color:#41506A;}
+  .chk .bx{width:15px;height:15px;border-radius:4px;border:1.5px solid #B8C4D4;display:grid;place-items:center;} .chk.on .bx{background:var(--cyan);border-color:var(--cyan);} .chk .rq{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:#94A2B4;}
+  .embed .run{padding:15px 16px;}
+  .stp{display:grid;grid-template-columns:24px 1fr auto;gap:11px;align-items:center;padding:9px 0;border-top:1px solid #EDF1F6;} .stp.f{border-top:none;}
+  .stp .sn{width:23px;height:23px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:11.5px;color:var(--navy);background:var(--accent-bg);border:1px solid #C7ECFA;}
+  .stp.done .sn{background:#E6F7EF;border-color:#B6E6CE;color:var(--newink);}
+  .stp h4{margin:0;font-size:13.5px;} .stp .m{font-family:var(--mono);font-size:11px;color:var(--muted);}
+  .runp{font-size:11px;font-weight:600;color:#fff;background:var(--grad);border-radius:6px;padding:4px 10px;white-space:nowrap;} .runp.g{color:var(--navy);background:#fff;border:1px solid var(--border);}
+
+  /* code */
+  .cb{background:#0F1729;border-radius:10px;overflow:hidden;margin:12px 0 0;}
+  .cb .bar{display:flex;gap:2px;padding:7px 9px 0;background:#0B1120;} .cb .bar span{font-family:var(--mono);font-size:11px;color:#8FA0B5;padding:5px 11px;border-radius:6px 6px 0 0;} .cb .bar span.on{background:#0F1729;color:#fff;}
+  .cb pre{margin:0;padding:13px 14px;font-family:var(--mono);font-size:11.5px;line-height:1.6;color:#D7DEE9;white-space:pre;overflow-x:auto;}
+  .cmd{color:#5BC8F5;} .flg{color:#9BB4D4;} .str{color:#7FE0B6;} .com{color:#5E7088;}
+  .out{display:flex;align-items:center;gap:8px;background:#0B1120;padding:8px 14px;font-family:var(--mono);font-size:11px;color:#8FA0B5;} .g200{width:7px;height:7px;border-radius:50%;background:#36D399;} .out b{color:#36D399;}
+
+  /* doc body + sidebar */
+  .docbody{display:grid;grid-template-columns:212px 1fr;min-width:680px;}
+  .side{border-right:1px solid var(--border);background:var(--ground-2);padding:14px 12px;font-size:12.5px;}
+  .side .grp{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;margin:11px 6px 5px;}
+  .side .it{padding:5px 10px;border-radius:6px;color:#41506A;} .side .it.on{background:var(--accent-bg);color:var(--navy);font-weight:600;}
+  .side .it.split{color:#B4434A;} .main{padding:20px 22px;} .crumb{font-family:var(--mono);font-size:11px;color:var(--muted);} .main h2{margin:7px 0 5px;font-size:22px;letter-spacing:-.02em;} .lede{color:#46566E;font-size:14px;margin:0 0 14px;}
+
+  /* reference */
+  .ref{display:grid;grid-template-columns:170px 1fr 1fr;min-width:760px;}
+  .ref .rnav{border-right:1px solid var(--border);background:var(--ground-2);padding:13px 10px;font-size:12px;}
+  .ref .rnav .grp{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;margin:10px 5px 5px;}
+  .ref .rnav .ep{display:flex;gap:6px;align-items:center;padding:4px 8px;border-radius:6px;color:#41506A;} .ref .rnav .ep.on{background:#fff;box-shadow:var(--shadow-soft);color:var(--navy);font-weight:600;}
+  .verb{font-family:var(--mono);font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;color:#fff;} .verb.post{background:#2AA775;} .verb.get{background:#2A7DFF;} .verb.patch{background:#B5730B;}
+  .ref .mid{padding:16px 16px;border-right:1px solid var(--border);} .ref .mid h2{margin:5px 0 4px;font-size:18px;} .epline{font-family:var(--mono);font-size:11.5px;color:#41506A;background:var(--ground-2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;margin:8px 0 12px;}
+  .ptbl{width:100%;border-collapse:collapse;font-size:11.5px;} .ptbl th{text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#94A2B4;padding:5px 7px;border-bottom:1px solid var(--border);} .ptbl td{padding:5px 7px;border-bottom:1px solid #EDF1F6;} .ptbl .pn{font-family:var(--mono);color:var(--navy);} .ptbl .rq{color:#C2410C;font-size:10px;font-family:var(--mono);}
+  .ref .rhs{padding:14px;background:#F8FAFC;} .runbtn{float:right;font-size:11px;font-weight:600;color:#fff;background:var(--grad);border-radius:7px;padding:5px 11px;}
+  .refold{padding:18px 20px;min-width:680px;} .epcard{border:1px solid var(--border);border-radius:11px;padding:14px 16px;margin:10px 0;box-shadow:var(--shadow-soft);} .epcard .h{display:flex;gap:9px;align-items:center;} .epcard p{margin:8px 0 0;color:var(--muted);font-size:13px;}
+
+  /* steps (recipe) */
+  .recipe{padding:18px 22px;min-width:680px;}
+  .rstep{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:11px 0;border-top:1px solid var(--border);} .rstep.f{border-top:none;}
+  .rstep .sn{width:25px;height:25px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:12px;color:var(--navy);background:var(--accent-bg);border:1px solid #C7ECFA;}
+  .rstep h4{margin:0 0 2px;font-size:14.5px;} .rstep p{margin:0;color:var(--muted);font-size:12.5px;}
+  .pillrow{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0;} .pill{font-family:var(--mono);font-size:11px;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:999px;padding:4px 10px;} .pill .m{color:var(--cyan);font-weight:700;}
+
+  /* agents */
+  .agrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:4px 0;} @media(max-width:680px){.agrid{grid-template-columns:1fr;}}
+  .acard{border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow-soft);} .acard h4{margin:0 0 4px;font-size:14.5px;display:flex;align-items:center;gap:8px;} .acard p{margin:0 0 9px;color:var(--muted);font-size:12.5px;} .acard .u{font-family:var(--mono);font-size:11px;color:var(--navy);background:var(--ground-2);border:1px solid var(--border);border-radius:7px;padding:5px 9px;display:inline-block;}
+  .roadmap{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#7A5Ac2;background:#F1ECFB;border:1px solid #DDD0F5;border-radius:5px;padding:2px 6px;}
+
+  .callout{background:#fff;border:1px solid var(--border);border-left:4px solid var(--cyan);border-radius:11px;padding:15px 18px;margin:18px 0 0;font-size:14px;color:#41506A;} .callout b{color:var(--ink);}
+  footer{padding:30px 0 70px;color:var(--muted);font-size:13px;border-top:1px solid #E1E7EE;} footer code{color:#46566E;}
+</style>
+
+<div class="ribbon">PROPOSED FLOW · v2 — sandbox stays on the landing (per your feedback) · <b>design only</b> · branch <b>design/front-door-nav</b></div>
+
+<div class="wrap intro">
+  <p class="eyebrow">Phase 2 · the corrected flow + old vs new</p>
+  <h1>Every page I’m proposing — and what changes from today.</h1>
+  <p>The big revision since v1: the sandbox is <b>not</b> moved to a separate route. It stays embedded on the landing where it gets discovery for free; a standalone <code>/sandbox</code> is optional and additive only. Each surface below shows the proposal, with a side-by-side <b>today vs proposed</b> wherever there’s a real difference. Real content throughout.</p>
+  <div class="keys">
+    <span><span class="pip" style="background:var(--old)"></span> Today</span>
+    <span><span class="pip" style="background:var(--new)"></span> Proposed</span>
+    <span><span class="tg ex">Existing</span> content you already have</span>
+    <span><span class="tg en">Enhanced</span> upgrade of something you have</span>
+    <span><span class="tg nw">New</span> built fresh (shell, not content)</span>
+  </div>
+</div>
+
+<!-- ===== 01 LANDING (old vs new) ===== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">The homepage</span><span class="sec-route">docs.valyd.id/</span><span class="tg nw">New shell · keeps the sandbox</span></div>
+  <p class="sec-cap"><b>Today</b> the homepage <em>is</em> the Interactive Sandbox — great runner, but no map of the products and no Verify in sight. <b>Proposed:</b> add a job-router and unified nav <em>above</em> the runner; the runner stays right below, so discovery is unchanged and you gain orientation.</p>
+  <div class="cmp">
+    <div class="pane old">
+      <div class="lab"><span class="pip"></span>Today <span class="note">/ = the sandbox</span></div>
+      <div class="frame muted"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">docs.valyd.id/</div></div>
+        <div class="fscroll"><div style="min-width:680px">
+          <div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="lk"><a>Docs ↗</a></span><span class="sp"></span><span class="mk">Sandbox</span></div>
+          <div style="padding:22px 22px 18px">
+            <span style="font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:600">Interactive Sandbox</span>
+            <div style="font-size:26px;font-weight:800;letter-spacing:-.03em;margin:8px 0 6px">Try the Valyd APIs</div>
+            <p style="color:var(--muted);font-size:13px;margin:0 0 14px;max-width:46ch">Run the Valyd ID OAuth flow with a demo user. (No product picker, no Verify, no “which one do I need?”.)</p>
+            <div style="border:1px solid var(--border);border-radius:11px;padding:14px;background:#fff">
+              <div class="chk on" style="font-size:12.5px"><span class="bx"></span>profile<span class="rq">scopes</span></div>
+              <div class="stp f" style="grid-template-columns:24px 1fr auto"><span class="sn">1</span><div><h4>Issue code</h4></div><span class="runp">▶ Run</span></div>
+              <div class="stp"><span class="sn">2</span><div><h4>Exchange token</h4></div><span class="runp g">Run</span></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+    <div class="pane new">
+      <div class="lab"><span class="pip"></span>Proposed <span class="note">front door + runner below</span></div>
+      <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">🔒 docs.valyd.id/</div></div>
+        <div class="fscroll"><div style="min-width:680px">
+          <div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="lk"><a class="on">Home</a><a>ID</a><a>Verify</a><a>API Ref</a></span><span class="sp"></span><span class="mk">🔍 ⌘K</span><span class="agents">Agents</span><span class="cta">Get keys</span></div>
+          <div class="lhero"><span class="eb">Developer docs</span><h2>Identity &amp; verification APIs, <span class="gr">live in minutes</span>.</h2><p>Sign users in with Valyd, or verify who they are.</p><div class="lsearch">🔍 Search docs, endpoints, errors… <span class="kbd">⌘K</span></div></div>
+          <div style="padding:4px 22px 16px"><div class="seclbl">Start by job</div>
+            <div class="jrow">
+              <div class="jt"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.2-2.9 7.4-7 8.5C7.9 18.4 5 15.2 5 11V6l7-3z"/><path d="M9 11.5l2 2 4-4.5"/></svg></div><h3>Verify a person</h3><p>KYC</p><span class="r">→ /verify</span></div>
+              <div class="jt"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg></div><h3>Sign in</h3><p>OAuth / OIDC</p><span class="r">→ /docs</span></div>
+              <div class="jt soon"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16"/><path d="M15 9h4a1 1 0 0 1 1 1v11"/></svg></div><h3>Screen a business</h3><p>KYB · soon</p><span class="r" style="color:#9AA7B8">Talk to us →</span></div>
+            </div>
+            <div class="seclbl" style="margin-top:18px">Try it live — no signup ↓</div>
+            <div class="embed"><div class="top"><span class="badge">◆ Valyd ID</span><h3>Run the OAuth flow</h3><span class="live"><span class="g200" style="box-shadow:0 0 0 3px rgba(54,211,153,.18)"></span>sandbox</span></div>
+              <div class="body"><div class="cfg"><div class="ll f">Demo user</div><div class="selbox"><span class="av"></span>Dr. Jane Doe<span class="ch">▾</span></div><div class="ll">Scopes</div><div class="chk on"><span class="bx"></span>profile<span class="rq">req</span></div><div class="chk on"><span class="bx"></span>verifications</div></div>
+                <div class="run"><div class="stp done f"><span class="sn">✓</span><div><h4>1 · Issue code</h4><span class="m">→ pl_9s8d7f</span></div><span class="runp g">Re-run</span></div><div class="stp"><span class="sn">2</span><div><h4>2 · Exchange → token</h4></div><span class="runp">▶ Run</span></div>
+                  <div class="cb"><div class="out"><span class="g200"></span><b>200</b> · access_token "eyJ…" · id_verified: true</div></div></div></div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout"><b>The fix to my earlier mistake:</b> the runner is <b>not</b> relocated — it’s the same <code>TryApis</code> module, embedded below the job tiles (lazy-loaded so it doesn’t slow first paint). An optional <code>/sandbox</code> can exist as a deep-linkable full-screen view, but no one ever has to <em>find</em> it.</p></div>
+</div></section>
+
+<!-- ===== 02 UNIFIED NAV (old vs new) ===== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Navigation across products</span><span class="tg nw">New shell</span></div>
+  <p class="sec-cap"><b>Today</b> Valyd ID (<code>/docs</code>) and Valyd Verify (<code>/verify</code>) are two islands with separate sidebars and no link between them. <b>Proposed:</b> one persistent nav with an ID ⇄ Verify switch — cross a product boundary without editing the URL.</p>
+  <div class="cmp">
+    <div class="pane old"><div class="lab"><span class="pip"></span>Today <span class="note">two silos</span></div>
+      <div class="frame muted"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">docs.valyd.id/docs</div></div>
+        <div class="fscroll"><div class="docbody"><div class="side"><div class="grp">Valyd ID only</div><div class="it on">Overview</div><div class="it">Quick start</div><div class="it">Authentication</div><div class="it">OIDC</div><div class="it">Endpoints</div></div><div class="main"><div class="crumb">— no link to Verify —</div><h2>Overview</h2><p class="lede">Separate sidebar. To reach Verify you must already know to type <code>/verify</code>.</p></div></div></div>
+      </div>
+    </div>
+    <div class="pane new"><div class="lab"><span class="pip"></span>Proposed <span class="note">one nav + switch</span></div>
+      <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">🔒 docs.valyd.id/docs</div></div>
+        <div class="fscroll"><div style="min-width:680px"><div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="sw"><span class="on">ID</span><span>Verify</span></span><span class="sp"></span><span class="mk">🔍 ⌘K</span><span class="mk">Agents</span><span class="cta">Get keys</span></div>
+          <div class="docbody"><div class="side"><div class="grp">Valyd ID</div><div class="it on">Overview</div><div class="it">Quick start</div><div class="it">Authentication</div><div class="it">OIDC</div></div><div class="main"><div class="crumb">Valyd ID / Overview</div><h2>Overview</h2><p class="lede">Same content — now under the shared nav. The switch jumps to Verify in one click.</p></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 03 PRODUCT DOCS (existing) ===== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Product docs</span><span class="sec-route">/docs · /verify</span><span class="tg ex">Your existing docs</span></div>
+  <p class="sec-cap"><b>This is your current documentation</b> — every page you’ve written (ID: Overview, Quickstart, Authentication, OIDC, Endpoints, Scopes, Errors; Verify: Intro, Modes, Hosted, Webhooks, Statuses, SDK). <b>Unchanged content</b> — it just inherits the shared nav. Shown: Verify.</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">🔒 docs.valyd.id/verify/quickstart</div></div>
+    <div class="fscroll"><div style="min-width:680px"><div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="sw"><span>ID</span><span class="on">Verify</span></span><span class="sp"></span><span class="mk">🔍 ⌘K</span><span class="mk">Agents</span><span class="cta">Get keys</span></div>
+      <div class="docbody"><div class="side"><div class="grp">Get started</div><div class="it">Introduction</div><div class="it on">Quickstart</div><div class="it">Hosted vs Standalone</div><div class="grp">Guides</div><div class="it">Ship Hosted KYC ★</div><div class="it">Webhooks</div><div class="it">Statuses</div></div>
+        <div class="main"><div class="crumb">Verify / Get started / Quickstart</div><h2>Quickstart</h2><p class="lede">Your first verification call in under a minute — runs against the sandbox.</p>
+          <div class="cb"><div class="bar"><span class="on">cURL</span><span>Node</span></div><pre><span class="cmd">curl</span> https://verify.pollus.tech/api/v2/age-verification <span class="flg">\</span>
+  <span class="flg">-H</span> <span class="str">"X-API-Key: vk_test_demo"</span> <span class="flg">-d</span> <span class="str">'{"dob":"1995-06-01","bands":["is_18_plus"]}'</span></pre><div class="out"><span class="g200"></span><b>200 OK</b> · {"success":true,"data":{"check":{"status":"passed"}}}</div></div>
+        </div></div></div></div>
+  </div>
+</div></section>
+
+<!-- ===== 04 SHIP HOSTED KYC (old vs new) ===== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Ship Hosted KYC — one recipe</span><span class="sec-route">/verify/ship-hosted-kyc</span><span class="tg nw">New page · existing content</span></div>
+  <p class="sec-cap"><b>Today</b> shipping Hosted KYC means stitching together five separate pages. <b>Proposed:</b> one self-contained recipe with the whole flow — the content already exists, it’s just consolidated. The five originals redirect here.</p>
+  <div class="cmp">
+    <div class="pane old"><div class="lab"><span class="pip"></span>Today <span class="note">5 pages to stitch</span></div>
+      <div class="frame muted"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">docs.valyd.id/verify/…</div></div>
+        <div class="fscroll"><div class="docbody"><div class="side"><div class="grp">…jump between</div><div class="it split">Intro</div><div class="it split">Modes</div><div class="it split">Hosted</div><div class="it split">Webhooks</div><div class="it split">Statuses</div></div><div class="main"><h2>Hosted</h2><p class="lede">Each page covers one slice. You assemble the integration by hopping across all five and back.</p></div></div></div>
+      </div>
+    </div>
+    <div class="pane new"><div class="lab"><span class="pip"></span>Proposed <span class="note">one page, top to bottom</span></div>
+      <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">🔒 …/ship-hosted-kyc · also .md</div></div>
+        <div class="fscroll"><div class="recipe"><div class="crumb">Verify / Guides / Ship Hosted KYC</div><h2>Ship Hosted KYC</h2><div class="pillrow"><span class="pill"><span class="m">env</span> API_KEY</span><span class="pill"><span class="m">env</span> WEBHOOK_SECRET</span><span class="pill">⏱ ~10 min</span></div>
+          <div class="rstep f"><span class="sn">1</span><div><h4>Create a session</h4><p><code>POST /api/v2/session</code> → hosted <code>url</code> + <code>session_id</code></p></div></div>
+          <div class="rstep"><span class="sn">2</span><div><h4>Redirect to <code>session.url</code></h4><p>User completes capture on Valyd’s page</p></div></div>
+          <div class="rstep"><span class="sn">3</span><div><h4>Verify the webhook</h4><p>HMAC-SHA256 of <code>"{ts}.{rawBody}"</code> via <code>X-Valyd-Signature</code></p></div></div>
+          <div class="rstep"><span class="sn">4</span><div><h4>Fetch the decision</h4><p><code>GET /api/v2/session/{id}/decision</code></p></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 05 API REFERENCE (old vs new) ===== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">API Reference</span><span class="sec-route">/reference</span><span class="tg en">Enhanced · spec-driven</span></div>
+  <p class="sec-cap"><b>Today</b> the reference is hand-written cards inside <code>/verify</code> — prose, no try-it, drifts from the API. <b>Proposed:</b> a three-column reference generated from the <code>valyd-verify.json</code> OpenAPI spec you now have, with a Run button (wired to the sandbox in Phase 2 ④).</p>
+  <div class="cmp">
+    <div class="pane old"><div class="lab"><span class="pip"></span>Today <span class="note">hand-written cards</span></div>
+      <div class="frame muted"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">docs.valyd.id/verify/api-reference</div></div>
+        <div class="fscroll"><div class="refold"><h2 style="font-size:18px;margin:0 0 4px">API Reference</h2><div class="epcard"><div class="h"><span class="verb post">POST</span> <code style="font-size:12px">/api/v2/session</code></div><p>Creates a session. Params described in prose. No example response, no run.</p></div><div class="epcard"><div class="h"><span class="verb get">GET</span> <code style="font-size:12px">/api/v2/session/{id}</code></div><p>Hand-maintained — can drift from the real API.</p></div></div></div>
+      </div>
+    </div>
+    <div class="pane new"><div class="lab"><span class="pip"></span>Proposed <span class="note">from OpenAPI · 3-column</span></div>
+      <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">🔒 docs.valyd.id/reference#create-session</div></div>
+        <div class="fscroll"><div class="ref"><div class="rnav"><div class="grp">Sessions</div><div class="ep on"><span class="verb post">POST</span> Create</div><div class="ep"><span class="verb get">GET</span> Decision</div><div class="ep"><span class="verb patch">PATCH</span> Status</div></div>
+          <div class="mid"><div class="crumb">Sessions</div><h2>Create session</h2><div class="epline"><span class="verb post">POST</span> /api/v2/session</div><table class="ptbl"><thead><tr><th>Field</th><th>Type</th><th></th></tr></thead><tbody><tr><td class="pn">workflow_id</td><td>string</td><td class="rq">required</td></tr><tr><td class="pn">redirect_url</td><td>string</td><td></td></tr><tr><td class="pn">vendor_data</td><td>string</td><td></td></tr></tbody></table></div>
+          <div class="rhs"><span class="runbtn">▶ Run</span><div class="cb" style="margin-top:0"><div class="bar"><span class="on">cURL</span></div><pre><span class="cmd">curl</span> -X POST …/session <span class="flg">\</span>
+ <span class="flg">-d</span> <span class="str">'{"workflow_id":"wf_kyc"}'</span></pre></div><div class="cb"><div class="bar"><span class="on">200</span></div><pre>{ <span class="str">"data"</span>: { <span class="str">"url"</span>: <span class="str">"…/s/abc"</span> } }</pre></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 06 AGENTS (new) ===== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">Agents</span><span class="sec-route">/agents</span><span class="tg nw">New page · existing files</span></div>
+  <p class="sec-cap">A page collecting the machine-readable surface agents use to self-integrate — most of it <b>already exists</b> (llms.txt, the OpenAPI specs); the page just gathers and presents it. MCP is Phase 3.</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar">🔒 docs.valyd.id/agents</div></div>
+    <div class="fscroll"><div style="min-width:680px"><div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="lk"><a>ID</a><a>Verify</a><a>API Ref</a></span><span class="sp"></span><span class="mk">🔍 ⌘K</span><span class="agents">Agents</span><span class="cta">Get keys</span></div>
+      <div class="main"><div class="crumb">Agents</div><h2>Build with an agent</h2><p class="lede">Point your tool at these and let it integrate Valyd without you in the loop.</p>
+        <div class="agrid"><div class="acard"><h4>📑 llms.txt <span class="tg ex" style="font-size:9px">existing</span></h4><p>Curated index, agent instructions, base URLs, human-only steps.</p><span class="u">docs.valyd.id/llms.txt</span></div>
+          <div class="acard"><h4>🧩 OpenAPI <span class="tg ex" style="font-size:9px">existing</span></h4><p>3.1 specs for both products — the codegen substrate.</p><span class="u">/openapi/valyd-id.json · valyd-verify.json</span></div>
+          <div class="acard"><h4>🔌 MCP server <span class="roadmap">Phase 3</span></h4><p>Generated from the spec — search docs, list endpoints, scoped tools.</p><span class="u">+ Add to Cursor / Claude Code</span></div>
+          <div class="acard"><h4>📦 Full corpus <span class="tg ex" style="font-size:9px">existing</span></h4><p>Whole doc set as one text file for context ingestion.</p><span class="u">docs.valyd.id/llms-full.txt</span></div></div>
+      </div></div></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Proposed flow v2 · palette transcribed from <code>src/index.css</code> · production renders in Inter + JetBrains Mono. All interactions illustrative — no code wired. The sandbox stays embedded on the landing; <code>/sandbox</code>, the Run button (Phase 2 ④), and the MCP server (Phase 3) are additive/later and labelled as such.
+</div></footer>

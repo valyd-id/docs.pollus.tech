@@ -2,7 +2,9 @@
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: StandaloneSection.tsx
 
-# Standalone APIs (server-to-server verification)
+# Core APIs (server-to-server verification)
+
+> **Raw data vs proofs.** Without a Valyd user token these are **Non-account (Fresh)** checks: you did the capture, nothing is retained, and the response contains the **raw** extracted data (document `fields`, `dob`, portrait, OCR). Pass a `valyd_access_token` (or `valyd_id`) and the same endpoints run in **Account (Managed by Valyd)** mode — answering from the user's stored identity and returning **proofs only** (`id_verified`, match + score, license badges, age bands), never raw KYC. Raw account attributes come only from the consent Core API. See [Account (Managed by Valyd)](https://{{DOCS_BASE_URL}}/verify/managed.md).
 
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#standalone

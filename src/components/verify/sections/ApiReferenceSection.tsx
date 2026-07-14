@@ -39,7 +39,7 @@ export const ApiReferenceSection = ({ mode }: { mode: VerifyMode }) => (
       <p className="text-sm text-muted-foreground">
         A workflow bundles services (id_verification, liveness, face_match, age,
         credential) and exposes a stable <code>workflow_id</code> you pass when creating a
-        session. Create them in the Developer Console, or manage them over the API:
+        session. Create them in the Developer Portal, or manage them over the API:
       </p>
       <div className="border border-border rounded-lg overflow-hidden">
         <table className="w-full text-sm">
@@ -57,7 +57,7 @@ export const ApiReferenceSection = ({ mode }: { mode: VerifyMode }) => (
 
     {mode === "standalone" && (
     <section id="api-standalone" className="scroll-mt-8 space-y-4">
-      <h2 className="text-2xl font-bold text-foreground">Standalone checks</h2>
+      <h2 className="text-2xl font-bold text-foreground">Core checks</h2>
       <div className="border border-border rounded-lg overflow-hidden">
         <table className="w-full text-sm">
           <tbody>
@@ -66,6 +66,7 @@ export const ApiReferenceSection = ({ mode }: { mode: VerifyMode }) => (
             <Row method="POST" path="/api/v2/face-match" desc="Selfie vs reference portrait" />
             <Row method="POST" path="/api/v2/age-verification" desc="Age bands from a DOB" />
             <Row method="POST" path="/api/v2/credential-verification" desc="Professional license lookup" />
+            <Row method="POST" path="/api/v2/location" desc="Mandatory GPS fix; with an expected point + radius_m the status is the geofence verdict" />
             <Row method="POST" path="/api/v2/kyc-credential" desc="ID + liveness + face match, then license matched to the OCR'd name (one call)" />
           </tbody>
         </table>

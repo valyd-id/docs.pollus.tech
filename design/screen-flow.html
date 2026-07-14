@@ -1,0 +1,369 @@
+<title>Valyd Docs — Screen Flow</title>
+<style>
+  :root{
+    --ground:#FFFFFF; --ground-2:#F4F7FA; --ink:#0F1729; --muted:#6B7787;
+    --border:#E5EAF0; --cyan:#00A6E1; --blue:#2A7DFF; --navy:#04207A;
+    --accent-bg:#EAF9FF; --grad:linear-gradient(135deg,#00A6E1,#2A7DFF);
+    --radius:12px;
+    --shadow-soft:0 1px 3px rgba(15,23,41,.06),0 1px 2px rgba(15,23,41,.04);
+    --shadow-lift:0 24px 60px -20px rgba(15,23,41,.16);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#EEF2F7;color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+  .ribbon{background:var(--navy);color:#CFE6FF;font-family:var(--mono);font-size:12px;text-align:center;padding:7px 16px;}
+  .ribbon b{color:#fff;}
+
+  .intro{padding:56px 0 14px;}
+  .intro .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin:0 0 14px;}
+  .intro h1{font-size:clamp(28px,4.4vw,44px);letter-spacing:-.03em;font-weight:800;margin:0;max-width:20ch;}
+  .intro p{color:#46566E;max-width:64ch;margin:18px 0 0;font-size:16px;}
+  .intro .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;font-family:var(--mono);font-size:12px;}
+  .intro .legend span{background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 12px;color:#41506A;}
+  .intro .legend b{color:var(--navy);}
+
+  /* screen scaffold */
+  .screen{padding:30px 0;}
+  .sc-head{display:flex;align-items:baseline;gap:14px;margin:0 0 16px;flex-wrap:wrap;}
+  .sc-num{font-family:var(--mono);font-weight:700;font-size:14px;color:#fff;background:var(--grad);border-radius:7px;padding:3px 10px;}
+  .sc-title{font-size:20px;font-weight:700;letter-spacing:-.02em;}
+  .sc-route{font-family:var(--mono);font-size:12.5px;color:var(--cyan);background:var(--accent-bg);border:1px solid #C7ECFA;border-radius:7px;padding:3px 9px;}
+  .sc-cap{color:var(--muted);font-size:14.5px;max-width:70ch;margin:-6px 0 16px;}
+
+  /* browser frame */
+  .frame{background:#fff;border:1px solid #D8E0EA;border-radius:14px;box-shadow:var(--shadow-lift);overflow:hidden;}
+  .chrome{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F0F3F7;border-bottom:1px solid var(--border);}
+  .lights{display:flex;gap:6px;}
+  .lights i{width:11px;height:11px;border-radius:50%;display:block;}
+  .urlbar{flex:1;background:#fff;border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-family:var(--mono);font-size:12px;color:#5C6B80;display:flex;align-items:center;gap:7px;}
+  .urlbar .lock{color:#8FA0B5;}
+  .fscroll{overflow-x:auto;}
+
+  /* shared in-page nav */
+  .gn{display:flex;align-items:center;gap:16px;padding:11px 18px;border-bottom:1px solid var(--border);background:#fff;min-width:760px;}
+  .gn .b{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;letter-spacing:-.02em;}
+  .gn .b .lg{width:20px;height:20px;border-radius:6px;background:var(--grad);}
+  .sw{display:flex;gap:3px;background:var(--ground-2);border:1px solid var(--border);border-radius:9px;padding:3px;}
+  .sw span{font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:6px;color:var(--muted);cursor:pointer;}
+  .sw span.on{background:#fff;color:var(--navy);box-shadow:var(--shadow-soft);}
+  .gn .lk{display:flex;gap:2px;}
+  .gn .lk a{font-size:13.5px;font-weight:500;color:#41506A;padding:6px 10px;border-radius:7px;}
+  .gn .lk a.on{color:var(--navy);font-weight:600;}
+  .gn .sp{flex:1;}
+  .gn .mk{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);border-radius:7px;padding:5px 9px;}
+  .gn .mk.k{display:flex;gap:7px;align-items:center;min-width:120px;}
+  .gn .agents{font-size:12.5px;font-weight:600;color:var(--cyan);border:1px dashed #9BD9F2;background:var(--accent-bg);border-radius:8px;padding:5px 10px;}
+  .gn .cta{font-size:12.5px;font-weight:600;color:#fff;background:var(--grad);border-radius:8px;padding:6px 12px;}
+
+  /* generic doc body */
+  .docbody{display:grid;grid-template-columns:230px 1fr;min-width:760px;}
+  .side{border-right:1px solid var(--border);background:var(--ground-2);padding:16px 14px;font-size:13px;}
+  .side .grp{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;margin:12px 6px 6px;}
+  .side .it{padding:6px 11px;border-radius:7px;color:#41506A;}
+  .side .it.on{background:var(--accent-bg);color:var(--navy);font-weight:600;}
+  .main{padding:26px 30px;}
+  .crumb{font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+  .main h2{margin:8px 0 6px;font-size:27px;letter-spacing:-.025em;}
+  .lede{color:#46566E;font-size:15.5px;margin:0 0 18px;max-width:66ch;}
+
+  /* code block */
+  .cb{background:#0F1729;border-radius:11px;overflow:hidden;margin:14px 0;}
+  .cb .bar{display:flex;gap:2px;padding:8px 10px 0;background:#0B1120;}
+  .cb .bar span{font-family:var(--mono);font-size:11.5px;color:#8FA0B5;padding:6px 12px;border-radius:7px 7px 0 0;}
+  .cb .bar span.on{background:#0F1729;color:#fff;}
+  .cb pre{margin:0;padding:15px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:#D7DEE9;white-space:pre;overflow-x:auto;}
+  .cmd{color:#5BC8F5;} .flg{color:#9BB4D4;} .str{color:#7FE0B6;} .com{color:#5E7088;}
+  .out{display:flex;align-items:center;gap:9px;background:#0B1120;padding:9px 16px;font-family:var(--mono);font-size:12px;color:#8FA0B5;}
+  .g200{width:8px;height:8px;border-radius:50%;background:#36D399;box-shadow:0 0 0 3px rgba(54,211,153,.18);} .out b{color:#36D399;}
+
+  /* recipe steps */
+  .step{display:grid;grid-template-columns:34px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--border);}
+  .step .sn{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:14px;color:var(--navy);background:var(--accent-bg);border:1px solid #C7ECFA;}
+  .step h3{margin:2px 0 4px;font-size:16.5px;letter-spacing:-.01em;}
+  .step p{margin:0;color:var(--muted);font-size:14px;}
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;}
+  .pill{font-family:var(--mono);font-size:11.5px;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 11px;}
+  .pill .m{color:var(--cyan);font-weight:700;}
+
+  /* api reference 3-col */
+  .ref{display:grid;grid-template-columns:210px 1fr 1fr;min-width:900px;}
+  .ref .rnav{border-right:1px solid var(--border);background:var(--ground-2);padding:16px 12px;font-size:12.5px;}
+  .ref .rnav .grp{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;margin:12px 6px 5px;}
+  .ref .rnav .ep{display:flex;gap:7px;align-items:center;padding:5px 9px;border-radius:7px;color:#41506A;}
+  .ref .rnav .ep.on{background:#fff;box-shadow:var(--shadow-soft);color:var(--navy);font-weight:600;}
+  .verb{font-family:var(--mono);font-size:9.5px;font-weight:700;padding:2px 5px;border-radius:4px;color:#fff;}
+  .verb.post{background:#2AA775;} .verb.get{background:#2A7DFF;} .verb.patch{background:#B5730B;}
+  .ref .mid{padding:22px 22px;border-right:1px solid var(--border);}
+  .ref .mid h2{margin:6px 0 4px;font-size:21px;letter-spacing:-.02em;}
+  .ref .mid .epline{font-family:var(--mono);font-size:12.5px;color:#41506A;background:var(--ground-2);border:1px solid var(--border);border-radius:8px;padding:8px 11px;margin:10px 0 14px;display:flex;gap:8px;align-items:center;overflow-x:auto;}
+  .ptbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .ptbl th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#94A2B4;padding:6px 8px;border-bottom:1px solid var(--border);}
+  .ptbl td{padding:7px 8px;border-bottom:1px solid #EDF1F6;vertical-align:top;}
+  .ptbl .pn{font-family:var(--mono);color:var(--navy);} .ptbl .req{color:#C2410C;font-size:11px;font-family:var(--mono);}
+  .ref .rhs{padding:18px 18px;background:#F8FAFC;}
+  .runbtn{float:right;font-size:12px;font-weight:600;color:#fff;background:var(--grad);border-radius:8px;padding:6px 13px;}
+
+  /* palette overlay */
+  .pl-stage{position:relative;min-height:430px;background:var(--ground-2);}
+  .pl-dim{position:absolute;inset:0;background:rgba(15,23,41,.42);}
+  .pl{position:absolute;left:50%;top:42px;transform:translateX(-50%);width:min(560px,86%);background:#fff;border-radius:14px;box-shadow:0 40px 80px -20px rgba(15,23,41,.5);overflow:hidden;border:1px solid #D8E0EA;}
+  .pl .q{display:flex;align-items:center;gap:11px;padding:15px 18px;border-bottom:1px solid var(--border);font-size:16px;}
+  .pl .q .cur{color:var(--ink);} .pl .q .ph{color:#9AA7B8;}
+  .pl .grp{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#94A2B4;padding:10px 18px 4px;}
+  .pl .res{display:flex;align-items:center;gap:11px;padding:9px 18px;font-size:13.5px;color:#33415A;}
+  .pl .res.on{background:var(--accent-bg);}
+  .pl .res .tag{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:1px 7px;}
+  .pl .res .ic{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;background:var(--ground-2);color:var(--cyan);}
+  .pl .ft{display:flex;gap:14px;padding:9px 18px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:#94A2B4;}
+
+  /* job tiles (screen 1 condensed) */
+  .jrow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:6px 0 4px;}
+  .jt{padding:18px;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-soft);}
+  .jt .ic{width:38px;height:38px;border-radius:10px;background:var(--accent-bg);color:var(--cyan);display:grid;place-items:center;margin-bottom:10px;}
+  .jt h3{margin:0 0 4px;font-size:16px;letter-spacing:-.02em;}
+  .jt p{margin:0;color:var(--muted);font-size:13px;}
+  .jt .r{font-family:var(--mono);font-size:11.5px;color:var(--cyan);margin-top:9px;display:block;}
+  .jt.soon{border-style:dashed;background:#FAFCFE;} .jt.soon .ic{background:#F1F4F8;color:#9AA7B8;}
+  .heroblock{padding:30px;text-align:center;}
+  .heroblock h2{font-size:30px;letter-spacing:-.03em;margin:0 auto;max-width:18ch;}
+  .heroblock .gr{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .heroblock p{color:#46566E;max-width:52ch;margin:14px auto 18px;}
+  .heroblock .search{display:flex;align-items:center;gap:10px;max-width:480px;margin:0 auto;border:1px solid var(--border);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow-lift);color:var(--muted);font-size:14px;}
+  .heroblock .search .kbd{margin-left:auto;font-family:var(--mono);font-size:11px;border:1px solid var(--border);border-radius:5px;padding:1px 7px;}
+
+  /* agents */
+  .agrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media(max-width:760px){.agrid{grid-template-columns:1fr;}}
+  .acard{border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow-soft);}
+  .acard h3{margin:0 0 4px;font-size:16.5px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+  .acard p{margin:0 0 12px;color:var(--muted);font-size:13.5px;}
+  .acard .u{font-family:var(--mono);font-size:12px;color:var(--navy);background:var(--ground-2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;display:inline-block;}
+  .roadmap{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#7A5Ac2;background:#F1ECFB;border:1px solid #DDD0F5;border-radius:6px;padding:2px 7px;}
+  .addbtns{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px;}
+  .addbtns .ab{font-size:12.5px;font-weight:600;border:1px solid var(--border);border-radius:9px;padding:8px 13px;color:var(--navy);background:#fff;}
+
+  footer{padding:34px 0 70px;color:var(--muted);font-size:13px;}
+  footer code{font-family:var(--mono);color:#46566E;}
+</style>
+
+<div class="ribbon">MOCKUP SET · the full screen flow · <b>design only, not wired up</b> · branch <b>design/front-door-nav</b></div>
+
+<div class="wrap intro">
+  <p class="eyebrow">Phase 2 · where the front door leads</p>
+  <h1>The six screens behind the flow.</h1>
+  <p>Each frame below is a destination from the navigation diagram, shown with the same persistent nav and Valyd’s real palette. Content is real — actual endpoints from the new OpenAPI specs and the real Hosted-KYC steps — so you’re judging the flow, not placeholder text.</p>
+  <div class="legend">
+    <span><b>①</b> Front door</span><span><b>②</b> ⌘K search</span><span><b>③</b> Product docs</span>
+    <span><b>④</b> Ship Hosted KYC</span><span><b>⑤</b> API Reference</span><span><b>⑥</b> Agents</span>
+  </div>
+</div>
+
+<!-- ============ ① FRONT DOOR ============ -->
+<div class="wrap screen">
+  <div class="sc-head"><span class="sc-num">01</span><span class="sc-title">Front door</span><span class="sc-route">docs.valyd.id/</span></div>
+  <p class="sc-cap">Entry for humans. Route by the job you came to do — not by a product name you may not know yet. (Detailed version is the separate “front-door-mockup”.)</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar"><span class="lock">🔒</span>docs.valyd.id</div></div>
+    <div class="fscroll">
+      <div class="gn">
+        <span class="b"><span class="lg"></span>Valyd</span>
+        <span class="lk"><a class="on">Home</a><a>Valyd ID</a><a>Valyd Verify</a><a>API Reference</a></span>
+        <span class="sp"></span><span class="mk k">🔍 Search <span style="margin-left:auto;font-size:10px">⌘K</span></span><span class="agents">Agents</span><span class="cta">Get API keys</span>
+      </div>
+      <div style="min-width:760px">
+        <div class="heroblock">
+          <h2>Identity &amp; verification APIs, <span class="gr">live in minutes</span>.</h2>
+          <p>Sign users in with Valyd, or verify who they are. One platform, two products — built for humans and the agents building alongside them.</p>
+          <div class="search">🔍 Search “create a hosted session”, error codes… <span class="kbd">⌘K</span></div>
+        </div>
+        <div style="padding:0 30px 26px">
+          <div class="jrow">
+            <div class="jt"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.2-2.9 7.4-7 8.5C7.9 18.4 5 15.2 5 11V6l7-3z"/><path d="M9 11.5l2 2 4-4.5"/></svg></div><h3>Verify a person</h3><p>KYC — hosted or standalone.</p><span class="r">→ /verify</span></div>
+            <div class="jt"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg></div><h3>Sign in with Valyd</h3><p>OAuth2 / OIDC SSO.</p><span class="r">→ /docs</span></div>
+            <div class="jt soon"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16"/><path d="M15 9h4a1 1 0 0 1 1 1v11"/><path d="M8 8h3M8 12h3"/></svg></div><h3>Screen a business</h3><p>KYB / AML — coming soon.</p><span class="r" style="color:#9AA7B8">Talk to us →</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ② SEARCH ============ -->
+<div class="wrap screen">
+  <div class="sc-head"><span class="sc-num">02</span><span class="sc-title">⌘K search</span><span class="sc-route">any page · ⌘K</span></div>
+  <p class="sc-cap">One palette spanning both products and the API reference — the same text corpus agents read, so human and agent search return the same answers.</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar"><span class="lock">🔒</span>docs.valyd.id/verify</div></div>
+    <div class="pl-stage">
+      <div class="pl-dim"></div>
+      <div class="pl">
+        <div class="q">🔍 <span class="cur">hosted session</span><span class="ph">▏</span></div>
+        <div class="grp">Valyd Verify · Guides</div>
+        <div class="res on"><span class="ic">★</span> Ship Hosted KYC — the full recipe <span class="tag">/verify/ship-hosted-kyc</span></div>
+        <div class="res"><span class="ic">📄</span> Create a hosted session <span class="tag">/verify/hosted</span></div>
+        <div class="grp">Valyd Verify · API Reference</div>
+        <div class="res"><span class="ic"><span class="verb post">POST</span></span> /api/v2/session — Create a hosted session <span class="tag">reference</span></div>
+        <div class="grp">Valyd ID</div>
+        <div class="res"><span class="ic">🔑</span> Login sessions (CSRF) <span class="tag">/docs/login-sessions</span></div>
+        <div class="ft"><span>17 results</span><span>↑↓ navigate</span><span>⏎ open</span><span>esc close</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ③ PRODUCT DOCS ============ -->
+<div class="wrap screen">
+  <div class="sc-head"><span class="sc-num">03</span><span class="sc-title">Product docs — Valyd Verify</span><span class="sc-route">docs.valyd.id/verify</span></div>
+  <p class="sc-cap">The standard reading view. The global nav and the ID ⇄ Verify switch persist; the product’s own sidebar sits underneath. Switching products is a tab, not a URL you have to know.</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar"><span class="lock">🔒</span>docs.valyd.id/verify/quickstart</div></div>
+    <div class="fscroll">
+      <div class="gn">
+        <span class="b"><span class="lg"></span>Valyd</span>
+        <span class="sw"><span>ID</span><span class="on">Verify</span></span>
+        <span class="sp"></span><span class="mk k">🔍 Search <span style="margin-left:auto;font-size:10px">⌘K</span></span><span class="mk">Agents</span><span class="cta">Get API keys</span>
+      </div>
+      <div class="docbody">
+        <div class="side">
+          <div class="grp">Get started</div>
+          <div class="it">Introduction</div>
+          <div class="it on">Quickstart</div>
+          <div class="it">Hosted vs Standalone</div>
+          <div class="grp">Guides</div>
+          <div class="it">Ship Hosted KYC ★</div>
+          <div class="it">Webhooks</div>
+          <div class="it">Statuses</div>
+          <div class="grp">Reference</div>
+          <div class="it">Sessions</div>
+          <div class="it">Standalone checks</div>
+        </div>
+        <div class="main">
+          <div class="crumb">Verify / Get started / Quickstart</div>
+          <h2>Quickstart</h2>
+          <p class="lede">Make your first verification call in under a minute. This runs against the sandbox with a test key — no signup needed for the first request.</p>
+          <div class="cb"><div class="bar"><span class="on">cURL</span><span>Node</span></div>
+            <pre><span class="cmd">curl</span> https://verify.pollus.tech/api/v2/age-verification <span class="flg">\</span>
+  <span class="flg">-H</span> <span class="str">"X-API-Key: vk_test_demo"</span> <span class="flg">\</span>
+  <span class="flg">-d</span> <span class="str">'{"dob":"1995-06-01","bands":["is_18_plus"]}'</span></pre>
+            <div class="out"><span class="g200"></span><b>200 OK</b> · {"success":true,"data":{"check":{"status":"passed"}}}</div>
+          </div>
+          <p class="lede" style="margin-top:6px">Next: create a <b>hosted session</b> so a user can complete capture on a Valyd-hosted page →</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ④ SHIP HOSTED KYC ============ -->
+<div class="wrap screen">
+  <div class="sc-head"><span class="sc-num">04</span><span class="sc-title">Ship Hosted KYC — the canonical recipe</span><span class="sc-route">docs.valyd.id/verify/ship-hosted-kyc</span></div>
+  <p class="sc-cap">The star destination: one self-contained page that ships the whole integration, replacing today’s five split pages (intro / modes / hosted / webhooks / statuses). An agent fetches this one file and is done.</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar"><span class="lock">🔒</span>docs.valyd.id/verify/ship-hosted-kyc<span style="color:#9AA7B8"> · also .md for agents</span></div></div>
+    <div class="fscroll">
+      <div class="gn">
+        <span class="b"><span class="lg"></span>Valyd</span>
+        <span class="sw"><span>ID</span><span class="on">Verify</span></span>
+        <span class="sp"></span><span class="mk k">🔍 Search <span style="margin-left:auto;font-size:10px">⌘K</span></span><span class="mk">Agents</span><span class="cta">Get API keys</span>
+      </div>
+      <div class="main" style="min-width:760px">
+        <div class="crumb">Verify / Guides / Ship Hosted KYC</div>
+        <h2>Ship Hosted KYC</h2>
+        <p class="lede">Redirect a user to a Valyd-hosted capture flow, get a signed webhook when they finish, and pull the authoritative decision. Everything you need on one page.</p>
+        <div class="pillrow"><span class="pill"><span class="m">env</span> VALYD_API_KEY</span><span class="pill"><span class="m">env</span> VALYD_WEBHOOK_SECRET</span><span class="pill"><span class="m">human-only</span> workflow_id</span><span class="pill">⏱ ~10 min</span></div>
+        <div class="step"><div class="sn">1</div><div><h3>Create a session</h3><p><span style="font-family:var(--mono);font-size:12px">POST /api/v2/session</span> with your <code style="font-family:var(--mono)">workflow_id</code> → returns a hosted <code style="font-family:var(--mono)">url</code> and <code style="font-family:var(--mono)">session_id</code>.</p></div></div>
+        <div class="step"><div class="sn">2</div><div><h3>Redirect the user to <code style="font-family:var(--mono);font-size:14px">session.url</code></h3><p>They complete capture on Valyd’s page. The redirect-back <code style="font-family:var(--mono)">?status</code> is a hint — never treat it as final.</p></div></div>
+        <div class="step"><div class="sn">3</div><div><h3>Verify the webhook signature</h3><p>On a terminal event, Valyd POSTs your callback. Check <code style="font-family:var(--mono)">X-Valyd-Signature</code> = HMAC-SHA256 of <code style="font-family:var(--mono)">"{timestamp}.{rawBody}"</code> before trusting it.</p>
+          <div class="cb"><div class="bar"><span class="on">Node</span></div><pre><span class="cmd">const</span> sig = hmacSHA256(<span class="str">`${ts}.${rawBody}`</span>, SECRET);
+<span class="cmd">if</span> (!timingSafeEqual(sig, header)) <span class="cmd">return</span> res.status(<span class="str">400</span>);</pre></div></div></div>
+        <div class="step"><div class="sn">4</div><div><h3>Fetch the decision</h3><p><span style="font-family:var(--mono);font-size:12px">GET /api/v2/session/{id}/decision</span> for the authoritative result and per-check data.</p>
+          <div class="cb"><pre><span class="com"># APPROVED · DECLINED · IN_REVIEW</span>
+{ <span class="str">"decision"</span>: <span class="str">"APPROVED"</span>, <span class="str">"checks"</span>: [ … ] }</pre><div class="out"><span class="g200"></span><b>200 OK</b></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ⑤ API REFERENCE ============ -->
+<div class="wrap screen">
+  <div class="sc-head"><span class="sc-num">05</span><span class="sc-title">API Reference — generated from OpenAPI</span><span class="sc-route">docs.valyd.id/reference</span></div>
+  <p class="sc-cap">Three columns: endpoints · params · live request &amp; response — rendered from the <code>valyd-verify.json</code> spec you now have. The Run button fires against the sandbox tenant.</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar"><span class="lock">🔒</span>docs.valyd.id/reference#create-session</div></div>
+    <div class="fscroll">
+      <div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="sw"><span>ID</span><span class="on">Verify</span></span><span class="lk"><a class="on">API Reference</a></span><span class="sp"></span><span class="mk k">🔍 ⌘K</span><span class="mk">Agents</span><span class="cta">Get API keys</span></div>
+      <div class="ref">
+        <div class="rnav">
+          <div class="grp">Sessions</div>
+          <div class="ep on"><span class="verb post">POST</span> Create session</div>
+          <div class="ep"><span class="verb get">GET</span> Retrieve session</div>
+          <div class="ep"><span class="verb get">GET</span> Decision</div>
+          <div class="ep"><span class="verb patch">PATCH</span> Override status</div>
+          <div class="grp">Standalone</div>
+          <div class="ep"><span class="verb post">POST</span> ID verification</div>
+          <div class="ep"><span class="verb post">POST</span> Liveness</div>
+          <div class="ep"><span class="verb post">POST</span> Face match</div>
+          <div class="grp">Credentials</div>
+          <div class="ep"><span class="verb get">GET</span> List states</div>
+        </div>
+        <div class="mid">
+          <div class="crumb">Sessions</div>
+          <h2>Create a hosted session</h2>
+          <div class="epline"><span class="verb post">POST</span> /api/v2/session</div>
+          <p style="color:#46566E;font-size:13.5px;margin:0 0 14px">Creates a hosted session and returns a Valyd-hosted URL to redirect the user to.</p>
+          <table class="ptbl"><thead><tr><th>Body field</th><th>Type</th><th></th></tr></thead><tbody>
+            <tr><td class="pn">workflow_id</td><td>string</td><td class="req">required</td></tr>
+            <tr><td class="pn">redirect_url</td><td>string</td><td></td></tr>
+            <tr><td class="pn">callback</td><td>string</td><td></td></tr>
+            <tr><td class="pn">vendor_data</td><td>string</td><td></td></tr>
+            <tr><td class="pn">ttl_seconds</td><td>integer</td><td></td></tr>
+          </tbody></table>
+        </div>
+        <div class="rhs">
+          <span class="runbtn">▶ Run</span>
+          <div class="cb" style="margin-top:0"><div class="bar"><span class="on">cURL</span><span>Node</span><span>Python</span></div>
+            <pre><span class="cmd">curl</span> -X POST .../api/v2/session <span class="flg">\</span>
+ <span class="flg">-H</span> <span class="str">"X-API-Key: vk_test_…"</span> <span class="flg">\</span>
+ <span class="flg">-d</span> <span class="str">'{"workflow_id":"wf_kyc"}'</span></pre></div>
+          <div class="cb"><div class="bar"><span class="on">200 response</span></div>
+            <pre>{
+  <span class="str">"success"</span>: true,
+  <span class="str">"data"</span>: {
+    <span class="str">"session_id"</span>: <span class="str">"ses_abc"</span>,
+    <span class="str">"status"</span>: <span class="str">"NOT_STARTED"</span>,
+    <span class="str">"url"</span>: <span class="str">"…/s/abc"</span>
+  }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ⑥ AGENTS ============ -->
+<div class="wrap screen">
+  <div class="sc-head"><span class="sc-num">06</span><span class="sc-title">Agents</span><span class="sc-route">docs.valyd.id/agents</span></div>
+  <p class="sc-cap">The agent rail from the diagram, made an explicit page: the machine-readable surface agents use to self-integrate, plus one-click setup. MCP is Phase 3 (built from the spec).</p>
+  <div class="frame"><div class="chrome"><div class="lights"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div><div class="urlbar"><span class="lock">🔒</span>docs.valyd.id/agents</div></div>
+    <div class="fscroll">
+      <div class="gn"><span class="b"><span class="lg"></span>Valyd</span><span class="lk"><a>Valyd ID</a><a>Valyd Verify</a><a>API Reference</a></span><span class="sp"></span><span class="mk k">🔍 ⌘K</span><span class="agents">Agents</span><span class="cta">Get API keys</span></div>
+      <div class="main" style="min-width:760px">
+        <div class="crumb">Agents</div>
+        <h2>Build with an agent</h2>
+        <p class="lede">Everything an AI agent needs to integrate Valyd without you in the loop — point your tool at these and let it work.</p>
+        <div class="agrid">
+          <div class="acard"><h3>📑 llms.txt</h3><p>The curated index of every page, with agent instructions, base URLs, and human-only steps called out.</p><span class="u">docs.valyd.id/llms.txt</span></div>
+          <div class="acard"><h3>🧩 OpenAPI specs</h3><p>3.1 specs for both products — endpoints, schemas, auth, and the webhook. The substrate for codegen.</p><span class="u">/openapi/valyd-id.json · /openapi/valyd-verify.json</span></div>
+          <div class="acard"><h3>🔌 MCP server <span class="roadmap">Phase 3</span></h3><p>Hosted Model Context Protocol server generated from the spec — search docs, list endpoints, scoped read/write.</p><div class="addbtns"><span class="ab">+ Add to Cursor</span><span class="ab">+ Add to Claude Code</span></div></div>
+          <div class="acard"><h3>📦 Full corpus</h3><p>The entire documentation set as one concatenated text file for whole-context ingestion.</p><span class="u">docs.valyd.id/llms-full.txt</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    Screen-flow mockups for the Phase 2 front door &amp; unified nav · palette transcribed from <code>src/index.css</code> · production renders in Inter + JetBrains Mono. All interactions are illustrative — no code is wired up. The MCP server (screen 6) and the spec-driven Run button (screen 5) depend on later phases; shown here to make the destination clear.
+  </div>
+</footer>

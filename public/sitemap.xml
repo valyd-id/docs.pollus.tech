@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://docs.pollus.tech/</loc></url>
+  <url><loc>https://docs.pollus.tech/docs</loc></url>
+  <url><loc>https://docs.pollus.tech/verify</loc></url>
+  <url><loc>https://docs.pollus.tech/llms.txt</loc></url>
+  <url><loc>https://docs.pollus.tech/llms-full.txt</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/overview.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/create-project.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/quick-start.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/login-sessions.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/authentication.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/oidc.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/endpoints.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/scopes.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/errors.md</loc></url>
+  <url><loc>https://docs.pollus.tech/docs/changelog.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/intro.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/quickstart.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/console.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/modes.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/hosted.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/standalone.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/sdk.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/webhooks.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/statuses.md</loc></url>
+  <url><loc>https://docs.pollus.tech/verify/api-reference.md</loc></url>
+  <url><loc>https://docs.pollus.tech/openapi/valyd-id.json</loc></url>
+  <url><loc>https://docs.pollus.tech/openapi/valyd-verify.json</loc></url>
+</urlset>

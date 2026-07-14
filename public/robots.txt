@@ -10,5 +10,38 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+# AI assistants & agents — explicitly welcome to read and index the docs
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Content usage signal (opt in to AI training, search, and agent input)
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+# Agent-readable documentation
+Sitemap: https://docs.pollus.tech/sitemap.xml
+# LLM index: https://docs.pollus.tech/llms.txt
+# Full corpus: https://docs.pollus.tech/llms-full.txt

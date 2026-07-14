@@ -9,10 +9,10 @@
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET (for hosted/webhook flows), VALYD_WORKFLOW_ID (for hosted sessions)
 - Files an integrator edits: .env, your server bootstrap (VerifyClient init), and a webhook route handler (e.g. Express)
 - Estimated steps: 3 (install, initialise, call resources)
-- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Verify dashboard (https://{{VERIFY_BASE_URL}}/dashboard); these cannot be generated programmatically here.
+- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}); these cannot be generated programmatically here.
 - Prerequisites:
   - Node 18+ (the SDK relies on the built-in `fetch` and `crypto`)
-  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://{{VERIFY_BASE_URL}}/dashboard
+  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://{{DEV_PORTAL_URL}}
   - For hosted/webhook flows: a webhook secret and a workflow ID from the dashboard
   - Server-side runtime only — the API key must never reach the browser
 
@@ -28,7 +28,7 @@ The official Node SDK for Valyd Verify: `valyd-verify-sdk` on npm (https://www.n
   node --version
   ```
   **Expected output:** `v18.x.x` or higher. If lower, upgrade Node before continuing.
-- Credentials from the Valyd Verify dashboard (https://{{VERIFY_BASE_URL}}/dashboard):
+- Credentials from the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}):
   - `VALYD_API_KEY` — sent as the `X-API-Key` header on every request.
   - `VALYD_WEBHOOK_SECRET` — needed to verify webhook signatures (hosted flow).
   - `VALYD_WORKFLOW_ID` — needed when creating hosted sessions.
@@ -36,10 +36,10 @@ The official Node SDK for Valyd Verify: `valyd-verify-sdk` on npm (https://www.n
 ```text
 IF you are building a hosted flow (redirect the user to a Valyd-hosted page):
   → you need VALYD_API_KEY, VALYD_WEBHOOK_SECRET, and VALYD_WORKFLOW_ID
-IF you are building a standalone flow (call individual checks server-side):
+IF you are building a Core APIs flow (call individual checks server-side):
   → you only need VALYD_API_KEY
 IF unsure which credentials you have:
-  → log in to https://{{VERIFY_BASE_URL}}/dashboard and check your project's API keys / webhooks / workflows
+  → log in to https://{{DEV_PORTAL_URL}} and check your project's API keys / webhooks / workflows
 ```
 
 ### Steps
@@ -50,7 +50,7 @@ IF unsure which credentials you have:
    ```
    **Expected output:** npm adds `valyd-verify-sdk` to `dependencies` in `package.json` and reports `added 1 package`. Versions follow semver and are pinned per release — lock to `^x.y.z` for backwards-compatible upgrades.
 
-2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Verify dashboard: https://{{VERIFY_BASE_URL}}/dashboard.
+2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Developer Portal: https://{{DEV_PORTAL_URL}}.
    ```bash
    VALYD_API_KEY=your_api_key_here          # X-API-Key for every request
    VALYD_WEBHOOK_SECRET=your_webhook_secret  # required for hosted/webhook flows
@@ -104,7 +104,7 @@ After initialising `verify`, use these resource namespaces.
 - `credentialVerification({ firstName, lastName, providerCode, licenseState, licenseNumber, npi? }): Promise<CheckEnvelope>` — Professional license lookup.
 - `kycCredential({ frontImage, selfie, backImage?, providerCode, licenseState, licenseNumber, npi? }): Promise<KycCredentialResult>` — ID + liveness + face match + license, matched against the OCR'd name.
 
-See the Standalone APIs guide for full field details.
+See the Core APIs guide for full field details.
 
 #### `verify.credentials`
 - `states(): Promise<{ states: CredentialState[] }>` — List supported states.
@@ -207,7 +207,7 @@ const decision = await verify.sessions.decision(event.session_id);
 
 **Expected output:** `verify.sessions.create(...)` resolves to a `Session` with `.url` (redirect the user here) and `.sessionId`. After the user finishes, your webhook fires; `constructEvent` returns the parsed `WebhookEvent`, and `verify.sessions.decision(...)` resolves to a `Decision` with `.status` and `.checks[]`.
 
-#### Standalone quickstart
+#### Core APIs quickstart
 
 ```javascript
 import { VerifyClient, readImage } from "valyd-verify-sdk";
@@ -272,7 +272,7 @@ app.post(
   npm ls valyd-verify-sdk
   ```
   **Expected output:** a line like `valyd-verify-sdk@x.y.z`.
-- Confirm credentials are wired (standalone path, only needs `VALYD_API_KEY`):
+- Confirm credentials are wired (Core APIs path, only needs `VALYD_API_KEY`):
   ```javascript
   import { VerifyClient } from "valyd-verify-sdk";
   const verify = new VerifyClient({ apiKey: process.env.VALYD_API_KEY! });

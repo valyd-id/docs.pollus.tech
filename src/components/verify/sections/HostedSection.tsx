@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { CodeBlock } from "@/components/docs/CodeBlock";
 import { LanguageTabs } from "@/components/docs/LanguageTabs";
+import { HostedFlowDiagram } from "../HostedFlowDiagram";
 import { VERIFY_CONFIG } from "@/lib/verify-config";
 import {
   Globe,
@@ -81,6 +82,24 @@ export const HostedSection = () => (
         receive the result via a signed webhook plus the decision API. No UI to build, no PII
         handled by you.
       </p>
+      <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-sm text-muted-foreground">
+        <strong className="text-foreground">This page covers Non-account (Fresh) hosted.</strong> No
+        Valyd login, nothing retained, and the decision returns the <strong>raw</strong> captured data.
+        If you want the user's result stored on their Valyd account and reused (returning users verify
+        with a selfie only, and you receive <strong>proofs only</strong>), use{" "}
+        <a href="?mode=managed#managed" className="text-primary hover:underline">Account · Managed by
+        Valyd</a> — the same hosted page, but you pass the user's <code>valyd_access_token</code> when
+        creating the session.
+      </div>
+
+      {/* How the fresh hosted flow actually runs */}
+      <div id="hosted-flow" className="scroll-mt-8 space-y-4 pt-2">
+        <h3 className="text-xl font-bold text-foreground">How the hosted flow works</h3>
+        <p className="text-sm text-muted-foreground">
+          End to end, who does what — from creating the session to acting on the result.
+        </p>
+        <HostedFlowDiagram variant="fresh" />
+      </div>
       <div className="flex items-start gap-2 rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
         <AlertTriangle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
         <p className="text-foreground">
@@ -138,7 +157,7 @@ const verify = new VerifyClient({
         Both products use the <strong>same integration code</strong> — only the{" "}
         <code>workflow_id</code> differs. Create the workflow in the{" "}
         <a href={VERIFY_CONFIG.CONSOLE_URL} target="_blank" rel="noreferrer" className="text-primary hover:underline">
-          Developer Console
+          Developer Portal
         </a>{" "}
         (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy
         its <code>workflow_id</code>.

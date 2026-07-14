@@ -36,7 +36,7 @@
         "responses": {
           "200": {
             "description": "Tokens issued.",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TokenResponse" }, "example": { "success": true, "data": { "access_token": "eyJhbGciOi...", "token_type": "Bearer", "expires_in": 900, "refresh_token": "rfrsh_abc123...", "user": { "id": 123, "email": "user@example.com", "username": "john_doe", "name": "John Doe", "pollus_id": "pl_9s8d7f", "avatar_url": null, "created_at": "2025-09-11T10:15:00Z" } } } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TokenResponse" }, "example": { "success": true, "data": { "access_token": "eyJhbGciOi...", "token_type": "Bearer", "expires_in": 900, "refresh_token": "rfrsh_abc123...", "user": { "id": 123, "email": "user@example.com", "username": "john_doe", "name": "John Doe", "valyd_id": "valyd_225c7f2ac450496f97bbbc57354a5898", "avatar_url": null, "created_at": "2025-09-11T10:15:00Z" } } } } }
           },
           "400": { "$ref": "#/components/responses/BadRequest" },
           "401": { "$ref": "#/components/responses/Unauthorized" }
@@ -78,7 +78,7 @@
         "responses": {
           "200": {
             "description": "User profile.",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserInfoResponse" }, "example": { "success": true, "data": { "sub": "123", "email": "user@example.com", "first_name": "John", "last_name": "Doe", "full_name": "John Doe", "anon_id": "anon_x1y2z3", "id_verified": true, "created_at": "2025-09-10T12:00:00Z" } } } }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserInfoResponse" }, "example": { "success": true, "data": { "sub": "valyd_225c7f2ac450496f97bbbc57354a5898", "email": "user@example.com", "first_name": "John", "last_name": "Doe", "full_name": "John Doe", "valyd_id": "valyd_225c7f2ac450496f97bbbc57354a5898", "id_verified": true, "created_at": "2025-09-10T12:00:00Z" } } } }
           },
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "403": { "$ref": "#/components/responses/Forbidden" }
@@ -277,7 +277,7 @@
           "email": { "type": "string", "format": "email" },
           "username": { "type": "string" },
           "name": { "type": "string" },
-          "pollus_id": { "type": "string" },
+          "valyd_id": { "type": "string" },
           "avatar_url": { "type": ["string", "null"], "format": "uri" },
           "created_at": { "type": "string", "format": "date-time" }
         }
@@ -324,7 +324,7 @@
               "first_name": { "type": "string" },
               "last_name": { "type": "string" },
               "full_name": { "type": "string" },
-              "anon_id": { "type": "string" },
+              "valyd_id": { "type": "string" },
               "id_verified": { "type": "boolean" },
               "created_at": { "type": "string", "format": "date-time" }
             }

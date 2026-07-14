@@ -9,10 +9,10 @@
 - Credentials / env vars needed: VALYD_WEBHOOK_SECRET (the webhook signing secret), VALYD_API_KEY (App API key, to fetch the full decision)
 - Files an integrator edits: server route handler (e.g. an Express handler), .env (to store VALYD_WEBHOOK_SECRET and VALYD_API_KEY)
 - Estimated steps: 4
-- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard), which is a human/portal action.
+- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}), which is a human/portal action.
 - Prerequisites:
   - A publicly reachable HTTPS endpoint to receive POST callbacks
-  - A webhook signing secret configured on your App or session (from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard)
+  - A webhook signing secret configured on your App or session (from the Developer Portal: https://{{DEV_PORTAL_URL}})
   - An App API key to call the decision endpoint
   - Ability to read the raw (unparsed) request body in your web framework
 
@@ -24,12 +24,12 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
 ### Prerequisites
 - A publicly reachable HTTPS URL for your webhook handler.
-- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard). Store it as `VALYD_WEBHOOK_SECRET`.
+- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Developer Portal (https://{{DEV_PORTAL_URL}}). Store it as `VALYD_WEBHOOK_SECRET`.
 - An App API key stored as `VALYD_API_KEY`, used to fetch the full decision after a webhook arrives.
 
 ### Steps
 
-1. **Register your callback URL.** In the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
+1. **Register your callback URL.** In the Developer Portal (https://{{DEV_PORTAL_URL}}) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
 
    **Expected output:** The console shows your callback URL saved and a signing secret. There is no HTTP response to capture for this step — it is a portal action.
 
@@ -37,8 +37,8 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
    ```bash
    # .env
-   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://{{VERIFY_BASE_URL}}/dashboard)
-   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://{{VERIFY_BASE_URL}}/dashboard)
+   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://{{DEV_PORTAL_URL}})
+   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://{{DEV_PORTAL_URL}})
    ```
 
    **Expected output:** Both variables are available to your process via `process.env`.

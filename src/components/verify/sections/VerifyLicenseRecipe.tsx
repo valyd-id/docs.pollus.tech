@@ -53,7 +53,7 @@ export const VerifyLicenseRecipe = () => (
       <div className="text-xs font-semibold uppercase tracking-wider text-primary">Recipe</div>
       <h1 className="text-3xl font-bold text-foreground">Verify a professional license</h1>
       <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
-        Use Valyd's standalone credential-verification API to check whether a professional license
+        Use Valyd's Core credential-verification API to check whether a professional license
         (medical, nursing, law, engineering, and more) is active and belongs to the person you
         expect. No hosted flow required — your backend calls the API directly and returns the
         result.
@@ -80,7 +80,7 @@ export const VerifyLicenseRecipe = () => (
           </thead>
           <tbody>
             {[
-              ["VALYD_API_KEY", "Developer Console → your App → Credentials"],
+              ["VALYD_API_KEY", "Developer Portal → your Verify project → API key (shown once)"],
             ].map(([v, where]) => (
               <tr key={v} className="border-t border-border">
                 <td className="px-4 py-2 font-mono text-xs">{v}</td>
@@ -313,7 +313,7 @@ const result = await response.json();`} />
           {
             title: "401 Unauthorized",
             cause: "X-API-Key is missing or incorrect.",
-            fix: "Check VALYD_API_KEY is set and matches the App API key in your Developer Console. Confirm the key is for the correct environment (sandbox vs. production).",
+            fix: "Check VALYD_API_KEY is set and matches the API key of your Verify project in the Developer Portal. Confirm the key is for the correct environment (sandbox vs. production).",
           },
           {
             title: "Exposing results to the browser",

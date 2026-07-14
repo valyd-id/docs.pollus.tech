@@ -16,7 +16,7 @@ export const ScopesSection = () => {
         { field: "first_name", description: "User's first name" },
         { field: "last_name", description: "User's last name" },
         { field: "full_name", description: "User's full name" },
-        { field: "anon_id", description: "Anonymous identifier" },
+        { field: "valyd_id", description: "The user's unique Valyd account identifier" },
         { field: "id_verified", description: "Whether ID is verified (boolean)" },
         { field: "created_at", description: "Account creation timestamp" },
       ],

@@ -4,7 +4,7 @@
     "title": "Valyd Verify API",
     "version": "2.0.0",
     "summary": "Hosted and server-to-server identity verification: ID checks, liveness, face match, age, and credential verification.",
-    "description": "REST API for Valyd Verify (`/api/v2`).\n\n- **Hosted** — create a session with a `workflow_id`, redirect the user to the returned hosted `url`, receive a signed webhook on a terminal state, then pull the authoritative result from `GET /api/v2/session/{id}/decision`. The redirect-back `?status=` is a hint only — never treat it as final.\n- **Standalone** — call individual check endpoints (`/api/v2/id-verification`, `/liveness`, `/face-match`, `/age-verification`, `/credential-verification`, `/kyc-credential`) directly for a synchronous result.\n\nAll responses use a `{ success, data, error }` envelope. Authenticate with `X-API-Key: <App API key>` (a Bearer token with the same key is also accepted). API keys are created by a human in the Developer Console — not via API.",
+    "description": "REST API for Valyd Verify (`/api/v2`).\n\n- **Hosted** — create a session with a `workflow_id`, redirect the user to the returned hosted `url`, receive a signed webhook on a terminal state, then pull the authoritative result from `GET /api/v2/session/{id}/decision`. The redirect-back `?status=` is a hint only — never treat it as final.\n- **Standalone** — call individual check endpoints (`/api/v2/id-verification`, `/liveness`, `/face-match`, `/age-verification`, `/credential-verification`, `/kyc-credential`) directly for a synchronous result.\n\nAll responses use a `{ success, data, error }` envelope. Authenticate with `X-API-Key: <App API key>` (a Bearer token with the same key is also accepted). API keys are created by a human in the Developer Portal — not via API.",
     "contact": { "name": "Valyd Developer Docs", "url": "https://{{DOCS_BASE_URL}}/verify/intro.md" },
     "license": { "name": "Proprietary", "url": "https://{{DOCS_BASE_URL}}" }
   },
@@ -406,7 +406,7 @@
   },
   "components": {
     "securitySchemes": {
-      "apiKeyAuth": { "type": "apiKey", "in": "header", "name": "X-API-Key", "description": "Your App API key from the Developer Console." },
+      "apiKeyAuth": { "type": "apiKey", "in": "header", "name": "X-API-Key", "description": "Your App API key from the Developer Portal." },
       "bearerAuth": { "type": "http", "scheme": "bearer", "description": "The same App API key may be sent as a Bearer token." }
     },
     "parameters": {
@@ -429,7 +429,7 @@
         "type": "object",
         "required": ["workflow_id"],
         "properties": {
-          "workflow_id": { "type": "string", "description": "Service bundle to run (from the Developer Console)." },
+          "workflow_id": { "type": "string", "description": "Service bundle to run (from the Developer Portal)." },
           "redirect_url": { "type": "string", "format": "uri", "description": "Where Valyd redirects the user's browser after the flow." },
           "callback": { "type": "string", "format": "uri", "description": "Per-session webhook URL." },
           "vendor_data": { "type": "string", "description": "Your internal correlation ref; echoed on webhooks and the decision." },

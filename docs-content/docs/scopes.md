@@ -77,7 +77,7 @@ User profile information including name, photo, and age verification status.
 | `first_name` | User's first name |
 | `last_name` | User's last name |
 | `full_name` | User's full name |
-| `anon_id` | Anonymous identifier |
+| `valyd_id` | The user's unique Valyd account identifier |
 | `id_verified` | Whether ID is verified (boolean) |
 | `created_at` | Account creation timestamp |
 

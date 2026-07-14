@@ -15,7 +15,7 @@
   - Valyd ID / OAuth / OIDC: `https://{{IDP_BASE_URL}}`
   - Valyd Verify API: `https://{{VERIFY_BASE_URL}}`
   - Developer Portal (Valyd ID): `https://{{DEV_PORTAL_URL}}`
-  - Verify Developer Console: `https://{{VERIFY_BASE_URL}}/dashboard`
+  - Developer Portal: `https://{{DEV_PORTAL_URL}}`
 - **Credentials cannot be created via API.** A human must sign up and generate them in the portal
   (see "Human-only steps" at the bottom). Pause and request these values rather than guessing:
   `client_id`, `client_secret` (Valyd ID); App `API key`, `workflow_id`, webhook signing secret
@@ -48,24 +48,25 @@
 
 ## Valyd Verify — Guides
 
-- [Introduction](https://{{DOCS_BASE_URL}}/verify/intro.md): What Valyd Verify is, Hosted vs Standalone modes, services, base URL, response envelope.
-- [Quickstart](https://{{DOCS_BASE_URL}}/verify/quickstart.md): Get an API key, create a workflow/webhook, make a first standalone call and a hosted session.
-- [Developer Console](https://{{DOCS_BASE_URL}}/verify/console.md): Apps, API keys, workflows, webhooks, SSO. (Human-only UI steps.)
-- [Hosted vs Standalone](https://{{DOCS_BASE_URL}}/verify/modes.md): Decision tree and comparison to choose an integration mode.
+- [Introduction](https://{{DOCS_BASE_URL}}/verify/intro.md): What Valyd Verify is, Hosted vs Core APIs modes, services, base URL, response envelope.
+- [Quickstart](https://{{DOCS_BASE_URL}}/verify/quickstart.md): Get an API key, create a workflow/webhook, make a first Core API call and a hosted session.
+- [Developer Portal](https://{{DOCS_BASE_URL}}/verify/console.md): Apps, API keys, workflows, webhooks, SSO. (Human-only UI steps.)
+- [Hosted vs Core APIs](https://{{DOCS_BASE_URL}}/verify/modes.md): Decision tree and comparison to choose an integration mode.
+- [Account (Managed by Valyd)](https://{{DOCS_BASE_URL}}/verify/managed.md): Account vs Non-account model, the proofs-only data rule, hosted + core account APIs, reuse, and the consent Core API for raw KYC.
 - [Hosted Verification](https://{{DOCS_BASE_URL}}/verify/hosted.md): Create session, redirect, signed webhooks, decision API, statuses. Base URL https://{{VERIFY_BASE_URL}}.
-- [Standalone APIs](https://{{DOCS_BASE_URL}}/verify/standalone.md): Server-to-server checks — ID, liveness, face match, age, credential, KYC+credential.
+- [Core APIs](https://{{DOCS_BASE_URL}}/verify/standalone.md): Server-to-server checks — ID, liveness, face match, age, credential, KYC+credential.
 - [Node SDK](https://{{DOCS_BASE_URL}}/verify/sdk.md): Install/init valyd-verify-sdk, resources, types, error handling, Express webhook handler.
 - [Webhooks](https://{{DOCS_BASE_URL}}/verify/webhooks.md): Register a callback URL and verify HMAC-SHA256 signatures over the raw request body.
 - [Statuses & decisioning](https://{{DOCS_BASE_URL}}/verify/statuses.md): Every session/check status, what it means, and how to act on it.
 
 ## Valyd Verify — API Reference
 
-- [API Reference](https://{{DOCS_BASE_URL}}/verify/api-reference.md): Sessions, Workflows, Standalone checks, Decision, and Errors & rate limits. All calls use `X-API-Key`.
+- [API Reference](https://{{DOCS_BASE_URL}}/verify/api-reference.md): Sessions, Workflows, Core checks, Decision, and Errors & rate limits. All calls use `X-API-Key`.
 
 ## API specs (OpenAPI 3.1)
 
 - [Valyd ID OpenAPI](https://{{DOCS_BASE_URL}}/openapi/valyd-id.json): TPSSO + OIDC endpoints, schemas, auth, and error envelope. Use for SDK/codegen and endpoint discovery.
-- [Valyd Verify OpenAPI](https://{{DOCS_BASE_URL}}/openapi/valyd-verify.json): Sessions, standalone checks, credentials, and the verification webhook (HMAC-SHA256). Use for SDK/codegen and endpoint discovery.
+- [Valyd Verify OpenAPI](https://{{DOCS_BASE_URL}}/openapi/valyd-verify.json): Sessions, Core checks, credentials, and the verification webhook (HMAC-SHA256). Use for SDK/codegen and endpoint discovery.
 
 ## Downloads & tooling
 
@@ -77,5 +78,5 @@
 - Sign up for a Valyd account and log in to the Developer Portal: https://{{DEV_PORTAL_URL}} (no KYC required).
 - Create a Valyd ID project; copy `client_id` and `client_secret` (secret shown once — regenerate if lost).
 - Register the exact redirect/callback URL on the project (must match what you send; no trailing slash).
-- Sign in to the Verify Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) with Valyd SSO; copy the App API key (shown once).
+- Sign in to the Developer Portal (https://{{DEV_PORTAL_URL}}) with Valyd SSO; copy the App API key (shown once).
 - Create a Verify workflow and copy its `workflow_id`; set the webhook URL and signing secret.

@@ -4,16 +4,18 @@
 
 # Hosted Verification
 
+> **Scope: Non-account (Fresh) hosted.** No Valyd login, nothing retained; the decision returns the **raw** captured data. For the Account variant — result stored on the user's Valyd account, reuse (returning users verify with a selfie only), and **proofs-only** results — see [Account (Managed by Valyd)](https://{{DOCS_BASE_URL}}/verify/managed.md). Same hosted page; you additionally pass the user's `valyd_access_token` when creating the session.
+
 ## Agent Quick-Start
 - Source URL: https://{{DOCS_BASE_URL}}/verify#hosted
-- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard), APP_URL
+- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Portal: https://{{DEV_PORTAL_URL}}), APP_URL
 - Files an integrator edits: .env (credentials), server route handlers (session create, redirect callback, webhook receiver)
 - Estimated steps: 4 (create session → redirect → handle redirect-back → read authoritative result)
-- Can complete without human input: NO — a human must create the App API key, the webhook signing secret, and a workflow in the Developer Console to obtain a `workflow_id`.
+- Can complete without human input: NO — a human must create the App API key, the webhook signing secret, and a workflow in the Developer Portal to obtain a `workflow_id`.
 - Prerequisites:
-  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard
-  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard
-  - A `workflow_id` — create the workflow in the Developer Console (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy its `workflow_id`.
+  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Portal: https://{{DEV_PORTAL_URL}}
+  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Portal: https://{{DEV_PORTAL_URL}}
+  - A `workflow_id` — create the workflow in the Developer Portal (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy its `workflow_id`.
   - Node.js project with `valyd-verify-sdk` installed (for the SDK examples).
 
 > ALL server-to-server calls use the header `X-API-Key: <App API key>`. Keep this key SERVER-SIDE ONLY — never expose it to the browser. Every response uses the envelope `{ success, data, error: { code, message } }`.
@@ -56,12 +58,12 @@ Hosted flow at a glance:
 
 ## The two hosted products
 
-Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
+Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Portal (https://{{DEV_PORTAL_URL}}) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
 
 ```text
 IF you only need to verify a professional license (no ID scan):  → use the "License Verification" workflow_id
 IF you need identity + credential (ID scan + selfie + license):  → use the "KYC + License" workflow_id
-IF unsure which workflow_id to use:                              → open the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard) → Workflows, and copy the workflow_id of the preset you created
+IF unsure which workflow_id to use:                              → open the Developer Portal (https://{{DEV_PORTAL_URL}}) → Workflows, and copy the workflow_id of the preset you created
 ```
 
 ### License Verification (badge: Credential only)
@@ -81,9 +83,9 @@ IF unsure which workflow_id to use:                              → open the De
 The steps are identical for both products. Swap the `workflow_id` to switch between License Verification and KYC + License.
 
 ### Prerequisites
-- `VALYD_API_KEY` set server-side (App API key — get from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard).
-- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard).
-- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Console: https://{{VERIFY_BASE_URL}}/dashboard, or create via the Workflows API below).
+- `VALYD_API_KEY` set server-side (App API key — get from the Developer Portal: https://{{DEV_PORTAL_URL}}).
+- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Portal: https://{{DEV_PORTAL_URL}}).
+- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Portal: https://{{DEV_PORTAL_URL}}, or create via the Workflows API below).
 - `APP_URL` — your application's public base URL (used to build `redirect_url` and `callback`).
 
 ### Steps
@@ -138,7 +140,7 @@ Expected output: HTTP 200 with the envelope `{ success: true, data: { … } }`. 
 }
 ```
 
-> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Console (https://{{VERIFY_BASE_URL}}/dashboard → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
+> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Portal (https://{{DEV_PORTAL_URL}} → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
 
 #### Step 2 — Redirect the user to the hosted page
 

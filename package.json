@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "docs:gen": "node scripts/docs-gen/generate.mjs",
+    "predev": "npm run docs:gen",
+    "prebuild": "npm run docs:gen",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

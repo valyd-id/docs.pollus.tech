@@ -33,7 +33,7 @@ export const DOCS_SEARCH_INDEX: DocsSearchEntry[] = [
   { title: "Callback handling",       icon: "🔑", group: "OAuth / TPSSO",      href: "/docs/authentication#callback-handling",      keywords: ["callback", "redirect", "code", "token exchange", "exchangeCode", "access_token"] },
 
   { title: "Scopes",                  icon: "🏷️", group: "Scopes",             href: "/docs/scopes",                               keywords: ["permissions", "consent", "oauth scopes"] },
-  { title: "profile",                 icon: "🏷️", group: "Scopes",             href: "/docs/scopes#scope-profile",                  keywords: ["userinfo", "name", "email", "id_verified", "sub", "anon_id"] },
+  { title: "profile",                 icon: "🏷️", group: "Scopes",             href: "/docs/scopes#scope-profile",                  keywords: ["userinfo", "name", "email", "id_verified", "sub", "valyd_id"] },
   { title: "verifications",           icon: "🏷️", group: "Scopes",             href: "/docs/scopes#scope-verifications",            keywords: ["id_verified", "face_match", "verification", "last_checked"] },
   { title: "zkp",                     icon: "🏷️", group: "Scopes",             href: "/docs/scopes#scope-zkp",                      keywords: ["zero knowledge proof", "age verification", "is_18", "is_21"] },
   { title: "mcp",                     icon: "🏷️", group: "Scopes",             href: "/docs/scopes#scope-mcp",                      keywords: ["model context protocol", "ai agent", "tools"] },
@@ -69,7 +69,7 @@ export const DOCS_SEARCH_INDEX: DocsSearchEntry[] = [
 
   { title: "Introduction",            icon: "🛡️", group: "Valyd Verify",        href: "/verify#intro",                              keywords: ["kyc", "verify", "overview", "identity verification"] },
   { title: "Quickstart",              icon: "⚡", group: "Valyd Verify",        href: "/verify#quickstart",                         keywords: ["get started", "setup", "verify sdk"] },
-  { title: "Developer Console",       icon: "🖥️", group: "Valyd Verify",        href: "/verify#console",                            keywords: ["portal", "dashboard", "console"] },
+  { title: "Developer Portal",        icon: "🖥️", group: "Valyd Verify",        href: "/verify#console",                            keywords: ["portal", "dashboard", "console", "api key", "workflow"] },
   { title: "Choose your integration", icon: "🛡️", group: "Valyd Verify",        href: "/verify#modes",                              keywords: ["hosted", "standalone", "mode", "integration type"] },
 
   { title: "Hosted Verification",     icon: "🌐", group: "Valyd Verify — Hosted", href: "/verify?mode=hosted#hosted",               keywords: ["hosted kyc", "hosted flow", "redirect"] },
@@ -80,7 +80,7 @@ export const DOCS_SEARCH_INDEX: DocsSearchEntry[] = [
   { title: "Reading the decision",    icon: "✅", group: "Valyd Verify — Hosted", href: "/verify?mode=hosted#hosted-decision",      keywords: ["approved", "rejected", "decision", "result"] },
   { title: "Statuses",                icon: "✅", group: "Valyd Verify — Hosted", href: "/verify?mode=hosted#hosted-statuses",      keywords: ["pending", "expired", "status"] },
 
-  { title: "Standalone APIs",         icon: "🔧", group: "Valyd Verify — Standalone", href: "/verify?mode=standalone#standalone",  keywords: ["standalone", "custom ui", "manual"] },
+  { title: "Core APIs",         icon: "🔧", group: "Valyd Verify — Core APIs", href: "/verify?mode=standalone#standalone",  keywords: ["standalone", "custom ui", "manual"] },
 
   { title: "Node SDK",                icon: "📦", group: "Valyd Verify — SDK",  href: "/verify#sdk",                               keywords: ["node sdk", "npm", "valyd-verify-sdk"] },
   { title: "Install & init",          icon: "📦", group: "Valyd Verify — SDK",  href: "/verify#sdk-install",                       keywords: ["npm install", "initialize", "new VerifyClient"] },
@@ -119,7 +119,7 @@ export const DOCS_SEARCH_INDEX: DocsSearchEntry[] = [
   { title: "Sessions",                icon: "🔌", group: "Valyd Verify — API",  href: "/verify?mode=hosted#api-sessions",          keywords: ["create session", "POST /sessions", "session id"] },
   { title: "Workflows",               icon: "🔌", group: "Valyd Verify — API",  href: "/verify?mode=hosted#api-workflows",         keywords: ["workflow", "steps", "kyc workflow"] },
   { title: "Decision",                icon: "🔌", group: "Valyd Verify — API",  href: "/verify?mode=hosted#api-decision",          keywords: ["decision endpoint", "approve", "reject"] },
-  { title: "Standalone checks",       icon: "🔌", group: "Valyd Verify — API",  href: "/verify?mode=standalone#api-standalone",    keywords: ["id check", "liveness", "face match", "age check", "standalone api"] },
+  { title: "Core checks",       icon: "🔌", group: "Valyd Verify — API",  href: "/verify?mode=standalone#api-standalone",    keywords: ["id check", "liveness", "face match", "age check", "standalone api"] },
   { title: "Errors & rate limits",    icon: "⚠️", group: "Valyd Verify — API",  href: "/verify#api-errors",                        keywords: ["rate limit", "429", "error codes", "verify errors"] },
 
   // ── Recipes ──────────────────────────────────────────────────────────────

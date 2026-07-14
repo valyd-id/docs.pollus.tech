@@ -35,7 +35,7 @@ const JOBS = [
     eyebrow: "Valyd Verify",
     title: "Verify your users",
     description:
-      "KYC, document checks, and liveness detection. Hosted flows or standalone API calls — your integration, your UX.",
+      "KYC, document checks, and liveness detection. Hosted flows or Core API calls — your integration, your UX.",
     href: "/verify",
     cta: "Read the Verify docs",
     accent: "from-emerald-50 to-transparent border-emerald-200/60 hover:border-emerald-400/60",
