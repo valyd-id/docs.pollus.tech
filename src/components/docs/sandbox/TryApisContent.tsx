@@ -401,8 +401,8 @@ export const TryApisContent = () => {
                 flow on your localhost in three commands.
               </p>
               <pre className="mt-4 rounded-md bg-slate-950 text-slate-100 text-xs font-mono p-3 overflow-auto">
-{`git clone https://github.com/valyd-id/pollus-sandbox-starter.git
-cd pollus-sandbox-starter
+{`git clone https://github.com/valyd-id/valyd-sandbox-starter.git
+cd valyd-sandbox-starter
 npm install
 cp .env.example .env   # fill in client id/secret
 npm run dev`}
@@ -414,7 +414,7 @@ npm run dev`}
               </p>
             </div>
             <a
-              href="https://github.com/valyd-id/pollus-sandbox-starter"
+              href="https://github.com/valyd-id/valyd-sandbox-starter"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold shadow-sm hover:bg-primary/90 transition-colors whitespace-nowrap"

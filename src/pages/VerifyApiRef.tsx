@@ -40,6 +40,7 @@ const VerifyApiRef = () => {
           backLabel="Valyd Verify docs"
           activeId={activeId}
           onNavigate={onNavigate}
+          demos
         />
       )}
     >

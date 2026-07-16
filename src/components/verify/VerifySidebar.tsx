@@ -77,6 +77,7 @@ const apiRef: Item[] = [
   { id: "api-workflows", label: "Workflows", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
   { id: "api-standalone", label: "Core checks", icon: <Code className="h-4 w-4" />, modes: ["standalone"] },
   { id: "api-decision", label: "Decision", icon: <Code className="h-4 w-4" />, modes: ["hosted"] },
+  { id: "api-demo", label: "Demo · Try it live", icon: <Code className="h-4 w-4" /> },
   { id: "api-errors", label: "Errors & rate limits", icon: <AlertTriangle className="h-4 w-4" /> },
 ];
 

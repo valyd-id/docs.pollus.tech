@@ -1,10 +1,22 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PlayCircle, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MethodBadge } from "@/components/docs/MethodBadge";
 import { getOperationsByTag } from "@/lib/openapi";
 import { scrollToId } from "@/lib/scroll";
 import type { OApiSpec } from "@/lib/openapi";
+
+// Live, no-signup verification sandbox. Each entry deep-links to a specific flow (?flow=<id>) so a
+// reader can run the real experience in a new tab straight from the endpoints panel — no iframe.
+const DEMO_URL = "https://demos.pollus.tech";
+const SIDEBAR_DEMOS = [
+  { id: "core-kyc", label: "Core KYC" },
+  { id: "kyc-license", label: "KYC + License" },
+  { id: "liveness", label: "Liveness" },
+  { id: "face-auth", label: "Face Auth" },
+  { id: "license", label: "License" },
+  { id: "location-match", label: "Location" },
+];
 
 interface Props {
   spec: OApiSpec;
@@ -12,9 +24,11 @@ interface Props {
   backLabel: string;
   activeId?: string;
   onNavigate?: () => void;
+  /** Show the "Try it live" demo launch buttons beneath the endpoint list (Verify reference). */
+  demos?: boolean;
 }
 
-export const ApiRefSidebar = ({ spec, backHref, backLabel, activeId, onNavigate }: Props) => {
+export const ApiRefSidebar = ({ spec, backHref, backLabel, activeId, onNavigate, demos }: Props) => {
   const byTag = getOperationsByTag(spec);
 
   const handleClick = (id: string) => {
@@ -71,6 +85,30 @@ export const ApiRefSidebar = ({ spec, backHref, backLabel, activeId, onNavigate 
             </div>
           );
         })}
+
+        {/* Try it live — launch a real verification flow (no iframe), under the endpoint list */}
+        {demos && (
+          <div className="pt-2 border-t border-border">
+            <p className="px-3 mb-2 flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground font-semibold">
+              <PlayCircle className="h-3.5 w-3.5 text-primary" /> Try it live
+            </p>
+            <ul className="space-y-0.5">
+              {SIDEBAR_DEMOS.map((d) => (
+                <li key={d.id}>
+                  <a
+                    href={`${DEMO_URL}/?flow=${d.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between gap-2 w-full px-3 py-1.5 rounded-lg text-left text-muted-foreground transition-smooth hover:bg-primary/10 hover:text-primary"
+                  >
+                    <span className="text-[13px] truncate">{d.label}</span>
+                    <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </nav>
     </aside>
   );

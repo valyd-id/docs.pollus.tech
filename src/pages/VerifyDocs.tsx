@@ -39,9 +39,10 @@ const HOSTED_IDS = [
   "api-sessions",
   "api-workflows",
   "api-decision",
+  "api-demo",
   "api-errors",
 ];
-const STANDALONE_IDS = ["standalone", ...SDK_IDS, "api-standalone", "api-errors"];
+const STANDALONE_IDS = ["standalone", ...SDK_IDS, "api-standalone", "api-demo", "api-errors"];
 const MANAGED_IDS = [
   "managed",
   "managed-overview",

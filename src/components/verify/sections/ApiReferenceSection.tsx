@@ -2,6 +2,7 @@ import { CodeBlock } from "@/components/docs/CodeBlock";
 import { VERIFY_CONFIG } from "@/lib/verify-config";
 import { Code, AlertTriangle } from "lucide-react";
 import type { VerifyMode } from "../ModeSwitch";
+import { DemoEndpointsSection } from "./DemoEndpointsSection";
 
 const BASE = VERIFY_CONFIG.API_BASE_URL;
 
@@ -98,6 +99,8 @@ export const ApiReferenceSection = ({ mode }: { mode: VerifyMode }) => (
       />
     </section>
     )}
+
+    <DemoEndpointsSection />
 
     <section id="api-errors" className="scroll-mt-8 space-y-4">
       <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
