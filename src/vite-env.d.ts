@@ -18,6 +18,10 @@ interface ImportMetaEnv {
   readonly VITE_SANDBOX_CLIENT_ID?: string;
   readonly VITE_SANDBOX_CLIENT_SECRET?: string;
   readonly VITE_BRAND_NAME?: string;
+  /** MCP server origin, e.g. https://mcp.pollus.tech */
+  readonly VITE_MCP_BASE_URL?: string;
+  /** Demos site origin, e.g. https://demos.pollus.tech */
+  readonly VITE_DEMOS_BASE_URL?: string;
 }
 
 interface ImportMeta {

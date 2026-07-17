@@ -5,7 +5,7 @@ import { VERIFY_CONFIG } from "@/lib/verify-config";
 const BASE = VERIFY_CONFIG.API_BASE_URL;
 // The live, no-signup verification playground. Each button below opens a SPECIFIC flow directly
 // (via ?flow=<id>) in a new tab — the exact experience your end users get, no embedded iframe.
-const DEMO_URL = "https://demos.pollus.tech";
+const DEMO_URL = import.meta.env.VITE_DEMOS_BASE_URL ?? "https://demos.pollus.tech";
 
 type Demo = {
   id: string;
