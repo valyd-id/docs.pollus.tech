@@ -13,6 +13,7 @@ import Agents from "./pages/Agents";
 import HostedKycPage from "./pages/HostedKycPage";
 import VerifyLicensePage from "./pages/VerifyLicensePage";
 import EvvPage from "./pages/EvvPage";
+import AntiSpoofPage from "./pages/AntiSpoofPage";
 import McpDocs from "./pages/McpDocs";
 import NotFound from "./pages/NotFound";
 
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/verify/ship-hosted-kyc" element={<HostedKycPage />} />
           <Route path="/verify/verify-license" element={<VerifyLicensePage />} />
           <Route path="/evv" element={<EvvPage />} />
+          <Route path="/antispoof" element={<AntiSpoofPage />} />
           <Route path="/mcp" element={<McpDocs />} />
           <Route path="/agents" element={<Agents />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
