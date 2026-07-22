@@ -15,5 +15,5 @@ export const VERIFY_CONFIG = {
   BRAND_NAME: "Valyd Verify",
 } as const;
 
-/** The console host without a scheme — e.g. "dev.pollus.tech". */
+/** The console host without a scheme — e.g. "dev.valyd.work". */
 export const CONSOLE_HOST = VERIFY_CONFIG.CONSOLE_URL.replace(/^https?:\/\//, "").replace(/\/+$/, "");

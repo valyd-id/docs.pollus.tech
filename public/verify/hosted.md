@@ -1,26 +1,26 @@
-> Source: https://docs.pollus.tech/verify#hosted
+> Source: https://docs.valyd.work/verify#hosted
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: HostedSection.tsx
 
 # Hosted Verification
 
-> **Scope: Non-account (Fresh) hosted.** No Valyd login, nothing retained; the decision returns the **raw** captured data. For the Account variant — result stored on the user's Valyd account, reuse (returning users verify with a selfie only), and **proofs-only** results — see [Account (Managed by Valyd)](https://docs.pollus.tech/verify/managed.md). Same hosted page; you additionally pass the user's `valyd_access_token` when creating the session.
+> **Scope: Non-account (Fresh) hosted.** No Valyd login, nothing retained; the decision returns the **raw** captured data. For the Account variant — result stored on the user's Valyd account, reuse (returning users verify with a selfie only), and **proofs-only** results — see [Account (Managed by Valyd)](https://docs.valyd.work/verify/managed.md). Same hosted page; you additionally pass the user's `valyd_access_token` when creating the session.
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#hosted
-- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Portal: https://dev.pollus.tech), APP_URL
+- Source URL: https://docs.valyd.work/verify#hosted
+- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Portal: https://dev.valyd.work), APP_URL
 - Files an integrator edits: .env (credentials), server route handlers (session create, redirect callback, webhook receiver)
 - Estimated steps: 4 (create session → redirect → handle redirect-back → read authoritative result)
 - Can complete without human input: NO — a human must create the App API key, the webhook signing secret, and a workflow in the Developer Portal to obtain a `workflow_id`.
 - Prerequisites:
-  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Portal: https://dev.pollus.tech
-  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Portal: https://dev.pollus.tech
+  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Portal: https://dev.valyd.work
+  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Portal: https://dev.valyd.work
   - A `workflow_id` — create the workflow in the Developer Portal (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy its `workflow_id`.
   - Node.js project with `valyd-verify-sdk` installed (for the SDK examples).
 
 > ALL server-to-server calls use the header `X-API-Key: <App API key>`. Keep this key SERVER-SIDE ONLY — never expose it to the browser. Every response uses the envelope `{ success, data, error: { code, message } }`.
 
-> Base URL note: the component resolves the API base URL from `VERIFY_CONFIG.API_BASE_URL` = `https://idp.pollus.tech`. The hosted session `url` returned by the API is also under `https://idp.pollus.tech/s/…`. This page's canonical doc URL is on a different host (`https://docs.pollus.tech`), which is expected for docs vs. API.
+> Base URL note: the component resolves the API base URL from `VERIFY_CONFIG.API_BASE_URL` = `https://idp.valyd.work`. The hosted session `url` returned by the API is also under `https://idp.valyd.work/s/…`. This page's canonical doc URL is on a different host (`https://docs.valyd.work`), which is expected for docs vs. API.
 
 ---
 
@@ -58,12 +58,12 @@ Hosted flow at a glance:
 
 ## The two hosted products
 
-Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Portal (https://dev.pollus.tech) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
+Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Portal (https://dev.valyd.work) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
 
 ```text
 IF you only need to verify a professional license (no ID scan):  → use the "License Verification" workflow_id
 IF you need identity + credential (ID scan + selfie + license):  → use the "KYC + License" workflow_id
-IF unsure which workflow_id to use:                              → open the Developer Portal (https://dev.pollus.tech) → Workflows, and copy the workflow_id of the preset you created
+IF unsure which workflow_id to use:                              → open the Developer Portal (https://dev.valyd.work) → Workflows, and copy the workflow_id of the preset you created
 ```
 
 ### License Verification (badge: Credential only)
@@ -83,9 +83,9 @@ IF unsure which workflow_id to use:                              → open the De
 The steps are identical for both products. Swap the `workflow_id` to switch between License Verification and KYC + License.
 
 ### Prerequisites
-- `VALYD_API_KEY` set server-side (App API key — get from the Developer Portal: https://dev.pollus.tech).
-- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Portal: https://dev.pollus.tech).
-- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Portal: https://dev.pollus.tech, or create via the Workflows API below).
+- `VALYD_API_KEY` set server-side (App API key — get from the Developer Portal: https://dev.valyd.work).
+- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Portal: https://dev.valyd.work).
+- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Portal: https://dev.valyd.work, or create via the Workflows API below).
 - `APP_URL` — your application's public base URL (used to build `redirect_url` and `callback`).
 
 ### Steps
@@ -97,7 +97,7 @@ POST `/api/v2/session` from your backend. The response includes the hosted `url`
 cURL:
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/session \
+curl -X POST https://idp.valyd.work/api/v2/session \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -132,7 +132,7 @@ Expected output: HTTP 200 with the envelope `{ success: true, data: { … } }`. 
 {
   "session_id":    "ses_…",
   "status":        "NOT_STARTED",
-  "url":           "https://idp.pollus.tech/s/…",
+  "url":           "https://idp.valyd.work/s/…",
   "session_token": "stk_…",
   "features":      ["id_verification","liveness","face_match","credential"],
   "redirect_url":  "https://app.example.com/verify/callback",
@@ -140,7 +140,7 @@ Expected output: HTTP 200 with the envelope `{ success: true, data: { … } }`. 
 }
 ```
 
-> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Portal (https://dev.pollus.tech → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
+> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Portal (https://dev.valyd.work → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
 
 #### Step 2 — Redirect the user to the hosted page
 
@@ -159,7 +159,7 @@ app.post("/start-verification", async (req, res) => {
 });
 ```
 
-Expected output: an HTTP 302 redirect of the user's browser to the Valyd-hosted `session.url` (under `https://idp.pollus.tech/s/…`).
+Expected output: an HTTP 302 redirect of the user's browser to the Valyd-hosted `session.url` (under `https://idp.valyd.work/s/…`).
 
 #### Step 3 — Handle the redirect back
 
@@ -189,7 +189,7 @@ Use the signed webhook (push) and/or call the decision endpoint (pull). See "Web
 To confirm the integration end-to-end, after a session reaches a terminal status:
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/ses_…/decision \
+curl https://idp.valyd.work/api/v2/session/ses_…/decision \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -323,7 +323,7 @@ Per check in d.checks (each: { type, status, score, data, error }):
 cURL:
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/ses_…/decision \
+curl https://idp.valyd.work/api/v2/session/ses_…/decision \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -416,16 +416,16 @@ Full set of check status values: `pending`, `running`, `passed`, `failed`, `revi
 
 | Method | Path | Auth | Purpose |
 | --- | --- | --- | --- |
-| POST | `https://idp.pollus.tech/api/v2/session` | `X-API-Key` | Create a hosted verification session. |
-| GET | `https://idp.pollus.tech/api/v2/session/<session_id>/decision` | `X-API-Key` | Read the authoritative decision and per-check breakdown. |
-| GET (SDK: `sessions.retrieve`) | `https://idp.pollus.tech/api/v2/session/<session_id>` | `X-API-Key` | Retrieve a session. |
-| GET (SDK: `sessions.list`) | `https://idp.pollus.tech/api/v2/session` | `X-API-Key` | List sessions (filter by `status`, `vendorData`, `limit`). |
-| POST/PATCH (SDK: `sessions.updateStatus`) | `https://idp.pollus.tech/api/v2/session/<session_id>` | `X-API-Key` | Manually override session status to `APPROVED` or `DECLINED`. |
-| POST (SDK: `workflows.create`) | `https://idp.pollus.tech/api/v2/workflows` | `X-API-Key` | Create a workflow. |
-| GET (SDK: `workflows.list`) | `https://idp.pollus.tech/api/v2/workflows` | `X-API-Key` | List workflows. |
-| GET (SDK: `workflows.retrieve`) | `https://idp.pollus.tech/api/v2/workflows/<id>` | `X-API-Key` | Retrieve a workflow. |
-| PATCH (SDK: `workflows.update`) | `https://idp.pollus.tech/api/v2/workflows/<id>` | `X-API-Key` | Update a workflow. |
-| DELETE (SDK: `workflows.remove`) | `https://idp.pollus.tech/api/v2/workflows/<id>` | `X-API-Key` | Delete a workflow. |
+| POST | `https://idp.valyd.work/api/v2/session` | `X-API-Key` | Create a hosted verification session. |
+| GET | `https://idp.valyd.work/api/v2/session/<session_id>/decision` | `X-API-Key` | Read the authoritative decision and per-check breakdown. |
+| GET (SDK: `sessions.retrieve`) | `https://idp.valyd.work/api/v2/session/<session_id>` | `X-API-Key` | Retrieve a session. |
+| GET (SDK: `sessions.list`) | `https://idp.valyd.work/api/v2/session` | `X-API-Key` | List sessions (filter by `status`, `vendorData`, `limit`). |
+| POST/PATCH (SDK: `sessions.updateStatus`) | `https://idp.valyd.work/api/v2/session/<session_id>` | `X-API-Key` | Manually override session status to `APPROVED` or `DECLINED`. |
+| POST (SDK: `workflows.create`) | `https://idp.valyd.work/api/v2/workflows` | `X-API-Key` | Create a workflow. |
+| GET (SDK: `workflows.list`) | `https://idp.valyd.work/api/v2/workflows` | `X-API-Key` | List workflows. |
+| GET (SDK: `workflows.retrieve`) | `https://idp.valyd.work/api/v2/workflows/<id>` | `X-API-Key` | Retrieve a workflow. |
+| PATCH (SDK: `workflows.update`) | `https://idp.valyd.work/api/v2/workflows/<id>` | `X-API-Key` | Update a workflow. |
+| DELETE (SDK: `workflows.remove`) | `https://idp.valyd.work/api/v2/workflows/<id>` | `X-API-Key` | Delete a workflow. |
 | POST (your endpoint) | `<your callback URL>` | Signed via `X-Valyd-Signature` | Webhook Valyd POSTs to on a terminal session. |
 
 > The exact HTTP methods/paths for the SDK helpers `sessions.retrieve`, `sessions.list`, `sessions.updateStatus`, and the `workflows.*` helpers are inferred from the SDK method names and the noted `↔ /api/v2/workflows` mapping in the source; the component only spells out the literal paths `POST /api/v2/session` and `GET /api/v2/session/<id>/decision`.

@@ -21,10 +21,10 @@ This file concatenates every Valyd documentation page. Each page is delimited by
 - Fetch pages with `curl -sL <url>`; each `.md` is self-contained (prerequisites, steps,
   verification, and common errors).
 - **Base URLs (one canonical host per product — use these exactly):**
-  - Valyd ID / OAuth / OIDC: `https://idp.pollus.tech`
-  - Valyd Verify API: `https://idp.pollus.tech`
-  - Developer Portal (Valyd ID): `https://dev.pollus.tech`
-  - Developer Portal: `https://dev.pollus.tech`
+  - Valyd ID / OAuth / OIDC: `https://idp.valyd.work`
+  - Valyd Verify API: `https://idp.valyd.work`
+  - Developer Portal (Valyd ID): `https://dev.valyd.work`
+  - Developer Portal: `https://dev.valyd.work`
 - **Credentials cannot be created via API.** A human must sign up and generate them in the portal
   (see "Human-only steps" at the bottom). Pause and request these values rather than guessing:
   `client_id`, `client_secret` (Valyd ID); App `API key`, `workflow_id`, webhook signing secret
@@ -36,71 +36,71 @@ This file concatenates every Valyd documentation page. Each page is delimited by
 
 ## Valyd ID — Getting started
 
-- [Overview](https://docs.pollus.tech/docs/overview.md): What Valyd ID is, the 6-step OAuth2 SSO integration flow, and security notes.
-- [Create a Project & Get Credentials](https://docs.pollus.tech/docs/create-project.md): Dev-portal setup — sign up, create a project, set redirect/scopes, copy client_id + client_secret. (Human-only.)
-- [Quick start — Login with Valyd](https://docs.pollus.tech/docs/quick-start.md): Install valyd-idp-sdk and wire the full TPSSO/OAuth login flow end to end.
-- [Login sessions (CSRF)](https://docs.pollus.tech/docs/login-sessions.md): Why OAuth `state` comparison fails for TPSSO and how to use createLoginSession/verifyLoginSession.
+- [Overview](https://docs.valyd.work/docs/overview.md): What Valyd ID is, the 6-step OAuth2 SSO integration flow, and security notes.
+- [Create a Project & Get Credentials](https://docs.valyd.work/docs/create-project.md): Dev-portal setup — sign up, create a project, set redirect/scopes, copy client_id + client_secret. (Human-only.)
+- [Quick start — Login with Valyd](https://docs.valyd.work/docs/quick-start.md): Install valyd-idp-sdk and wire the full TPSSO/OAuth login flow end to end.
+- [Login sessions (CSRF)](https://docs.valyd.work/docs/login-sessions.md): Why OAuth `state` comparison fails for TPSSO and how to use createLoginSession/verifyLoginSession.
 
 ## Valyd ID — Authentication & integration
 
-- [Authentication (OAuth2 / TPSSO flow)](https://docs.pollus.tech/docs/authentication.md): Authorization URL, login-session CSRF, callback handling, code→token exchange.
-- [OpenID Connect (OIDC) Integration](https://docs.pollus.tech/docs/oidc.md): Discovery endpoint, manual config, Mendix setup, claim/user mapping, testing, troubleshooting, security.
+- [Authentication (OAuth2 / TPSSO flow)](https://docs.valyd.work/docs/authentication.md): Authorization URL, login-session CSRF, callback handling, code→token exchange.
+- [OpenID Connect (OIDC) Integration](https://docs.valyd.work/docs/oidc.md): Discovery endpoint, manual config, Mendix setup, claim/user mapping, testing, troubleshooting, security.
 
 ## Valyd ID — Reference
 
-- [API Reference (endpoints)](https://docs.pollus.tech/docs/endpoints.md): POST /token, GET /userinfo, GET /licenses, GET /verifications, POST /refresh — base URL https://idp.pollus.tech/api/auth/tpsso.
-- [OAuth2 Scopes](https://docs.pollus.tech/docs/scopes.md): profile, verifications, doctor_license, zkp, mcp — what data each unlocks and how to request them.
-- [Errors & troubleshooting](https://docs.pollus.tech/docs/errors.md): Every error code with cause and fix, plus the SDK "Invalid login session" failure.
-- [Changelog](https://docs.pollus.tech/docs/changelog.md): valyd-idp-sdk release history (v0.2.0 login sessions, v0.1.0 initial client).
+- [API Reference (endpoints)](https://docs.valyd.work/docs/endpoints.md): POST /token, GET /userinfo, GET /licenses, GET /verifications, POST /refresh — base URL https://idp.valyd.work/api/auth/tpsso.
+- [OAuth2 Scopes](https://docs.valyd.work/docs/scopes.md): profile, verifications, doctor_license, zkp, mcp — what data each unlocks and how to request them.
+- [Errors & troubleshooting](https://docs.valyd.work/docs/errors.md): Every error code with cause and fix, plus the SDK "Invalid login session" failure.
+- [Changelog](https://docs.valyd.work/docs/changelog.md): valyd-idp-sdk release history (v0.2.0 login sessions, v0.1.0 initial client).
 
 ## Valyd Verify — Guides
 
-- [Introduction](https://docs.pollus.tech/verify/intro.md): What Valyd Verify is, Hosted vs Core APIs modes, services, base URL, response envelope.
-- [Quickstart](https://docs.pollus.tech/verify/quickstart.md): Get an API key, create a workflow/webhook, make a first Core API call and a hosted session.
-- [Developer Portal](https://docs.pollus.tech/verify/console.md): Apps, API keys, workflows, webhooks, SSO. (Human-only UI steps.)
-- [Hosted vs Core APIs](https://docs.pollus.tech/verify/modes.md): Decision tree and comparison to choose an integration mode.
-- [Account (Managed by Valyd)](https://docs.pollus.tech/verify/managed.md): Account vs Non-account model, the proofs-only data rule, hosted + core account APIs, reuse, and the consent Core API for raw KYC.
-- [Hosted Verification](https://docs.pollus.tech/verify/hosted.md): Create session, redirect, signed webhooks, decision API, statuses. Base URL https://idp.pollus.tech.
-- [Core APIs](https://docs.pollus.tech/verify/standalone.md): Server-to-server checks — ID, liveness, face match, age, credential, KYC+credential.
-- [Node SDK](https://docs.pollus.tech/verify/sdk.md): Install/init valyd-verify-sdk, resources, types, error handling, Express webhook handler.
-- [Webhooks](https://docs.pollus.tech/verify/webhooks.md): Register a callback URL and verify HMAC-SHA256 signatures over the raw request body.
-- [Statuses & decisioning](https://docs.pollus.tech/verify/statuses.md): Every session/check status, what it means, and how to act on it.
+- [Introduction](https://docs.valyd.work/verify/intro.md): What Valyd Verify is, Hosted vs Core APIs modes, services, base URL, response envelope.
+- [Quickstart](https://docs.valyd.work/verify/quickstart.md): Get an API key, create a workflow/webhook, make a first Core API call and a hosted session.
+- [Developer Portal](https://docs.valyd.work/verify/console.md): Apps, API keys, workflows, webhooks, SSO. (Human-only UI steps.)
+- [Hosted vs Core APIs](https://docs.valyd.work/verify/modes.md): Decision tree and comparison to choose an integration mode.
+- [Account (Managed by Valyd)](https://docs.valyd.work/verify/managed.md): Account vs Non-account model, the proofs-only data rule, hosted + core account APIs, reuse, and the consent Core API for raw KYC.
+- [Hosted Verification](https://docs.valyd.work/verify/hosted.md): Create session, redirect, signed webhooks, decision API, statuses. Base URL https://idp.valyd.work.
+- [Core APIs](https://docs.valyd.work/verify/standalone.md): Server-to-server checks — ID, liveness, face match, age, credential, KYC+credential.
+- [Node SDK](https://docs.valyd.work/verify/sdk.md): Install/init valyd-verify-sdk, resources, types, error handling, Express webhook handler.
+- [Webhooks](https://docs.valyd.work/verify/webhooks.md): Register a callback URL and verify HMAC-SHA256 signatures over the raw request body.
+- [Statuses & decisioning](https://docs.valyd.work/verify/statuses.md): Every session/check status, what it means, and how to act on it.
 
 ## Valyd Verify — API Reference
 
-- [API Reference](https://docs.pollus.tech/verify/api-reference.md): Sessions, Workflows, Core checks, Decision, and Errors & rate limits. All calls use `X-API-Key`.
+- [API Reference](https://docs.valyd.work/verify/api-reference.md): Sessions, Workflows, Core checks, Decision, and Errors & rate limits. All calls use `X-API-Key`.
 
 ## Downloads & tooling
 
-- [Postman collection](https://docs.pollus.tech/valyd-postman-collection.json): Importable collection of the Valyd ID API requests.
-- [Node SDK starter](https://docs.pollus.tech/downloads/valyd-sdk-starter.zip): Starter scaffold for integrating Valyd.
+- [Postman collection](https://docs.valyd.work/valyd-postman-collection.json): Importable collection of the Valyd ID API requests.
+- [Node SDK starter](https://docs.valyd.work/downloads/valyd-sdk-starter.zip): Starter scaffold for integrating Valyd.
 
 ## Human-only steps (an agent must pause and request these)
 
-- Sign up for a Valyd account and log in to the Developer Portal: https://dev.pollus.tech (no KYC required).
+- Sign up for a Valyd account and log in to the Developer Portal: https://dev.valyd.work (no KYC required).
 - Create a Valyd ID project; copy `client_id` and `client_secret` (secret shown once — regenerate if lost).
 - Register the exact redirect/callback URL on the project (must match what you send; no trailing slash).
-- Sign in to the Developer Portal (https://dev.pollus.tech) with Valyd SSO; copy the App API key (shown once).
+- Sign in to the Developer Portal (https://dev.valyd.work) with Valyd SSO; copy the App API key (shown once).
 - Create a Verify workflow and copy its `workflow_id`; set the webhook URL and signing secret.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/overview.md ===
+=== FILE: https://docs.valyd.work/docs/overview.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/overview
+> Source: https://docs.valyd.work/docs/overview
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: OverviewSection.tsx
 
 # Valyd Third-Party SSO API
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/overview
+- Source URL: https://docs.valyd.work/docs/overview
 - Credentials / env vars needed: client_id, client_secret (obtain from the Developer Portal — see Prerequisites)
 - Files an integrator edits: none — reference / orientation page only
 - Estimated steps: 6 (the end-to-end OAuth2 SSO flow described below)
-- Can complete without human input: NO — obtaining credentials requires signing up at https://dev.pollus.tech and creating a project (a human-only web step)
+- Can complete without human input: NO — obtaining credentials requires signing up at https://dev.valyd.work and creating a project (a human-only web step)
 - Prerequisites:
-  - A basic Valyd account (sign up at https://dev.pollus.tech — no KYC verification required)
+  - A basic Valyd account (sign up at https://dev.valyd.work — no KYC verification required)
   - A registered project in the Developer Portal that provides your `client_id` and `client_secret`
   - A backend capable of making server-side HTTPS requests (to keep `client_secret` secret)
 
@@ -109,16 +109,16 @@ Integrate secure identity verification and authentication into your application 
 ## Base URL
 
 ```text
-https://idp.pollus.tech/api/auth/tpsso
+https://idp.valyd.work/api/auth/tpsso
 ```
 
 ## Integration Flow
 
-Access to the Developer Portal requires a basic Valyd account. No KYC verification needed — just sign up at https://dev.pollus.tech to get your API credentials.
+Access to the Developer Portal requires a basic Valyd account. No KYC verification needed — just sign up at https://dev.valyd.work to get your API credentials.
 
 The end-to-end OAuth2 SSO flow has six steps:
 
-1. **Create Project** — Register your application at https://dev.pollus.tech to get your client credentials (`client_id` and `client_secret`).
+1. **Create Project** — Register your application at https://dev.valyd.work to get your client credentials (`client_id` and `client_secret`).
 2. **Redirect to Authorization** — When a user clicks "Login with Valyd", redirect them to the authorization URL with your `client_id` and requested `scope`s.
 3. **User Consent** — The user sees the consent screen with the requested permissions and approves access.
 4. **Receive Authorization Code** — After approval, the user is redirected to your callback URL with a one-time code (valid for 5 minutes).
@@ -127,13 +127,13 @@ The end-to-end OAuth2 SSO flow has six steps:
 
 ### Authorization URL shape
 
-The authorization URL is built from the IdP base host `https://idp.pollus.tech`, the `/auth` path, and query parameters. `scope` is a space-separated list, URL-encoded.
+The authorization URL is built from the IdP base host `https://idp.valyd.work`, the `/auth` path, and query parameters. `scope` is a space-separated list, URL-encoded.
 
 ```text
-https://idp.pollus.tech/auth?client_id=YOUR_CLIENT_ID&redirect_url=YOUR_REDIRECT_URI&scope=profile%20verifications
+https://idp.valyd.work/auth?client_id=YOUR_CLIENT_ID&redirect_url=YOUR_REDIRECT_URI&scope=profile%20verifications
 ```
 
-- `YOUR_CLIENT_ID` — get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+- `YOUR_CLIENT_ID` — get this from the Developer Portal → your project → Credentials: https://dev.valyd.work
 - `YOUR_REDIRECT_URI` — the Redirect URL you registered for the project in the Developer Portal (must NOT end with a trailing slash)
 - `scope` — space-separated scope list (e.g. `profile verifications zkp`), URL-encoded so the space becomes `%20`
 
@@ -151,46 +151,46 @@ https://idp.pollus.tech/auth?client_id=YOUR_CLIENT_ID&redirect_url=YOUR_REDIRECT
 The live documentation page includes a Postman Collection generator widget for exploring these endpoints interactively. It is a UI convenience and produces a Postman collection for the same endpoints described here; there is no additional API surface beyond the endpoints listed above.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/create-project.md ===
+=== FILE: https://docs.valyd.work/docs/create-project.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/create-project
+> Source: https://docs.valyd.work/docs/create-project
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: GettingStartedSection.tsx
 
 # Create a Project & Get Your Credentials
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/create-project
+- Source URL: https://docs.valyd.work/docs/create-project
 - Credentials / env vars needed: produces `client_id` and `client_secret` (these are the OUTPUT of this page, not a prerequisite)
 - Files an integrator edits: your backend environment file (e.g. `.env`) to store `client_secret` after you obtain it
 - Estimated steps: 3
 - Can complete without human input: NO — every step is a manual action in the Developer Portal web UI (sign up, create project, copy the one-time-shown secret). An automated agent cannot perform these; a human must do them and then hand the agent the resulting `client_id` and `client_secret`.
 - Prerequisites:
-  - A basic Valyd account (sign up at https://dev.pollus.tech — no KYC verification required)
-  - Access to a browser to use the Developer Portal at https://dev.pollus.tech
+  - A basic Valyd account (sign up at https://dev.valyd.work — no KYC verification required)
+  - Access to a browser to use the Developer Portal at https://dev.valyd.work
   - The exact production domain(s) your app sends requests from (for Allowed Web Origins)
   - Your callback/redirect URL, with NO trailing slash (e.g. `https://myapp.com/callback`)
 
-Before integrating with Valyd SSO, you need to register your application in the Developer Portal to obtain your client credentials. Access to the Developer Portal requires a basic Valyd account; no KYC verification is needed — just sign up at https://dev.pollus.tech.
+Before integrating with Valyd SSO, you need to register your application in the Developer Portal to obtain your client credentials. Access to the Developer Portal requires a basic Valyd account; no KYC verification is needed — just sign up at https://dev.valyd.work.
 
 ## Prerequisites
 
-- A Valyd account. Sign up at https://dev.pollus.tech if you do not have one. No KYC verification is required for portal access.
+- A Valyd account. Sign up at https://dev.valyd.work if you do not have one. No KYC verification is required for portal access.
 - The list of domains your application sends requests from (used for Allowed Web Origins).
 - Your redirect/callback URL, without a trailing slash.
 - A decision on which data scopes your application needs (`profile`, `verifications`, `zkp` — detailed below).
 
 ## Steps
 
-This is a portal-driven setup. All steps below are performed by a human in the web UI at https://dev.pollus.tech — there is no API to automate project creation.
+This is a portal-driven setup. All steps below are performed by a human in the web UI at https://dev.valyd.work — there is no API to automate project creation.
 
 ### Step 1 — Visit the Developer Portal and log in
 
 Open the Developer Portal in a browser and log in with your Valyd account.
 
 ```text
-https://dev.pollus.tech
+https://dev.valyd.work
 ```
 
 **Expected output:** You are signed in and see the Developer Portal dashboard with an option to create a new project.
@@ -274,7 +274,7 @@ VALYD_CLIENT_SECRET=sk_live_a1b2c3d4e5f6g7h8i9j0...
 With your Client ID and Client Secret you can now integrate Valyd SSO into your application:
 
 1. Store your `client_secret` securely in your backend environment variables.
-2. Implement the "Login with Valyd" button that redirects to the authorization URL (`https://idp.pollus.tech/auth?client_id=...&redirect_url=...&scope=...`).
+2. Implement the "Login with Valyd" button that redirects to the authorization URL (`https://idp.valyd.work/auth?client_id=...&redirect_url=...&scope=...`).
 3. Handle the callback and exchange the one-time code for tokens using your `client_secret` (backend only).
 4. Use the `access_token` to fetch user data.
 
@@ -283,7 +283,7 @@ With your Client ID and Client Secret you can now integrate Valyd SSO into your 
 There is no CLI/API check for project creation; verify manually in the portal:
 
 ```text
-IF you can see your project listed in the Developer Portal at https://dev.pollus.tech  → project was created
+IF you can see your project listed in the Developer Portal at https://dev.valyd.work  → project was created
 IF the credentials modal showed a Client ID and Client Secret                       → credentials were issued
 IF you saved the Client Secret before closing the modal                             → you can proceed
 IF you closed the modal without copying the Client Secret                           → regenerate it from project settings (it is shown only once per generation)
@@ -304,17 +304,17 @@ IF you closed the modal without copying the Client Secret                       
    - **Fix:** Add the exact origin (scheme + host, e.g. `https://myapp.com`) to Allowed Web Origins in the project settings.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/quick-start.md ===
+=== FILE: https://docs.valyd.work/docs/quick-start.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/quick-start
+> Source: https://docs.valyd.work/docs/quick-start
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: QuickStartSection.tsx
 
 # Quick start — Login with Valyd
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/quick-start
+- Source URL: https://docs.valyd.work/docs/quick-start
 - Credentials / env vars needed: VALYD_CLIENT_ID, VALYD_CLIENT_SECRET, VALYD_REDIRECT_URI
 - Files an integrator edits: .env, server route handlers (e.g. server.ts: /login and /callback)
 - Estimated steps: 6
@@ -358,7 +358,7 @@ IF you closed the modal without copying the Client Secret                       
 
    **Expected output:** A `.env` file on disk with the three keys set. No command output; verify the file contents are correct.
 
-3. **Initialize the client.** Construct a `ValydClient` from your environment variables. `baseUrl` defaults to `https://idp.pollus.tech`.
+3. **Initialize the client.** Construct a `ValydClient` from your environment variables. `baseUrl` defaults to `https://idp.valyd.work`.
 
    ```typescript
    // server.ts
@@ -368,7 +368,7 @@ IF you closed the modal without copying the Client Secret                       
      clientId: process.env.VALYD_CLIENT_ID!,
      clientSecret: process.env.VALYD_CLIENT_SECRET!,
      redirectUri: process.env.VALYD_REDIRECT_URI!, // e.g. http://localhost:8080/callback
-     // baseUrl defaults to https://idp.pollus.tech
+     // baseUrl defaults to https://idp.valyd.work
    });
    ```
 
@@ -487,17 +487,17 @@ IF you closed the modal without copying the Client Secret                       
   - **Fix:** Make `VALYD_REDIRECT_URI` identical to the registered value (no trailing slash), and enable each requested scope (`profile`, `verifications`, `doctor_license`, `zkp`, `mcp`) in the portal before requesting it.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/login-sessions.md ===
+=== FILE: https://docs.valyd.work/docs/login-sessions.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/login-sessions
+> Source: https://docs.valyd.work/docs/login-sessions
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: LoginSessionsSection.tsx
 
 # Login sessions (CSRF protection)
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/login-sessions
+- Source URL: https://docs.valyd.work/docs/login-sessions
 - Credentials / env vars needed: none directly (relies on the configured `valyd` client, which uses your client ID/secret — get these from the Valyd developer portal → your project → Credentials)
 - Files an integrator edits: server route handlers (the login redirect route and the callback route)
 - Estimated steps: 2
@@ -591,23 +591,23 @@ A full Express example is available in the SDK repo: https://github.com/valyd/id
   - **Fix:** Store the marker server-side only — an `httpOnly` cookie, an encrypted server session, or a KV store. Never expose it to JS.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/authentication.md ===
+=== FILE: https://docs.valyd.work/docs/authentication.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/authentication
+> Source: https://docs.valyd.work/docs/authentication
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: AuthenticationSection.tsx
 
 # Authentication (OAuth2 / TPSSO Flow)
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/authentication
+- Source URL: https://docs.valyd.work/docs/authentication
 - Credentials / env vars needed: VALYD_CLIENT_ID, VALYD_CLIENT_SECRET, VALYD_REDIRECT_URI
 - Files an integrator edits: .env (credentials), server route handler for `/callback`, login/redirect route handler
 - Estimated steps: 6
-- Can complete without human input: NO — a human must register the app and obtain a Client ID + Client Secret from the Developer Portal (https://dev.pollus.tech), and register the exact redirect/callback URL.
+- Can complete without human input: NO — a human must register the app and obtain a Client ID + Client Secret from the Developer Portal (https://dev.valyd.work), and register the exact redirect/callback URL.
 - Prerequisites:
-  - A Valyd application registered in the Developer Portal (https://dev.pollus.tech) with a Client ID and Client Secret.
+  - A Valyd application registered in the Developer Portal (https://dev.valyd.work) with a Client ID and Client Secret.
   - The exact callback/redirect URL (e.g. `https://yourapp.com/callback`) registered on that application — it must match the `redirect_url` you send.
   - A server-side environment that can keep `VALYD_CLIENT_SECRET` private (token exchange MUST happen server-side).
   - (Recommended) Node project with the official SDK: `npm install valyd-idp-sdk@^0.2.0`
@@ -619,11 +619,11 @@ Valyd uses the OAuth2 Authorization Code flow (referred to internally as TPSSO).
 CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `state` back on the callback. The `state` returned to your callback is Valyd's own opaque session id. Do NOT use it for CSRF protection by comparing it to a value you sent. Instead, create a login session up front, store its marker, and verify the marker on the callback.
 
 ### Prerequisites
-- Client ID and Client Secret (get these from the Developer Portal → your project → Credentials: https://dev.pollus.tech).
+- Client ID and Client Secret (get these from the Developer Portal → your project → Credentials: https://dev.valyd.work).
 - A registered redirect/callback URL matching what you send as `redirect_url`.
 - Environment variables set on your server:
-  - `VALYD_CLIENT_ID` (get from Developer Portal: https://dev.pollus.tech)
-  - `VALYD_CLIENT_SECRET` (get from Developer Portal: https://dev.pollus.tech)
+  - `VALYD_CLIENT_ID` (get from Developer Portal: https://dev.valyd.work)
+  - `VALYD_CLIENT_SECRET` (get from Developer Portal: https://dev.valyd.work)
   - `VALYD_REDIRECT_URI` (the exact callback URL you registered, e.g. `https://yourapp.com/callback`)
 
 ### Steps
@@ -631,14 +631,14 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
 1. **Construct the authorization URL.** Redirect users to the Valyd authorization endpoint with your client credentials and requested scopes. The exact URL format is:
 
    ```text
-   https://idp.pollus.tech/auth?client_id={client_id}&redirect_url={redirect_url}&scope={scopes}
+   https://idp.valyd.work/auth?client_id={client_id}&redirect_url={redirect_url}&scope={scopes}
    ```
 
    Parameters:
 
    | Parameter | Required | Description |
    | --- | --- | --- |
-   | `client_id` | Yes | Your application's Client ID from the Developer Portal (https://dev.pollus.tech). |
+   | `client_id` | Yes | Your application's Client ID from the Developer Portal (https://dev.valyd.work). |
    | `redirect_url` | Yes | The URL to redirect to after authentication. Must match the URL registered on your application. |
    | `scope` | Yes | Space-separated list of scopes, URL-encoded. Example: `profile%20verifications`. |
    | `state` | Optional | Pass `session.authorizeState` from `createLoginSession()`. NOT echoed on the callback for TPSSO — do not use it for CSRF on its own. |
@@ -646,7 +646,7 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
    **Expected output:** A fully-formed URL string. Example with encoded scopes `profile verifications`:
 
    ```text
-   https://idp.pollus.tech/auth?client_id=YOUR_CLIENT_ID&redirect_url=https://yourapp.com/callback&scope=profile%20verifications
+   https://idp.valyd.work/auth?client_id=YOUR_CLIENT_ID&redirect_url=https://yourapp.com/callback&scope=profile%20verifications
    ```
 
 2. **Issue a login session and redirect (recommended: use the SDK).** On your login route, create a login session, store its marker (httpOnly cookie or server session), build the authorization URL, and redirect the user:
@@ -672,7 +672,7 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
    res.redirect(url);
    ```
 
-   **Expected output:** HTTP 302 redirect sending the user's browser to `https://idp.pollus.tech/auth?...`. The login session marker is now stored on the user's side (cookie/session) for the CSRF check in step 5.
+   **Expected output:** HTTP 302 redirect sending the user's browser to `https://idp.valyd.work/auth?...`. The login session marker is now stored on the user's side (cookie/session) for the CSRF check in step 5.
 
 3. **User consents on the Valyd consent screen.** Valyd shows the consent screen with the requested scopes and, on approval, issues a one-time authorization `code`.
 
@@ -742,13 +742,13 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
 
 #### Token exchange without the SDK (raw HTTP)
 
-The token endpoint is `POST https://idp.pollus.tech/api/auth/tpsso/token` with a JSON body. The response wraps the tokens under a `data` key (i.e. `response.data.access_token`).
+The token endpoint is `POST https://idp.valyd.work/api/auth/tpsso/token` with a JSON body. The response wraps the tokens under a `data` key (i.e. `response.data.access_token`).
 
 Request shape:
 
 ```http
 POST /api/auth/tpsso/token HTTP/1.1
-Host: idp.pollus.tech
+Host: idp.valyd.work
 Content-Type: application/json
 
 {
@@ -776,7 +776,7 @@ def callback():
         return "missing code", 400
 
     response = requests.post(
-        "https://idp.pollus.tech/api/auth/tpsso/token",
+        "https://idp.valyd.work/api/auth/tpsso/token",
         json={
             "grant_type": "authorization_code",
             "client_id": "YOUR_CLIENT_ID",
@@ -798,7 +798,7 @@ if (!$code) { http_response_code(400); exit('missing code'); }
 
 $ch = curl_init();
 curl_setopt_array($ch, [
-    CURLOPT_URL => 'https://idp.pollus.tech/api/auth/tpsso/token',
+    CURLOPT_URL => 'https://idp.valyd.work/api/auth/tpsso/token',
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         'grant_type' => 'authorization_code',
@@ -829,13 +829,13 @@ public ResponseEntity<?> callback(@RequestParam String code) {
     );
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    rt.postForEntity("https://idp.pollus.tech/api/auth/tpsso/token",
+    rt.postForEntity("https://idp.valyd.work/api/auth/tpsso/token",
         new HttpEntity<>(body, headers), String.class);
     return ResponseEntity.status(302).header("Location", "/dashboard").build();
 }
 ```
 
-In all raw-HTTP examples, replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your real values (get these from the Developer Portal → your project → Credentials: https://dev.pollus.tech). Never expose `YOUR_CLIENT_SECRET` in client-side code — the token exchange must run on your server.
+In all raw-HTTP examples, replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your real values (get these from the Developer Portal → your project → Credentials: https://dev.valyd.work). Never expose `YOUR_CLIENT_SECRET` in client-side code — the token exchange must run on your server.
 
 ### Auth-flow decision tree
 
@@ -865,18 +865,18 @@ Token exchange:
     → res.clearCookie("valyd_login"), set your own app session, redirect to /dashboard.
 
 IF you are not using Node / the SDK:
-    → POST https://idp.pollus.tech/api/auth/tpsso/token with JSON
+    → POST https://idp.valyd.work/api/auth/tpsso/token with JSON
       { grant_type: "authorization_code", client_id, client_secret, code }
       and read the token from response.data.access_token.
 ```
 
 ### Verification
-- Confirm the redirect: opening your login route returns HTTP 302 with a `Location` header beginning `https://idp.pollus.tech/auth?client_id=...&redirect_url=...&scope=...`.
+- Confirm the redirect: opening your login route returns HTTP 302 with a `Location` header beginning `https://idp.valyd.work/auth?client_id=...&redirect_url=...&scope=...`.
 - After consenting, confirm your `/callback` route receives a `code` query parameter.
 - Confirm the token exchange succeeds:
 
   ```bash
-  curl -i -X POST https://idp.pollus.tech/api/auth/tpsso/token \
+  curl -i -X POST https://idp.valyd.work/api/auth/tpsso/token \
     -H "Content-Type: application/json" \
     -d '{"grant_type":"authorization_code","client_id":"YOUR_CLIENT_ID","client_secret":"YOUR_CLIENT_SECRET","code":"AUTH_CODE_HERE"}'
   ```
@@ -895,27 +895,27 @@ IF you are not using Node / the SDK:
 
 3. **`redirect_url` mismatch (authorization rejected by Valyd).**
    - Cause: The `redirect_url` sent on the authorization request does not exactly match the URL registered for your application.
-   - Fix: Set `VALYD_REDIRECT_URI` (and the SDK `redirectUri`) to the exact callback URL registered in the Developer Portal (https://dev.pollus.tech), matching scheme, host, and path.
+   - Fix: Set `VALYD_REDIRECT_URI` (and the SDK `redirectUri`) to the exact callback URL registered in the Developer Portal (https://dev.valyd.work), matching scheme, host, and path.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/oidc.md ===
+=== FILE: https://docs.valyd.work/docs/oidc.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/oidc
+> Source: https://docs.valyd.work/docs/oidc
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: OIDCSection.tsx
 
 # OpenID Connect (OIDC) Integration Guide
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/oidc
-- Credentials / env vars needed: OIDC_CLIENT_ID, OIDC_CLIENT_SECRET (get both from the Developer Portal → your project → Credentials: https://dev.pollus.tech), OIDC_REDIRECT_URI (the callback URL you register, e.g. https://your-app.mendixcloud.com/oidc/callback)
+- Source URL: https://docs.valyd.work/docs/oidc
+- Credentials / env vars needed: OIDC_CLIENT_ID, OIDC_CLIENT_SECRET (get both from the Developer Portal → your project → Credentials: https://dev.valyd.work), OIDC_REDIRECT_URI (the callback URL you register, e.g. https://your-app.mendixcloud.com/oidc/callback)
 - Files an integrator edits: your platform's SSO/OIDC config (Mendix Studio Pro module config, Mendix Cloud Portal Environment → Security, or a custom OIDC module's constants file)
 - Estimated steps: 8 (register client → configure issuer/endpoints → set scopes → enter credentials → set redirect URI → test login → exchange code → map user)
-- Can complete without human input: NO — a human must sign in to the Developer Portal at https://dev.pollus.tech, create the OIDC client, and copy the client_secret (shown only once). After credentials exist, the rest can be automated.
+- Can complete without human input: NO — a human must sign in to the Developer Portal at https://dev.valyd.work, create the OIDC client, and copy the client_secret (shown only once). After credentials exist, the rest can be automated.
 - Prerequisites:
   - A Mendix account, or admin access to your target OIDC-compatible platform's console.
-  - Access to the Developer Portal at https://dev.pollus.tech (used to register the client).
+  - Access to the Developer Portal at https://dev.valyd.work (used to register the client).
   - A registered OIDC client (created as a project in the Developer Portal — yields client_id and client_secret).
   - A redirect URL that matches EXACTLY what you configure in your platform (no trailing slashes, correct protocol).
 
@@ -961,7 +961,7 @@ User  →  Your App  →  Authorization  →  Token  →  Userinfo/JWKS
 Before integrating OIDC, ensure you have the following:
 
 1. **Mendix account** — Or access to your target platform's admin console.
-2. **Access to Developer Portal** — Visit https://dev.pollus.tech to register.
+2. **Access to Developer Portal** — Visit https://dev.valyd.work to register.
 3. **Registered OIDC client** — Create a project in the Developer Portal.
 4. **Correct redirect URL** — Must match exactly what you configure in your platform.
 
@@ -974,7 +974,7 @@ Before integrating OIDC, ensure you have the following:
 Open the Developer Portal and sign in with your account.
 
 ```text
-Open: https://dev.pollus.tech
+Open: https://dev.valyd.work
 ```
 
 **Expected output:** You are signed in and can see your projects dashboard.
@@ -1004,18 +1004,18 @@ https://your-app.mendixcloud.com/oidc/callback
 ```text
 IF your platform supports OIDC auto-discovery:
   → Point it at the discovery URL and let it auto-configure all endpoints:
-    GET https://idp.pollus.tech/api/.well-known/openid-configuration
+    GET https://idp.valyd.work/api/.well-known/openid-configuration
 IF your platform does NOT support auto-discovery:
   → Enter the endpoint values manually (see "Manual OIDC Configuration" below).
 IF unsure whether discovery works:
-  → Run: curl -s https://idp.pollus.tech/api/.well-known/openid-configuration
+  → Run: curl -s https://idp.valyd.work/api/.well-known/openid-configuration
     A 200 response with a JSON body containing "issuer" means discovery works.
 ```
 
 **Discovery endpoint** (method + full URL):
 
 ```http
-GET https://idp.pollus.tech/api/.well-known/openid-configuration
+GET https://idp.valyd.work/api/.well-known/openid-configuration
 ```
 
 The discovery endpoint provides all the information needed to configure your OIDC client automatically. Most platforms can use this URL to auto-configure all endpoints.
@@ -1024,11 +1024,11 @@ The discovery endpoint provides all the information needed to configure your OID
 
 ```json
 {
-  "issuer": "https://idp.pollus.tech",
-  "authorization_endpoint": "https://idp.pollus.tech/api/auth/oidc/authorize",
-  "token_endpoint": "https://idp.pollus.tech/api/auth/oidc/token",
-  "userinfo_endpoint": "https://idp.pollus.tech/api/auth/oidc/userinfo",
-  "jwks_uri": "https://idp.pollus.tech/api/auth/oidc/jwks.json",
+  "issuer": "https://idp.valyd.work",
+  "authorization_endpoint": "https://idp.valyd.work/api/auth/oidc/authorize",
+  "token_endpoint": "https://idp.valyd.work/api/auth/oidc/token",
+  "userinfo_endpoint": "https://idp.valyd.work/api/auth/oidc/userinfo",
+  "jwks_uri": "https://idp.valyd.work/api/auth/oidc/jwks.json",
   "response_types_supported": ["code", "id_token", "token id_token"],
   "grant_types_supported": ["authorization_code", "refresh_token"],
   "subject_types_supported": ["public"],
@@ -1061,11 +1061,11 @@ If your platform doesn't support auto-discovery, use these values to configure m
 
 | Setting                | Value                                            |
 | ---------------------- | ------------------------------------------------ |
-| Issuer                 | `https://idp.pollus.tech`                           |
-| Authorization Endpoint | `https://idp.pollus.tech/api/auth/oidc/authorize`   |
-| Token Endpoint         | `https://idp.pollus.tech/api/auth/oidc/token`       |
-| Userinfo Endpoint      | `https://idp.pollus.tech/api/auth/oidc/userinfo`    |
-| JWKS URI               | `https://idp.pollus.tech/api/auth/oidc/jwks.json`   |
+| Issuer                 | `https://idp.valyd.work`                           |
+| Authorization Endpoint | `https://idp.valyd.work/api/auth/oidc/authorize`   |
+| Token Endpoint         | `https://idp.valyd.work/api/auth/oidc/token`       |
+| Userinfo Endpoint      | `https://idp.valyd.work/api/auth/oidc/userinfo`    |
+| JWKS URI               | `https://idp.valyd.work/api/auth/oidc/jwks.json`   |
 | Auth Method            | `client_secret_post` / `client_secret_basic`     |
 | ID Token Algorithm     | `RS256`                                          |
 
@@ -1093,7 +1093,7 @@ Configure OIDC directly in Mendix Studio Pro:
 
 1. **Add Issuer URL** — In your SSO configuration, set:
    ```text
-   https://idp.pollus.tech
+   https://idp.valyd.work
    ```
 2. **Configure Endpoints:**
    - Authorization: `/api/auth/oidc/authorize`
@@ -1103,7 +1103,7 @@ Configure OIDC directly in Mendix Studio Pro:
    ```text
    openid profile email
    ```
-4. **Enter Credentials** — Add your `client_id` and `client_secret` from the Developer Portal (https://dev.pollus.tech → your project → Credentials).
+4. **Enter Credentials** — Add your `client_id` and `client_secret` from the Developer Portal (https://dev.valyd.work → your project → Credentials).
 5. **Set Redirect URI** — Format:
    ```text
    https://your-app.mendixcloud.com/oidc/callback
@@ -1118,8 +1118,8 @@ For apps deployed to Mendix Cloud, configure via the Cloud Portal:
 1. Go to your app in the Mendix Cloud Portal.
 2. Navigate to Environment → Security.
 3. Enable SSO and select "OpenID Connect".
-4. Enter the issuer URL: `https://idp.pollus.tech`
-5. Add your client credentials (`client_id` and `client_secret` from https://dev.pollus.tech).
+4. Enter the issuer URL: `https://idp.valyd.work`
+5. Add your client credentials (`client_id` and `client_secret` from https://dev.valyd.work).
 6. Save and restart your application.
 
 **Expected output:** SSO is enabled for the environment; after restart the login page offers OpenID Connect sign-in.
@@ -1127,13 +1127,13 @@ For apps deployed to Mendix Cloud, configure via the Cloud Portal:
 ##### Method 3 — Custom Module Configuration
 
 For custom OIDC module implementations, use these constants. Replace the placeholder values:
-- `your-client-id` → your `client_id` (from https://dev.pollus.tech → your project → Credentials)
+- `your-client-id` → your `client_id` (from https://dev.valyd.work → your project → Credentials)
 - `your-client-secret` → your `client_secret` (from the same place; shown only once at registration)
 - `OIDC_REDIRECT_URI` → the callback URL you registered
 
 ```javascript
 // OIDC Configuration Constants
-const OIDC_ISSUER = "https://idp.pollus.tech";
+const OIDC_ISSUER = "https://idp.valyd.work";
 const OIDC_CLIENT_ID = "your-client-id";
 const OIDC_CLIENT_SECRET = "your-client-secret";
 const OIDC_REDIRECT_URI = "https://your-app.mendixcloud.com/oidc/callback";
@@ -1154,7 +1154,7 @@ Map OIDC claims to your platform's user fields:
 | First Name   | `first_name`                |
 | Last Name    | `last_name`                 |
 
-**Sample userinfo response** (returned by `GET https://idp.pollus.tech/api/auth/oidc/userinfo` with a valid access token):
+**Sample userinfo response** (returned by `GET https://idp.valyd.work/api/auth/oidc/userinfo` with a valid access token):
 
 ```json
 {
@@ -1173,7 +1173,7 @@ Map OIDC claims to your platform's user fields:
 
 #### Step 7 — Complete example: Mendix SSO JSON configuration
 
-Complete configuration example for Mendix SSO. Replace `mendix-app-123` with your `client_id` and `your-secret-here` with your `client_secret` (both from https://dev.pollus.tech), and adjust `redirect_uri` to your app's callback URL:
+Complete configuration example for Mendix SSO. Replace `mendix-app-123` with your `client_id` and `your-secret-here` with your `client_secret` (both from https://dev.valyd.work), and adjust `redirect_uri` to your app's callback URL:
 
 ```json
 {
@@ -1181,13 +1181,13 @@ Complete configuration example for Mendix SSO. Replace `mendix-app-123` with you
     "enabled": true,
     "provider": "openid_connect",
     "config": {
-      "issuer": "https://idp.pollus.tech",
+      "issuer": "https://idp.valyd.work",
       "client_id": "mendix-app-123",
       "client_secret": "your-secret-here",
-      "authorization_endpoint": "https://idp.pollus.tech/api/auth/oidc/authorize",
-      "token_endpoint": "https://idp.pollus.tech/api/auth/oidc/token",
-      "userinfo_endpoint": "https://idp.pollus.tech/api/auth/oidc/userinfo",
-      "jwks_uri": "https://idp.pollus.tech/api/auth/oidc/jwks.json",
+      "authorization_endpoint": "https://idp.valyd.work/api/auth/oidc/authorize",
+      "token_endpoint": "https://idp.valyd.work/api/auth/oidc/token",
+      "userinfo_endpoint": "https://idp.valyd.work/api/auth/oidc/userinfo",
+      "jwks_uri": "https://idp.valyd.work/api/auth/oidc/jwks.json",
       "scopes": ["openid", "email", "profile"],
       "redirect_uri": "https://your-app.mendixcloud.com/oidc/callback",
       "token_endpoint_auth_method": "client_secret_post",
@@ -1212,7 +1212,7 @@ Walk through the flow end to end:
 
 1. **Open your application** — Navigate to your deployed app's login page.
 2. **Click Login** — Click the SSO or "Login with Valyd" button.
-3. **Redirect to authorization** — You should be redirected to `https://idp.pollus.tech/api/auth/oidc/authorize`.
+3. **Redirect to authorization** — You should be redirected to `https://idp.valyd.work/api/auth/oidc/authorize`.
 4. **Authenticate** — Log in with your Valyd credentials.
 5. **Consent screen** — Approve the requested scopes if prompted.
 6. **Callback redirect** — You're redirected back to your app with an authorization code.
@@ -1227,19 +1227,19 @@ Walk through the flow end to end:
 
 ```text
 1. Verify discovery is reachable:
-   curl -s https://idp.pollus.tech/api/.well-known/openid-configuration
-   → Expect HTTP 200 and a JSON body whose "issuer" is "https://idp.pollus.tech".
+   curl -s https://idp.valyd.work/api/.well-known/openid-configuration
+   → Expect HTTP 200 and a JSON body whose "issuer" is "https://idp.valyd.work".
 
 2. Verify JWKS is reachable (needed for ID token signature validation):
-   curl -s https://idp.pollus.tech/api/auth/oidc/jwks.json
+   curl -s https://idp.valyd.work/api/auth/oidc/jwks.json
    → Expect HTTP 200 and a JSON body containing a "keys" array.
 
 3. Verify the end-to-end login (Step 8):
-   → A click on Login redirects to https://idp.pollus.tech/api/auth/oidc/authorize,
+   → A click on Login redirects to https://idp.valyd.work/api/auth/oidc/authorize,
      and after authenticating you return to your app logged in with mapped fields.
 
 4. Verify userinfo returns mapped claims:
-   → With a valid access token, GET https://idp.pollus.tech/api/auth/oidc/userinfo
+   → With a valid access token, GET https://idp.valyd.work/api/auth/oidc/userinfo
      returns 200 with sub, preferred_username, email, name, first_name, last_name.
 ```
 
@@ -1249,11 +1249,11 @@ Walk through the flow end to end:
 
 **Invalid redirect_uri**
 - **Cause:** The redirect URI in your request doesn't match what's registered.
-- **Fix:** Ensure the `redirect_uri` matches EXACTLY (no trailing slashes, correct protocol) the value registered in the Developer Portal at https://dev.pollus.tech.
+- **Fix:** Ensure the `redirect_uri` matches EXACTLY (no trailing slashes, correct protocol) the value registered in the Developer Portal at https://dev.valyd.work.
 
 **Invalid client credentials**
 - **Cause:** Wrong `client_id` or `client_secret`.
-- **Fix:** Verify credentials in the Developer Portal (https://dev.pollus.tech). If the secret is lost, regenerate it (it is shown only once).
+- **Fix:** Verify credentials in the Developer Portal (https://dev.valyd.work). If the secret is lost, regenerate it (it is shown only once).
 
 **User mapping failed**
 - **Cause:** Expected claims are missing from the ID token or userinfo.
@@ -1261,11 +1261,11 @@ Walk through the flow end to end:
 
 **ID token validation failed**
 - **Cause:** Token signature verification failed or token is expired.
-- **Fix:** Ensure your server time is synchronized. Verify the JWKS endpoint (https://idp.pollus.tech/api/auth/oidc/jwks.json) is accessible.
+- **Fix:** Ensure your server time is synchronized. Verify the JWKS endpoint (https://idp.valyd.work/api/auth/oidc/jwks.json) is accessible.
 
 **Discovery endpoint failed**
 - **Cause:** Cannot reach the `.well-known/openid-configuration` URL.
-- **Fix:** Check network connectivity to https://idp.pollus.tech. Ensure no firewall blocks the request.
+- **Fix:** Check network connectivity to https://idp.valyd.work. Ensure no firewall blocks the request.
 
 ---
 
@@ -1285,32 +1285,32 @@ Walk through the flow end to end:
 | Refresh Token | 30 days    |
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/endpoints.md ===
+=== FILE: https://docs.valyd.work/docs/endpoints.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/endpoints
+> Source: https://docs.valyd.work/docs/endpoints
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: EndpointsSection.tsx
 
 # API Reference
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/endpoints
+- Source URL: https://docs.valyd.work/docs/endpoints
 - Credentials / env vars needed: CLIENT_ID, CLIENT_SECRET, ACCESS_TOKEN, REFRESH_TOKEN, AUTH_CODE
 - Files an integrator edits: none — reference only (consumed by your backend route handlers)
 - Estimated steps: N/A (reference)
-- Can complete without human input: NO — CLIENT_ID and CLIENT_SECRET must be obtained by a human from the Developer Portal (https://dev.pollus.tech)
+- Can complete without human input: NO — CLIENT_ID and CLIENT_SECRET must be obtained by a human from the Developer Portal (https://dev.valyd.work)
 - Prerequisites:
-  - A registered application with a Client ID and Client Secret (get these from the Developer Portal: https://dev.pollus.tech)
+  - A registered application with a Client ID and Client Secret (get these from the Developer Portal: https://dev.valyd.work)
   - All requests must be made over HTTPS
   - Authenticated endpoints require a Bearer access token in the `Authorization` header
-  - The base URL for every endpoint below is `https://idp.pollus.tech/api/auth/tpsso`
+  - The base URL for every endpoint below is `https://idp.valyd.work/api/auth/tpsso`
 
 ## General notes
 - All API requests must be made over HTTPS.
 - Endpoints that require authentication expect a Bearer token in the `Authorization` header: `Authorization: Bearer YOUR_ACCESS_TOKEN`.
 - If you are using the SDK, prefer the typed helpers (`createLoginSession()`, `verifyLoginSession(marker)`, `getAuthorizationUrl()`, `exchangeCode`) — they call these endpoints for you.
-- Base URL (used by every endpoint below): `https://idp.pollus.tech/api/auth/tpsso`
+- Base URL (used by every endpoint below): `https://idp.valyd.work/api/auth/tpsso`
 
 ## SDK methods (v0.2.0)
 
@@ -1330,8 +1330,8 @@ Validates the marker on the callback, **before** `exchangeCode`. Returns `{ vali
 ## POST /token — Exchange Code for Tokens
 
 - **Method:** POST
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/token`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/token`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/token`
 - **Auth / required scope:** None (authenticated via `client_id` + `client_secret` in the request body)
 - **Required headers:**
@@ -1345,8 +1345,8 @@ Exchange the one-time authorization code you received on your callback URL for a
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `grant_type` | string | Yes | Must be "authorization_code" |
-| `client_id` | string | Yes | Your assigned Client ID (get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech) |
-| `client_secret` | string | Yes | Your Client Secret (server-side only!) (get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech) |
+| `client_id` | string | Yes | Your assigned Client ID (get this from the Developer Portal → your project → Credentials: https://dev.valyd.work) |
+| `client_secret` | string | Yes | Your Client Secret (server-side only!) (get this from the Developer Portal → your project → Credentials: https://dev.valyd.work) |
 | `code` | string | Yes | The authorization code from callback |
 
 ### Request body (application/json)
@@ -1360,13 +1360,13 @@ Exchange the one-time authorization code you received on your callback URL for a
 }
 ```
 
-`YOUR_CLIENT_ID` / `YOUR_CLIENT_SECRET`: get these from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+`YOUR_CLIENT_ID` / `YOUR_CLIENT_SECRET`: get these from the Developer Portal → your project → Credentials: https://dev.valyd.work
 `AUTH_CODE_FROM_CALLBACK`: the one-time authorization code delivered to your registered callback URL after the user authenticates.
 
 ### Code examples
 
 ```bash
-curl -X POST "https://idp.pollus.tech/api/auth/tpsso/token" \
+curl -X POST "https://idp.valyd.work/api/auth/tpsso/token" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -1378,7 +1378,7 @@ curl -X POST "https://idp.pollus.tech/api/auth/tpsso/token" \
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/token", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/token", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -1400,7 +1400,7 @@ const { access_token, refresh_token } = data.data;
 import requests
 
 response = requests.post(
-    "https://idp.pollus.tech/api/auth/tpsso/token",
+    "https://idp.valyd.work/api/auth/tpsso/token",
     json={
         "grant_type": "authorization_code",
         "client_id": "YOUR_CLIENT_ID",
@@ -1423,7 +1423,7 @@ refresh_token = data["data"]["refresh_token"]
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/token",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/token",
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         "grant_type" => "authorization_code",
@@ -1457,7 +1457,7 @@ String body = """
 """.formatted(authCode);
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/token"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/token"))
     .header("Content-Type", "application/json")
     .header("Accept", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -1511,8 +1511,8 @@ HttpResponse<String> response = client.send(request,
 ## GET /userinfo — Get User Profile
 
 - **Method:** GET
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/userinfo`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/userinfo`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/userinfo`
 - **Auth / required scope:** Bearer access token required; required scope: `profile`
 - **Required headers:**
@@ -1526,13 +1526,13 @@ Retrieve the authenticated user's profile information including name, email, and
 ### Code examples
 
 ```bash
-curl -X GET "https://idp.pollus.tech/api/auth/tpsso/userinfo" \
+curl -X GET "https://idp.valyd.work/api/auth/tpsso/userinfo" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/userinfo", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/userinfo", {
   method: "GET",
   headers: {
     "Accept": "application/json",
@@ -1549,7 +1549,7 @@ console.log(user.full_name, user.email);
 import requests
 
 response = requests.get(
-    "https://idp.pollus.tech/api/auth/tpsso/userinfo",
+    "https://idp.valyd.work/api/auth/tpsso/userinfo",
     headers={
         "Accept": "application/json",
         "Authorization": f"Bearer {access_token}"
@@ -1565,7 +1565,7 @@ print(user["full_name"], user["email"])
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/userinfo",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/userinfo",
     CURLOPT_HTTPHEADER => [
         "Accept: application/json",
         "Authorization: Bearer " . $accessToken
@@ -1583,7 +1583,7 @@ echo $user["full_name"];
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/userinfo"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/userinfo"))
     .header("Accept", "application/json")
     .header("Authorization", "Bearer " + accessToken)
     .GET()
@@ -1630,8 +1630,8 @@ HttpResponse<String> response = client.send(request,
 ## GET /licenses — Get Professional Licenses
 
 - **Method:** GET
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/licenses`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/licenses`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/licenses`
 - **Auth / required scope:** Bearer access token required (no specific scope declared on this endpoint in the source)
 - **Required headers:**
@@ -1645,13 +1645,13 @@ Returns a snapshot of the user's professional licenses as verified by Valyd. Inc
 ### Code examples
 
 ```bash
-curl -X GET "https://idp.pollus.tech/api/auth/tpsso/licenses" \
+curl -X GET "https://idp.valyd.work/api/auth/tpsso/licenses" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/licenses", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/licenses", {
   method: "GET",
   headers: {
     "Accept": "application/json",
@@ -1671,7 +1671,7 @@ licenses.forEach(license => {
 import requests
 
 response = requests.get(
-    "https://idp.pollus.tech/api/auth/tpsso/licenses",
+    "https://idp.valyd.work/api/auth/tpsso/licenses",
     headers={
         "Accept": "application/json",
         "Authorization": f"Bearer {access_token}"
@@ -1688,7 +1688,7 @@ for license in licenses:
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/licenses",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/licenses",
     CURLOPT_HTTPHEADER => [
         "Accept: application/json",
         "Authorization: Bearer " . $accessToken
@@ -1709,7 +1709,7 @@ foreach ($licenses as $license) {
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/licenses"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/licenses"))
     .header("Accept", "application/json")
     .header("Authorization", "Bearer " + accessToken)
     .GET()
@@ -1766,8 +1766,8 @@ HttpResponse<String> response = client.send(request,
 ## GET /verifications — Get Identity Verifications
 
 - **Method:** GET
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/verifications`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/verifications`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/verifications`
 - **Auth / required scope:** Bearer access token required; required scope: `verifications`
 - **Required headers:**
@@ -1781,13 +1781,13 @@ Returns identity and verification results including ID verification status, face
 ### Code examples
 
 ```bash
-curl -X GET "https://idp.pollus.tech/api/auth/tpsso/verifications" \
+curl -X GET "https://idp.valyd.work/api/auth/tpsso/verifications" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/verifications", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/verifications", {
   method: "GET",
   headers: {
     "Accept": "application/json",
@@ -1807,7 +1807,7 @@ if (id_verified && face_match > 0.9) {
 import requests
 
 response = requests.get(
-    "https://idp.pollus.tech/api/auth/tpsso/verifications",
+    "https://idp.valyd.work/api/auth/tpsso/verifications",
     headers={
         "Accept": "application/json",
         "Authorization": f"Bearer {access_token}"
@@ -1824,7 +1824,7 @@ if verifications["id_verified"] and verifications["face_match"] > 0.9:
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/verifications",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/verifications",
     CURLOPT_HTTPHEADER => [
         "Accept: application/json",
         "Authorization: Bearer " . $accessToken
@@ -1845,7 +1845,7 @@ if ($verifications["id_verified"] && $verifications["face_match"] > 0.9) {
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/verifications"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/verifications"))
     .header("Accept", "application/json")
     .header("Authorization", "Bearer " + accessToken)
     .GET()
@@ -1891,8 +1891,8 @@ HttpResponse<String> response = client.send(request,
 ## POST /refresh — Refresh Access Token
 
 - **Method:** POST
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/refresh`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/refresh`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/refresh`
 - **Auth / required scope:** None (authenticated via the `refresh_token` in the request body)
 - **Required headers:**
@@ -1922,7 +1922,7 @@ Use your `refresh_token` to obtain a new `access_token` when it expires. Optiona
 ### Code examples
 
 ```bash
-curl -X POST "https://idp.pollus.tech/api/auth/tpsso/refresh" \
+curl -X POST "https://idp.valyd.work/api/auth/tpsso/refresh" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -1932,7 +1932,7 @@ curl -X POST "https://idp.pollus.tech/api/auth/tpsso/refresh" \
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/refresh", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/refresh", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -1956,7 +1956,7 @@ localStorage.setItem("refresh_token", refresh_token);
 import requests
 
 response = requests.post(
-    "https://idp.pollus.tech/api/auth/tpsso/refresh",
+    "https://idp.valyd.work/api/auth/tpsso/refresh",
     json={
         "refresh_token": refresh_token,
         "rotate_refresh": True  # Recommended for security
@@ -1977,7 +1977,7 @@ refresh_token = tokens["refresh_token"]
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/refresh",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/refresh",
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         "refresh_token" => $refreshToken,
@@ -2008,7 +2008,7 @@ String body = """
 """.formatted(refreshToken);
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/refresh"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/refresh"))
     .header("Content-Type", "application/json")
     .header("Accept", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -2049,23 +2049,23 @@ HttpResponse<String> response = client.send(request,
 ```
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/scopes.md ===
+=== FILE: https://docs.valyd.work/docs/scopes.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/scopes
+> Source: https://docs.valyd.work/docs/scopes
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: ScopesSection.tsx
 
 # OAuth2 Scopes
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/scopes
+- Source URL: https://docs.valyd.work/docs/scopes
 - Credentials / env vars needed: CLIENT_ID, REDIRECT_URI (access token also required to call scoped endpoints)
 - Files an integrator edits: the code that builds your authorization URL (e.g. server route handler or auth helper)
 - Estimated steps: 2 (choose scopes, add them space-separated and URL-encoded to the authorization URL)
-- Can complete without human input: NO — each requested scope must first be enabled for your project in the Developer Portal (https://dev.pollus.tech) by a human.
+- Can complete without human input: NO — each requested scope must first be enabled for your project in the Developer Portal (https://dev.valyd.work) by a human.
 - Prerequisites:
-  - A registered project in the Developer Portal: https://dev.pollus.tech
+  - A registered project in the Developer Portal: https://dev.valyd.work
   - The scopes you intend to request are enabled for that project in the portal
   - A `client_id` and registered `redirect_url` for the project
 
@@ -2086,12 +2086,12 @@ Valyd uses OAuth2 scope-based access control. When initiating the authorization 
 Include the `scope` parameter in your authorization URL. Multiple scopes must be **space-separated** and URL-encoded.
 
 ```javascript
-const clientId = "YOUR_CLIENT_ID";        // get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech
-const redirectUrl = "YOUR_REDIRECT_URI";  // must match a redirect URL registered for your project in the Developer Portal: https://dev.pollus.tech
+const clientId = "YOUR_CLIENT_ID";        // get this from the Developer Portal → your project → Credentials: https://dev.valyd.work
+const redirectUrl = "YOUR_REDIRECT_URI";  // must match a redirect URL registered for your project in the Developer Portal: https://dev.valyd.work
 
 const scopes = "profile verifications zkp"; // Space-separated
 
-const authURL = `https://idp.pollus.tech/auth?client_id=${clientId}&redirect_url=${redirectUrl}&scope=${encodeURIComponent(scopes)}`;
+const authURL = `https://idp.valyd.work/auth?client_id=${clientId}&redirect_url=${redirectUrl}&scope=${encodeURIComponent(scopes)}`;
 
 // Result: scope=profile%20verifications%20zkp
 ```
@@ -2107,7 +2107,7 @@ Expected output: a fully-formed authorization URL string. Redirecting the user t
 Decision tree when authorization or a scoped request fails:
 
 ```text
-IF authorization fails immediately (before the consent screen):  → the requested scope is not enabled for your project. Enable it in the Developer Portal → your project → Scopes: https://dev.pollus.tech
+IF authorization fails immediately (before the consent screen):  → the requested scope is not enabled for your project. Enable it in the Developer Portal → your project → Scopes: https://dev.valyd.work
 IF a scoped endpoint returns 403 with code "insufficient_scope": → the access token is missing that scope. Add the scope to your authorization URL and have the user re-authenticate.
 IF unsure which scopes a token carries:                          → re-run the authorization flow and confirm the requested `scope` parameter matches the scopes the endpoint requires.
 ```
@@ -2259,17 +2259,17 @@ Access to Model Context Protocol (MCP) endpoints. Lets AI agents and tools retri
 ```
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/errors.md ===
+=== FILE: https://docs.valyd.work/docs/errors.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/errors
+> Source: https://docs.valyd.work/docs/errors
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: ErrorsSection.tsx
 
 # Error Codes Reference
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/errors
+- Source URL: https://docs.valyd.work/docs/errors
 - Credentials / env vars needed: none (reference page; fixes may require CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 - Files an integrator edits: none — reference only (apply fixes in your auth/route-handler code as indicated per error)
 - Estimated steps: 0 (look up the error code, apply the listed fix)
@@ -2306,7 +2306,7 @@ IF verifyLoginSession returns valid:false (no thrown error): → go to "Invalid 
 
 - **Status:** 401 Unauthorized
 - **Cause:** The `client_id` or `client_secret` is invalid or doesn't match.
-- **Fix:** Verify your credentials in the Developer Portal (https://dev.pollus.tech → your project → Credentials) and ensure you're using the correct values. The `client_id` comes from the portal; the `client_secret` is generated in the portal by a human.
+- **Fix:** Verify your credentials in the Developer Portal (https://dev.valyd.work → your project → Credentials) and ensure you're using the correct values. The `client_id` comes from the portal; the `client_secret` is generated in the portal by a human.
 
 Example response:
 
@@ -2346,7 +2346,7 @@ Example response:
 
 - **Status:** 403 Forbidden
 - **Cause:** The access token doesn't have the required scope for this endpoint.
-- **Fix:** Request the missing scope in your authorization URL (space-separated, URL-encoded `scope` parameter) and have the user re-authenticate. The scope must also be enabled for your project in the Developer Portal: https://dev.pollus.tech
+- **Fix:** Request the missing scope in your authorization URL (space-separated, URL-encoded `scope` parameter) and have the user re-authenticate. The scope must also be enabled for your project in the Developer Portal: https://dev.valyd.work
 
 Example response:
 
@@ -2366,7 +2366,7 @@ Example response:
 
 - **Status:** 400 Bad Request
 - **Cause:** The authorization code or refresh token is invalid, expired, already used, or the `redirect_uri` doesn't match the one registered in the portal.
-- **Fix:** Authorization codes expire after 5 minutes and can only be used once. Verify your redirect URI matches exactly the one registered in the Developer Portal (https://dev.pollus.tech). For refresh tokens, have the user re-authenticate.
+- **Fix:** Authorization codes expire after 5 minutes and can only be used once. Verify your redirect URI matches exactly the one registered in the Developer Portal (https://dev.valyd.work). For refresh tokens, have the user re-authenticate.
 
 Example response:
 
@@ -2441,17 +2441,17 @@ const { valid } = await valyd.verifyLoginSession(marker);
 ```
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/docs/changelog.md ===
+=== FILE: https://docs.valyd.work/docs/changelog.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/docs/changelog
+> Source: https://docs.valyd.work/docs/changelog
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: ChangelogSection.tsx
 
 # Changelog
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/changelog
+- Source URL: https://docs.valyd.work/docs/changelog
 - Credentials / env vars needed: none
 - Files an integrator edits: none — reference only
 - Estimated steps: 0 (read to confirm which SDK version introduces the helper you need)
@@ -2476,18 +2476,18 @@ This page tracks releases of the Valyd SDK. Tags: **Added** (new functionality),
 - **Added:** Resource helpers: `getUserInfo`, `getLicenses`, `getCprLicense`, `getDoctorLicense`, `getVerifications`.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/intro.md ===
+=== FILE: https://docs.valyd.work/verify/intro.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#intro
+> Source: https://docs.valyd.work/verify#intro
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: IntroSection.tsx
 
 # Valyd Verify
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#intro
-- Credentials / env vars needed: none (this is an overview; you need an App API key from the Developer Portal before making calls — get it at https://dev.pollus.tech)
+- Source URL: https://docs.valyd.work/verify#intro
+- Credentials / env vars needed: none (this is an overview; you need an App API key from the Developer Portal before making calls — get it at https://dev.valyd.work)
 - Files an integrator edits: none — reference only
 - Estimated steps: 0 (conceptual overview)
 - Can complete without human input: YES — reading/reference only, no actions required
@@ -2503,7 +2503,7 @@ Redirect your user to Valyd's hosted page for ID + selfie capture. Receive the r
 ### Core APIs
 Call per-capability REST endpoints server-to-server with your own UI and data. Synchronous JSON result returned on the same request.
 
-To choose between them, see https://docs.pollus.tech/verify#modes (modes.md).
+To choose between them, see https://docs.valyd.work/verify#modes (modes.md).
 
 ## Services
 
@@ -2518,7 +2518,7 @@ To choose between them, see https://docs.pollus.tech/verify#modes (modes.md).
 ## Base URL
 
 ```text
-https://idp.pollus.tech
+https://idp.valyd.work
 ```
 
 ## Response envelope
@@ -2539,21 +2539,21 @@ Every API response uses this envelope. `success` is always present; `error` is o
 Note: the `error` object is only included in the response when `success` is `false`. On success, only `success` and `data` are present.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/quickstart.md ===
+=== FILE: https://docs.valyd.work/verify/quickstart.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#quickstart
+> Source: https://docs.valyd.work/verify#quickstart
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: QuickstartSection.tsx
 
 # Valyd Verify Quickstart
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#quickstart
+- Source URL: https://docs.valyd.work/verify#quickstart
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WORKFLOW_ID (Hosted only)
 - Files an integrator edits: .env (to store VALYD_API_KEY and VALYD_WORKFLOW_ID), server route handler (to make the API call and, for Hosted, handle the webhook)
 - Estimated steps: 6
-- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Portal (https://dev.pollus.tech). The API call itself (steps 5-6) can be automated once credentials exist.
+- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Portal (https://dev.valyd.work). The API call itself (steps 5-6) can be automated once credentials exist.
 - Prerequisites:
   - A Valyd SSO account able to sign in to the Developer Portal
   - An App API key copied from the Console (shown once at creation)
@@ -2561,7 +2561,7 @@ Note: the `error` object is only included in the response when `success` is `fal
   - For Hosted: a publicly reachable webhook URL and signing secret
 
 ### Prerequisites
-- Access to the Developer Portal at https://dev.pollus.tech (sign in with Valyd SSO).
+- Access to the Developer Portal at https://dev.valyd.work (sign in with Valyd SSO).
 - The App API key, copied at App creation (shown once). Store it server-side only.
 - For the Hosted snippet: a `workflow_id` from a Workflow you created in the Console.
 
@@ -2570,7 +2570,7 @@ Note: the `error` object is only included in the response when `success` is `fal
 1. Sign in to the Developer Portal with Valyd SSO. The Developer Portal is the ONE console: the same sign-in issues your OAuth app (client_id / client_secret), your Verify app (API key) and your workflows. (Human-only step.)
 
    ```text
-   Open https://dev.pollus.tech and sign in with Valyd SSO.
+   Open https://dev.valyd.work and sign in with Valyd SSO.
    ```
 
    **Expected output:** You are signed in and a default App is visible in the Console.
@@ -2581,7 +2581,7 @@ Note: the `error` object is only included in the response when `success` is `fal
    export VALYD_API_KEY="paste-the-one-time-app-api-key-here"
    ```
 
-   (Get the API key from the Developer Portal → your App → it is shown once at creation: https://dev.pollus.tech)
+   (Get the API key from the Developer Portal → your App → it is shown once at creation: https://dev.valyd.work)
 
    **Expected output:** `VALYD_API_KEY` is set in your shell/`.env`. The key cannot be retrieved again after creation — rotate it in the Console if lost.
 
@@ -2591,7 +2591,7 @@ Note: the `error` object is only included in the response when `success` is `fal
    export VALYD_WORKFLOW_ID="paste-your-workflow-id-here"
    ```
 
-   (Get the `workflow_id` from the Developer Portal → Workflows → your Workflow: https://dev.pollus.tech)
+   (Get the `workflow_id` from the Developer Portal → Workflows → your Workflow: https://dev.valyd.work)
 
    **Expected output:** `VALYD_WORKFLOW_ID` is set. Required only for the Hosted session call in step 6.
 
@@ -2607,7 +2607,7 @@ Note: the `error` object is only included in the response when `success` is `fal
 5. Run your first Core APIs call (age verification) to confirm your API key works.
 
    ```bash
-   curl -X POST https://idp.pollus.tech/api/v2/age-verification \
+   curl -X POST https://idp.valyd.work/api/v2/age-verification \
      -H "X-API-Key: $VALYD_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{ "dob": "1995-06-01", "bands": ["is_18_plus"] }'
@@ -2618,7 +2618,7 @@ Note: the `error` object is only included in the response when `success` is `fal
 6. (Hosted only) Create a Hosted session from your server, then redirect the user's browser to the returned URL.
 
    ```javascript
-   const res = await fetch("https://idp.pollus.tech/api/v2/session", {
+   const res = await fetch("https://idp.valyd.work/api/v2/session", {
      method: "POST",
      headers: {
        "X-API-Key": process.env.VALYD_API_KEY,
@@ -2641,7 +2641,7 @@ Note: the `error` object is only included in the response when `success` is `fal
 - Core APIs: the curl in step 5 returns HTTP `200` and a body where `success` is `true`.
 
   ```bash
-  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://idp.pollus.tech/api/v2/age-verification \
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://idp.valyd.work/api/v2/age-verification \
     -H "X-API-Key: $VALYD_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{ "dob": "1995-06-01", "bands": ["is_18_plus"] }'
@@ -2665,26 +2665,26 @@ Note: the `error` object is only included in the response when `success` is `fal
    - **Fix:** Set the webhook URL and signing secret in Console → Webhooks (step 4), ensure the URL is publicly reachable, and verify the signature using the signing secret before trusting the event.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/console.md ===
+=== FILE: https://docs.valyd.work/verify/console.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#console
+> Source: https://docs.valyd.work/verify#console
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ConsoleSection.tsx
 
 # The Developer Portal
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#console
+- Source URL: https://docs.valyd.work/verify#console
 - Credentials / env vars needed: none to read this page; using the Console produces the App ID, App API key, `workflow_id`, and webhook signing secret your integration will need
 - Files an integrator edits: none — reference only (the Console is a web UI)
 - Estimated steps: 0 (reference; the actions described are human-only UI steps)
-- Can complete without human input: NO — every action here is performed by a human in the web UI at https://dev.pollus.tech (Valyd SSO sign-in, creating Apps/Workflows, configuring webhooks, copying secrets)
+- Can complete without human input: NO — every action here is performed by a human in the web UI at https://dev.valyd.work (Valyd SSO sign-in, creating Apps/Workflows, configuring webhooks, copying secrets)
 - Prerequisites:
   - A Valyd SSO account
-  - A browser to reach https://dev.pollus.tech
+  - A browser to reach https://dev.valyd.work
 
-The console lives at https://dev.pollus.tech — **the Developer Portal is the one and only console**. There is no
+The console lives at https://dev.valyd.work — **the Developer Portal is the one and only console**. There is no
 separate Verify dashboard: one sign-in issues **everything** your integration needs.
 
 | What you get | Where |
@@ -2707,7 +2707,7 @@ apps such as Test and Production.
 ## Workflows
 Bundle services (ID, liveness, face match, and the other Verify services) into a reusable Workflow. Each Workflow has a `workflow_id` used when creating Hosted sessions.
 
-- The `workflow_id` is required as the `workflow_id` field when creating a Hosted session (see https://docs.pollus.tech/verify#quickstart).
+- The `workflow_id` is required as the `workflow_id` field when creating a Hosted session (see https://docs.valyd.work/verify#quickstart).
 
 ## Webhooks
 Configure a per-app endpoint URL and signing secret (rotatable). Valyd POSTs signed events to this URL when a session reaches a terminal state.
@@ -2722,7 +2722,7 @@ The console uses Valyd SSO. Your developer account is separate from end-users yo
 
 ```text
 IF you do not yet have an App API key:
-  → Sign in at https://dev.pollus.tech with Valyd SSO (one sign-in covers OAuth apps, Verify apps and workflows)
+  → Sign in at https://dev.valyd.work with Valyd SSO (one sign-in covers OAuth apps, Verify apps and workflows)
   → Open your App and copy the API key shown once at creation; store it server-side
 IF you lost the API key:
   → In the Console, rotate the App API key to generate a new one
@@ -2734,18 +2734,18 @@ IF you will use Core APIs mode only:
 ```
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/modes.md ===
+=== FILE: https://docs.valyd.work/verify/modes.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#modes
+> Source: https://docs.valyd.work/verify#modes
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ModesSection.tsx
 
 # Hosted vs Core APIs
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#modes
-- Credentials / env vars needed: none to choose a mode (each mode later needs an App API key from https://dev.pollus.tech; Hosted also needs a `workflow_id`)
+- Source URL: https://docs.valyd.work/verify#modes
+- Credentials / env vars needed: none to choose a mode (each mode later needs an App API key from https://dev.valyd.work; Hosted also needs a `workflow_id`)
 - Files an integrator edits: none — reference only (decision aid for picking a mode)
 - Estimated steps: 0 (decision aid)
 - Can complete without human input: YES — choosing a mode is a decision based on your requirements; no actions required
@@ -2758,11 +2758,11 @@ Valyd Verify offers two integration modes. Use the decision tree to pick one, th
 ```text
 IF you need an end-user KYC flow with live camera/ID + selfie capture, and you do NOT want to build the capture UI:
   → Use Hosted. Redirect the user to a Valyd-hosted session URL; receive the result via webhook + decision API.
-  → Next: create a Workflow (get workflow_id) and configure a webhook in the Console (https://docs.pollus.tech/verify#console), then create a session (https://docs.pollus.tech/verify#quickstart).
+  → Next: create a Workflow (get workflow_id) and configure a webhook in the Console (https://docs.valyd.work/verify#console), then create a session (https://docs.valyd.work/verify#quickstart).
 
 IF you want to call individual capabilities server-to-server from your backend with your own UI and data, and want a synchronous result:
   → Use Core APIs. Call the per-endpoint REST API (e.g. POST /api/v2/age-verification) with your App API key.
-  → Next: get an App API key from the Console (https://docs.pollus.tech/verify#console), then call the endpoint (https://docs.pollus.tech/verify#quickstart).
+  → Next: get an App API key from the Console (https://docs.valyd.work/verify#console), then call the endpoint (https://docs.valyd.work/verify#quickstart).
 
 IF your use case is backoffice, batch processing, or a fully custom UX (no camera redirect):
   → Use Core APIs.
@@ -2783,30 +2783,30 @@ IF unsure:
 | Identifier | `workflow_id` (bundle of services) | Per-endpoint call |
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/hosted.md ===
+=== FILE: https://docs.valyd.work/verify/hosted.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#hosted
+> Source: https://docs.valyd.work/verify#hosted
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: HostedSection.tsx
 
 # Hosted Verification
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#hosted
-- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Portal: https://dev.pollus.tech), APP_URL
+- Source URL: https://docs.valyd.work/verify#hosted
+- Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET, VALYD_WORKFLOW_ID (workflow created in the Developer Portal: https://dev.valyd.work), APP_URL
 - Files an integrator edits: .env (credentials), server route handlers (session create, redirect callback, webhook receiver)
 - Estimated steps: 4 (create session → redirect → handle redirect-back → read authoritative result)
 - Can complete without human input: NO — a human must create the App API key, the webhook signing secret, and a workflow in the Developer Portal to obtain a `workflow_id`.
 - Prerequisites:
-  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Portal: https://dev.pollus.tech
-  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Portal: https://dev.pollus.tech
+  - An App API key (`X-API-Key`) — server-side only, never exposed to the browser. Get this from the Developer Portal: https://dev.valyd.work
+  - A webhook signing secret (`VALYD_WEBHOOK_SECRET`) — get this from the Developer Portal: https://dev.valyd.work
   - A `workflow_id` — create the workflow in the Developer Portal (Workflows → "License Verification" or "KYC + License" preset) or via the API, then copy its `workflow_id`.
   - Node.js project with `valyd-verify-sdk` installed (for the SDK examples).
 
 > ALL server-to-server calls use the header `X-API-Key: <App API key>`. Keep this key SERVER-SIDE ONLY — never expose it to the browser. Every response uses the envelope `{ success, data, error: { code, message } }`.
 
-> Base URL note: the component resolves the API base URL from `VERIFY_CONFIG.API_BASE_URL` = `https://idp.pollus.tech`. The hosted session `url` returned by the API is also under `https://idp.pollus.tech/s/…`. This page's canonical doc URL is on a different host (`https://docs.pollus.tech`), which is expected for docs vs. API.
+> Base URL note: the component resolves the API base URL from `VERIFY_CONFIG.API_BASE_URL` = `https://idp.valyd.work`. The hosted session `url` returned by the API is also under `https://idp.valyd.work/s/…`. This page's canonical doc URL is on a different host (`https://docs.valyd.work`), which is expected for docs vs. API.
 
 ---
 
@@ -2844,12 +2844,12 @@ Hosted flow at a glance:
 
 ## The two hosted products
 
-Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Portal (https://dev.pollus.tech) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
+Both products use the SAME integration code — only the `workflow_id` differs. Create the workflow in the Developer Portal (https://dev.valyd.work) under Workflows → "License Verification" or "KYC + License" preset, or via the API, then copy its `workflow_id`.
 
 ```text
 IF you only need to verify a professional license (no ID scan):  → use the "License Verification" workflow_id
 IF you need identity + credential (ID scan + selfie + license):  → use the "KYC + License" workflow_id
-IF unsure which workflow_id to use:                              → open the Developer Portal (https://dev.pollus.tech) → Workflows, and copy the workflow_id of the preset you created
+IF unsure which workflow_id to use:                              → open the Developer Portal (https://dev.valyd.work) → Workflows, and copy the workflow_id of the preset you created
 ```
 
 ### License Verification (badge: Credential only)
@@ -2869,9 +2869,9 @@ IF unsure which workflow_id to use:                              → open the De
 The steps are identical for both products. Swap the `workflow_id` to switch between License Verification and KYC + License.
 
 ### Prerequisites
-- `VALYD_API_KEY` set server-side (App API key — get from the Developer Portal: https://dev.pollus.tech).
-- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Portal: https://dev.pollus.tech).
-- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Portal: https://dev.pollus.tech, or create via the Workflows API below).
+- `VALYD_API_KEY` set server-side (App API key — get from the Developer Portal: https://dev.valyd.work).
+- `VALYD_WEBHOOK_SECRET` set server-side (webhook signing secret — get from the Developer Portal: https://dev.valyd.work).
+- `VALYD_WORKFLOW_ID` — the `workflow_id` of the workflow you want to run (get from the Developer Portal: https://dev.valyd.work, or create via the Workflows API below).
 - `APP_URL` — your application's public base URL (used to build `redirect_url` and `callback`).
 
 ### Steps
@@ -2883,7 +2883,7 @@ POST `/api/v2/session` from your backend. The response includes the hosted `url`
 cURL:
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/session \
+curl -X POST https://idp.valyd.work/api/v2/session \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -2918,7 +2918,7 @@ Expected output: HTTP 200 with the envelope `{ success: true, data: { … } }`. 
 {
   "session_id":    "ses_…",
   "status":        "NOT_STARTED",
-  "url":           "https://idp.pollus.tech/s/…",
+  "url":           "https://idp.valyd.work/s/…",
   "session_token": "stk_…",
   "features":      ["id_verification","liveness","face_match","credential"],
   "redirect_url":  "https://app.example.com/verify/callback",
@@ -2926,7 +2926,7 @@ Expected output: HTTP 200 with the envelope `{ success: true, data: { … } }`. 
 }
 ```
 
-> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Portal (https://dev.pollus.tech → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
+> Placeholder source: `wf_…` / `VALYD_WORKFLOW_ID` is the `workflow_id` from the Developer Portal (https://dev.valyd.work → Workflows). `$VALYD_API_KEY` is your App API key from the same console.
 
 #### Step 2 — Redirect the user to the hosted page
 
@@ -2945,7 +2945,7 @@ app.post("/start-verification", async (req, res) => {
 });
 ```
 
-Expected output: an HTTP 302 redirect of the user's browser to the Valyd-hosted `session.url` (under `https://idp.pollus.tech/s/…`).
+Expected output: an HTTP 302 redirect of the user's browser to the Valyd-hosted `session.url` (under `https://idp.valyd.work/s/…`).
 
 #### Step 3 — Handle the redirect back
 
@@ -2975,7 +2975,7 @@ Use the signed webhook (push) and/or call the decision endpoint (pull). See "Web
 To confirm the integration end-to-end, after a session reaches a terminal status:
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/ses_…/decision \
+curl https://idp.valyd.work/api/v2/session/ses_…/decision \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -3109,7 +3109,7 @@ Per check in d.checks (each: { type, status, score, data, error }):
 cURL:
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/ses_…/decision \
+curl https://idp.valyd.work/api/v2/session/ses_…/decision \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -3202,16 +3202,16 @@ Full set of check status values: `pending`, `running`, `passed`, `failed`, `revi
 
 | Method | Path | Auth | Purpose |
 | --- | --- | --- | --- |
-| POST | `https://idp.pollus.tech/api/v2/session` | `X-API-Key` | Create a hosted verification session. |
-| GET | `https://idp.pollus.tech/api/v2/session/<session_id>/decision` | `X-API-Key` | Read the authoritative decision and per-check breakdown. |
-| GET (SDK: `sessions.retrieve`) | `https://idp.pollus.tech/api/v2/session/<session_id>` | `X-API-Key` | Retrieve a session. |
-| GET (SDK: `sessions.list`) | `https://idp.pollus.tech/api/v2/session` | `X-API-Key` | List sessions (filter by `status`, `vendorData`, `limit`). |
-| POST/PATCH (SDK: `sessions.updateStatus`) | `https://idp.pollus.tech/api/v2/session/<session_id>` | `X-API-Key` | Manually override session status to `APPROVED` or `DECLINED`. |
-| POST (SDK: `workflows.create`) | `https://idp.pollus.tech/api/v2/workflows` | `X-API-Key` | Create a workflow. |
-| GET (SDK: `workflows.list`) | `https://idp.pollus.tech/api/v2/workflows` | `X-API-Key` | List workflows. |
-| GET (SDK: `workflows.retrieve`) | `https://idp.pollus.tech/api/v2/workflows/<id>` | `X-API-Key` | Retrieve a workflow. |
-| PATCH (SDK: `workflows.update`) | `https://idp.pollus.tech/api/v2/workflows/<id>` | `X-API-Key` | Update a workflow. |
-| DELETE (SDK: `workflows.remove`) | `https://idp.pollus.tech/api/v2/workflows/<id>` | `X-API-Key` | Delete a workflow. |
+| POST | `https://idp.valyd.work/api/v2/session` | `X-API-Key` | Create a hosted verification session. |
+| GET | `https://idp.valyd.work/api/v2/session/<session_id>/decision` | `X-API-Key` | Read the authoritative decision and per-check breakdown. |
+| GET (SDK: `sessions.retrieve`) | `https://idp.valyd.work/api/v2/session/<session_id>` | `X-API-Key` | Retrieve a session. |
+| GET (SDK: `sessions.list`) | `https://idp.valyd.work/api/v2/session` | `X-API-Key` | List sessions (filter by `status`, `vendorData`, `limit`). |
+| POST/PATCH (SDK: `sessions.updateStatus`) | `https://idp.valyd.work/api/v2/session/<session_id>` | `X-API-Key` | Manually override session status to `APPROVED` or `DECLINED`. |
+| POST (SDK: `workflows.create`) | `https://idp.valyd.work/api/v2/workflows` | `X-API-Key` | Create a workflow. |
+| GET (SDK: `workflows.list`) | `https://idp.valyd.work/api/v2/workflows` | `X-API-Key` | List workflows. |
+| GET (SDK: `workflows.retrieve`) | `https://idp.valyd.work/api/v2/workflows/<id>` | `X-API-Key` | Retrieve a workflow. |
+| PATCH (SDK: `workflows.update`) | `https://idp.valyd.work/api/v2/workflows/<id>` | `X-API-Key` | Update a workflow. |
+| DELETE (SDK: `workflows.remove`) | `https://idp.valyd.work/api/v2/workflows/<id>` | `X-API-Key` | Delete a workflow. |
 | POST (your endpoint) | `<your callback URL>` | Signed via `X-Valyd-Signature` | Webhook Valyd POSTs to on a terminal session. |
 
 > The exact HTTP methods/paths for the SDK helpers `sessions.retrieve`, `sessions.list`, `sessions.updateStatus`, and the `workflows.*` helpers are inferred from the SDK method names and the noted `↔ /api/v2/workflows` mapping in the source; the component only spells out the literal paths `POST /api/v2/session` and `GET /api/v2/session/<id>/decision`.
@@ -3272,23 +3272,23 @@ app.listen(3000);
 ```
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/standalone.md ===
+=== FILE: https://docs.valyd.work/verify/standalone.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#standalone
+> Source: https://docs.valyd.work/verify#standalone
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: StandaloneSection.tsx
 
 # Core APIs (server-to-server verification)
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#standalone
+- Source URL: https://docs.valyd.work/verify#standalone
 - Credentials / env vars needed: VALYD_API_KEY (App API key — keep server-side, never ship to the browser)
 - Files an integrator edits: server route handler / backend service, .env (for VALYD_API_KEY)
 - Estimated steps: 3 (install SDK or use cURL, set VALYD_API_KEY, call the endpoint)
-- Can complete without human input: NO — you must obtain an App API key from the Valyd Developer Portal (https://dev.pollus.tech) before any call will authenticate.
+- Can complete without human input: NO — you must obtain an App API key from the Valyd Developer Portal (https://dev.valyd.work) before any call will authenticate.
 - Prerequisites:
-  - A Valyd App API key. Pass it as the HTTP header `X-API-Key: <App API key>` on every request. Get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+  - A Valyd App API key. Pass it as the HTTP header `X-API-Key: <App API key>` on every request. Get this from the Developer Portal → your project → Credentials: https://dev.valyd.work
   - A server/backend to make the call from (these are server-to-server APIs; never call them from the browser, because the API key would be exposed).
   - (SDK path only) Node.js with the `valyd-verify-sdk` npm package installed.
 
@@ -3296,7 +3296,7 @@ app.listen(3000);
 
 Direct, synchronous, server-to-server checks. You build your own UI and call these endpoints from your backend. Every request uses the header `X-API-Key: <App API key>` — keep this server-side, never ship it to the browser.
 
-Base URL for every endpoint below: `https://idp.pollus.tech`
+Base URL for every endpoint below: `https://idp.valyd.work`
 
 Every response uses the standard envelope and includes a `check` object:
 
@@ -3337,13 +3337,13 @@ import { VerifyClient, readImage } from "valyd-verify-sdk";
 
 const verify = new VerifyClient({ apiKey: process.env.VALYD_API_KEY! });
 // keep VALYD_API_KEY on the server — never in browser code
-// get the API key from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+// get the API key from the Developer Portal → your project → Credentials: https://dev.valyd.work
 ```
 
 Set the API key in your environment before running:
 
 ```bash
-export VALYD_API_KEY="<your App API key from https://dev.pollus.tech>"
+export VALYD_API_KEY="<your App API key from https://dev.valyd.work>"
 ```
 
 ---
@@ -3353,7 +3353,7 @@ export VALYD_API_KEY="<your App API key from https://dev.pollus.tech>"
 OCR + authenticity from a government ID.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/id-verification`
+**Full URL:** `https://idp.valyd.work/api/v2/id-verification`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -3363,7 +3363,7 @@ OCR + authenticity from a government ID.
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/id-verification \
+curl -X POST https://idp.valyd.work/api/v2/id-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "front_image=@./id_front.jpg" \
   -F "back_image=@./id_back.jpg"
@@ -3412,7 +3412,7 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);
 Passive liveness check. Passes when `live_score === 1`.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/liveness`
+**Full URL:** `https://idp.valyd.work/api/v2/liveness`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -3421,7 +3421,7 @@ Passive liveness check. Passes when `live_score === 1`.
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/liveness \
+curl -X POST https://idp.valyd.work/api/v2/liveness \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "image=@./selfie.jpg"
 ```
@@ -3453,7 +3453,7 @@ const { check } = await verify.standalone.liveness({
 Compare two images. Passes when similarity ≥ threshold (default ~0.95).
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/face-match`
+**Full URL:** `https://idp.valyd.work/api/v2/face-match`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -3463,7 +3463,7 @@ Compare two images. Passes when similarity ≥ threshold (default ~0.95).
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/face-match \
+curl -X POST https://idp.valyd.work/api/v2/face-match \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "image1=@./id_portrait.jpg" \
   -F "image2=@./selfie.jpg"
@@ -3492,7 +3492,7 @@ const { check } = await verify.standalone.faceMatch({
 JSON body. Computes age from DOB and verifies the requested age bands (no ZKP).
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/age-verification`
+**Full URL:** `https://idp.valyd.work/api/v2/age-verification`
 **Auth header:** `X-API-Key: <App API key>`
 **Content-Type:** `application/json`
 
@@ -3503,7 +3503,7 @@ JSON body. Computes age from DOB and verifies the requested age bands (no ZKP).
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/age-verification \
+curl -X POST https://idp.valyd.work/api/v2/age-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "dob": "1995-06-01", "bands": ["is_18_plus","is_21_plus"] }'
@@ -3538,7 +3538,7 @@ const { check } = await verify.standalone.ageVerification({
 Look up a professional license in the provider registry. Registry lookups can take 10–60s — use a generous timeout.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/credential-verification`
+**Full URL:** `https://idp.valyd.work/api/v2/credential-verification`
 **Auth header:** `X-API-Key: <App API key>`
 **Content-Type:** `application/json`
 
@@ -3553,7 +3553,7 @@ Look up a professional license in the provider registry. Registry lookups can ta
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/credential-verification \
+curl -X POST https://idp.valyd.work/api/v2/credential-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -3602,7 +3602,7 @@ const { check } = await verify.standalone.credentialVerification({
 Combined ID verification + liveness + face match + license lookup, in one call. The license is matched against the name OCR'd from the ID — never a client-supplied name — so the holder cannot impersonate someone else's license.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/kyc-credential`
+**Full URL:** `https://idp.valyd.work/api/v2/kyc-credential`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -3617,7 +3617,7 @@ Combined ID verification + liveness + face match + license lookup, in one call. 
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/kyc-credential \
+curl -X POST https://idp.valyd.work/api/v2/kyc-credential \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "front_image=@./id_front.jpg" \
   -F "selfie=@./selfie.jpg" \
@@ -3669,13 +3669,13 @@ Use these endpoints to build state and license-type pickers in your UI before ca
 ### GET /api/v2/credential/states — list states
 
 **Method:** GET
-**Full URL:** `https://idp.pollus.tech/api/v2/credential/states`
+**Full URL:** `https://idp.valyd.work/api/v2/credential/states`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Request (cURL):**
 
 ```bash
-curl https://idp.pollus.tech/api/v2/credential/states \
+curl https://idp.valyd.work/api/v2/credential/states \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -3697,13 +3697,13 @@ const { states } = await verify.credentials.states();
 `{state}` is a 2-letter state code (e.g. `CA`).
 
 **Method:** GET
-**Full URL:** `https://idp.pollus.tech/api/v2/credential/states/{state}/providers`
+**Full URL:** `https://idp.valyd.work/api/v2/credential/states/{state}/providers`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Request (cURL):**
 
 ```bash
-curl https://idp.pollus.tech/api/v2/credential/states/CA/providers \
+curl https://idp.valyd.work/api/v2/credential/states/CA/providers \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -3769,7 +3769,7 @@ try {
 
 1. **HTTP 401 — invalid or missing API key.**
    - Cause: The `X-API-Key` header is absent or holds a wrong/revoked key.
-   - Fix: Set `X-API-Key: <App API key>` on the request (or `apiKey` in the SDK client). Obtain a valid key from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+   - Fix: Set `X-API-Key: <App API key>` on the request (or `apiKey` in the SDK client). Obtain a valid key from the Developer Portal → your project → Credentials: https://dev.valyd.work
 
 2. **Client timeout on credential / kyc-credential calls.**
    - Cause: Registry lookups can take 10–60 seconds; the default client timeout aborts first.
@@ -3780,24 +3780,24 @@ try {
    - Fix: Call `GET /api/v2/credential/states` and `GET /api/v2/credential/states/{state}/providers` first to get valid codes and each provider's `required_fields`; always include first/last name even if `required_fields` omits it.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/sdk.md ===
+=== FILE: https://docs.valyd.work/verify/sdk.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#sdk
+> Source: https://docs.valyd.work/verify#sdk
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: SdkSection.tsx
 
 # Node SDK
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#sdk
+- Source URL: https://docs.valyd.work/verify#sdk
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET (for hosted/webhook flows), VALYD_WORKFLOW_ID (for hosted sessions)
 - Files an integrator edits: .env, your server bootstrap (VerifyClient init), and a webhook route handler (e.g. Express)
 - Estimated steps: 3 (install, initialise, call resources)
-- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Developer Portal (https://dev.pollus.tech); these cannot be generated programmatically here.
+- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Developer Portal (https://dev.valyd.work); these cannot be generated programmatically here.
 - Prerequisites:
   - Node 18+ (the SDK relies on the built-in `fetch` and `crypto`)
-  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://dev.pollus.tech
+  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://dev.valyd.work
   - For hosted/webhook flows: a webhook secret and a workflow ID from the dashboard
   - Server-side runtime only — the API key must never reach the browser
 
@@ -3813,7 +3813,7 @@ The official Node SDK for Valyd Verify: `valyd-verify-sdk` on npm (https://www.n
   node --version
   ```
   **Expected output:** `v18.x.x` or higher. If lower, upgrade Node before continuing.
-- Credentials from the Valyd Developer Portal (https://dev.pollus.tech):
+- Credentials from the Valyd Developer Portal (https://dev.valyd.work):
   - `VALYD_API_KEY` — sent as the `X-API-Key` header on every request.
   - `VALYD_WEBHOOK_SECRET` — needed to verify webhook signatures (hosted flow).
   - `VALYD_WORKFLOW_ID` — needed when creating hosted sessions.
@@ -3824,7 +3824,7 @@ IF you are building a hosted flow (redirect the user to a Valyd-hosted page):
 IF you are building a Core APIs flow (call individual checks server-side):
   → you only need VALYD_API_KEY
 IF unsure which credentials you have:
-  → log in to https://dev.pollus.tech and check your project's API keys / webhooks / workflows
+  → log in to https://dev.valyd.work and check your project's API keys / webhooks / workflows
 ```
 
 ### Steps
@@ -3835,7 +3835,7 @@ IF unsure which credentials you have:
    ```
    **Expected output:** npm adds `valyd-verify-sdk` to `dependencies` in `package.json` and reports `added 1 package`. Versions follow semver and are pinned per release — lock to `^x.y.z` for backwards-compatible upgrades.
 
-2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Developer Portal: https://dev.pollus.tech.
+2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Developer Portal: https://dev.valyd.work.
    ```bash
    VALYD_API_KEY=your_api_key_here          # X-API-Key for every request
    VALYD_WEBHOOK_SECRET=your_webhook_secret  # required for hosted/webhook flows
@@ -3858,7 +3858,7 @@ IF unsure which credentials you have:
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `apiKey` | string | — | Required. Sent as the `X-API-Key` header on every request. |
-| `baseUrl` | string | `https://idp.pollus.tech` | API base URL. Override only for staging/self-hosted. |
+| `baseUrl` | string | `https://idp.valyd.work` | API base URL. Override only for staging/self-hosted. |
 | `webhookSecret` | string | — | Optional. When set, `webhooks.constructEvent` / `verify` can be called without passing the secret explicitly. |
 | `timeoutMs` | number | `15000` | Per-request timeout. Increase for credential lookups (10–60s). |
 | `fetch` | typeof fetch | — | Custom fetch implementation (proxies, instrumentation, tests). |
@@ -4081,24 +4081,24 @@ app.post(
    - **Fix:** Increase the per-request timeout for credential lookups (10–60s), e.g. `new VerifyClient({ apiKey: process.env.VALYD_API_KEY!, timeoutMs: 90_000 })`.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/webhooks.md ===
+=== FILE: https://docs.valyd.work/verify/webhooks.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#webhooks
+> Source: https://docs.valyd.work/verify#webhooks
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: WebhooksSection.tsx
 
 # Webhooks
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#webhooks
+- Source URL: https://docs.valyd.work/verify#webhooks
 - Credentials / env vars needed: VALYD_WEBHOOK_SECRET (the webhook signing secret), VALYD_API_KEY (App API key, to fetch the full decision)
 - Files an integrator edits: server route handler (e.g. an Express handler), .env (to store VALYD_WEBHOOK_SECRET and VALYD_API_KEY)
 - Estimated steps: 4
-- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Developer Portal (https://dev.pollus.tech), which is a human/portal action.
+- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Developer Portal (https://dev.valyd.work), which is a human/portal action.
 - Prerequisites:
   - A publicly reachable HTTPS endpoint to receive POST callbacks
-  - A webhook signing secret configured on your App or session (from the Developer Portal: https://dev.pollus.tech)
+  - A webhook signing secret configured on your App or session (from the Developer Portal: https://dev.valyd.work)
   - An App API key to call the decision endpoint
   - Ability to read the raw (unparsed) request body in your web framework
 
@@ -4110,12 +4110,12 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
 ### Prerequisites
 - A publicly reachable HTTPS URL for your webhook handler.
-- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Developer Portal (https://dev.pollus.tech). Store it as `VALYD_WEBHOOK_SECRET`.
+- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Developer Portal (https://dev.valyd.work). Store it as `VALYD_WEBHOOK_SECRET`.
 - An App API key stored as `VALYD_API_KEY`, used to fetch the full decision after a webhook arrives.
 
 ### Steps
 
-1. **Register your callback URL.** In the Developer Portal (https://dev.pollus.tech) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
+1. **Register your callback URL.** In the Developer Portal (https://dev.valyd.work) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
 
    **Expected output:** The console shows your callback URL saved and a signing secret. There is no HTTP response to capture for this step — it is a portal action.
 
@@ -4123,8 +4123,8 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
    ```bash
    # .env
-   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://dev.pollus.tech)
-   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://dev.pollus.tech)
+   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://dev.valyd.work)
+   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://dev.valyd.work)
    ```
 
    **Expected output:** Both variables are available to your process via `process.env`.
@@ -4177,7 +4177,7 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 4. **Fetch the full decision after acknowledging the webhook.** The webhook body is a notification; retrieve the complete extracted data with the decision endpoint using the session id from the event.
 
    ```bash
-   curl https://idp.pollus.tech/api/v2/session/SES_ID/decision \
+   curl https://idp.valyd.work/api/v2/session/SES_ID/decision \
      -H "X-API-Key: $VALYD_API_KEY"
    ```
 
@@ -4230,17 +4230,17 @@ Field notes:
    - **Fix:** Return 2xx immediately and process asynchronously; deduplicate on `X-Valyd-Event-Id`.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/statuses.md ===
+=== FILE: https://docs.valyd.work/verify/statuses.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#statuses
+> Source: https://docs.valyd.work/verify#statuses
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: StatusesSection.tsx
 
 # Statuses & decisioning
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#statuses
+- Source URL: https://docs.valyd.work/verify#statuses
 - Credentials / env vars needed: none (reference only)
 - Files an integrator edits: none — reference only
 - Estimated steps: 0
@@ -4285,7 +4285,7 @@ IF status == APPROVED:      → fetch GET /api/v2/session/{id}/decision for the 
 IF status == DECLINED:      → fetch GET /api/v2/session/{id}/decision to see which checks failed; deny access and surface a retry path if your policy allows.
 IF status == ABANDONED:     → treat as not verified; prompt the user to restart verification (create a new session).
 IF status == EXPIRED:       → treat as not verified; the session TTL elapsed. Create a new session if the user still needs to verify.
-IF unsure of current state: → run `curl https://idp.pollus.tech/api/v2/session/{id} -H "X-API-Key: $VALYD_API_KEY"` to read the current status.
+IF unsure of current state: → run `curl https://idp.valyd.work/api/v2/session/{id} -H "X-API-Key: $VALYD_API_KEY"` to read the current status.
 ```
 
 ## Check status
@@ -4304,7 +4304,7 @@ Each individual check within a session reports one of three values:
 IF check == passed: → this check is satisfied. If all checks are passed, the session moves toward APPROVED.
 IF check == failed: → this check did not succeed. It typically drives the session toward DECLINED; inspect the decision for the failure reason.
 IF check == review: → inconclusive. The session typically sits in IN_REVIEW until a human or async process resolves it. Do not grant access on this check yet.
-IF unsure:          → run `curl https://idp.pollus.tech/api/v2/session/{id}/decision -H "X-API-Key: $VALYD_API_KEY"` to read per-check statuses.
+IF unsure:          → run `curl https://idp.valyd.work/api/v2/session/{id}/decision -H "X-API-Key: $VALYD_API_KEY"` to read per-check statuses.
 ```
 
 Relationship between check status and session status:
@@ -4313,26 +4313,26 @@ Relationship between check status and session status:
 - Any check `review` (and none failed) → session typically `IN_REVIEW` until resolved.
 
 ================================================================================
-=== FILE: https://docs.pollus.tech/verify/api-reference.md ===
+=== FILE: https://docs.valyd.work/verify/api-reference.md ===
 ================================================================================
 
-> Source: https://docs.pollus.tech/verify#api-sessions
+> Source: https://docs.valyd.work/verify#api-sessions
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ApiReferenceSection.tsx
 
 # API Reference
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#api-sessions
+- Source URL: https://docs.valyd.work/verify#api-sessions
 - Credentials / env vars needed: VALYD_API_KEY (your App API key, sent as the `X-API-Key` header)
 - Files an integrator edits: none — reference only (server code uses these endpoints)
 - Estimated steps: 0
 - Can complete without human input: YES — this is a reference page; no actions required.
 - Prerequisites:
-  - An App API key from the Valyd Developer Portal (https://dev.pollus.tech)
+  - An App API key from the Valyd Developer Portal (https://dev.valyd.work)
   - For workflow-based sessions, a `workflow_id` configured in the Developer Portal
 
-Base URL for all endpoints: `https://idp.pollus.tech`
+Base URL for all endpoints: `https://idp.valyd.work`
 
 ### Authentication (applies to every call)
 Every call uses the header:
@@ -4347,7 +4347,7 @@ A Bearer token is also accepted:
 Authorization: Bearer <App API key>
 ```
 
-Get your App API key from the Valyd Developer Portal (https://dev.pollus.tech). Authenticated endpoints are billed per call against your App.
+Get your App API key from the Valyd Developer Portal (https://dev.valyd.work). Authenticated endpoints are billed per call against your App.
 
 ## Sessions
 
@@ -4360,25 +4360,25 @@ Get your App API key from the Valyd Developer Portal (https://dev.pollus.tech). 
 
 ### POST /api/v2/session — create a hosted verification session
 
-Full URL: `https://idp.pollus.tech/api/v2/session`
+Full URL: `https://idp.valyd.work/api/v2/session`
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/session \
+curl -X POST https://idp.valyd.work/api/v2/session \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "workflow_id": "WORKFLOW_ID", "vendor_data": "user-123" }'
 ```
 
-`workflow_id` (get it from the Developer Portal: https://dev.pollus.tech) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
+`workflow_id` (get it from the Developer Portal: https://dev.valyd.work) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
 
 **Expected output:** HTTP 200/201 with a created session object including its session id and a hosted verification URL to send the user to.
 
 ### GET /api/v2/session — list sessions
 
-Full URL: `https://idp.pollus.tech/api/v2/session`
+Full URL: `https://idp.valyd.work/api/v2/session`
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session \
+curl https://idp.valyd.work/api/v2/session \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -4386,10 +4386,10 @@ curl https://idp.pollus.tech/api/v2/session \
 
 ### GET /api/v2/session/{id} — retrieve a session
 
-Full URL: `https://idp.pollus.tech/api/v2/session/{id}`
+Full URL: `https://idp.valyd.work/api/v2/session/{id}`
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/SES_ID \
+curl https://idp.valyd.work/api/v2/session/SES_ID \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -4397,12 +4397,12 @@ curl https://idp.pollus.tech/api/v2/session/SES_ID \
 
 ### PATCH /api/v2/session/{id}/status — manual override
 
-Full URL: `https://idp.pollus.tech/api/v2/session/{id}/status`
+Full URL: `https://idp.valyd.work/api/v2/session/{id}/status`
 
 Manually force a terminal decision. Body must set `status` to `APPROVED` or `DECLINED`.
 
 ```bash
-curl -X PATCH https://idp.pollus.tech/api/v2/session/SES_ID/status \
+curl -X PATCH https://idp.valyd.work/api/v2/session/SES_ID/status \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "status": "APPROVED" }'
@@ -4412,7 +4412,7 @@ curl -X PATCH https://idp.pollus.tech/api/v2/session/SES_ID/status \
 
 ## Workflows
 
-Workflows are configured in the Developer Portal (https://dev.pollus.tech). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
+Workflows are configured in the Developer Portal (https://dev.valyd.work). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
 
 Available services that a workflow can bundle:
 - `id_verification`
@@ -4438,7 +4438,7 @@ Run a single check directly without a hosted session.
 Each is called with the `X-API-Key` header. Example:
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/id-verification \
+curl -X POST https://idp.valyd.work/api/v2/id-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "...": "service-specific input" }'
@@ -4447,11 +4447,11 @@ curl -X POST https://idp.pollus.tech/api/v2/id-verification \
 **Expected output:** HTTP 200 with the check result, including a per-check status of `passed`, `failed`, or `review` (see statuses.md).
 
 Full URLs:
-- `https://idp.pollus.tech/api/v2/id-verification`
-- `https://idp.pollus.tech/api/v2/liveness`
-- `https://idp.pollus.tech/api/v2/face-match`
-- `https://idp.pollus.tech/api/v2/age-verification`
-- `https://idp.pollus.tech/api/v2/credential-verification`
+- `https://idp.valyd.work/api/v2/id-verification`
+- `https://idp.valyd.work/api/v2/liveness`
+- `https://idp.valyd.work/api/v2/face-match`
+- `https://idp.valyd.work/api/v2/age-verification`
+- `https://idp.valyd.work/api/v2/credential-verification`
 
 ## Decision
 
@@ -4459,10 +4459,10 @@ Full URLs:
 |--------|-------------------------------------|-----------------------------------|
 | GET    | `/api/v2/session/{id}/decision`     | Full decision and per-check data  |
 
-Full URL: `https://idp.pollus.tech/api/v2/session/{id}/decision`
+Full URL: `https://idp.valyd.work/api/v2/session/{id}/decision`
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/SES_ID/decision -H "X-API-Key: $VALYD_API_KEY"
+curl https://idp.valyd.work/api/v2/session/SES_ID/decision -H "X-API-Key: $VALYD_API_KEY"
 ```
 
 **Expected output:** HTTP 200 with the full decision and per-check data for the session. Call this after a terminal webhook to retrieve all extracted data (the webhook is only a notification).
@@ -4483,7 +4483,7 @@ What the `status` means depends on what you asked for:
 Request:
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/location \
+curl -X POST https://idp.valyd.work/api/v2/location \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -4548,7 +4548,7 @@ Rate limits and billing:
 
 ```text
 IF HTTP 400 (validation_error):  → fix the request body / add the missing required field, then retry.
-IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://dev.pollus.tech); do not retry until fixed.
+IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://dev.valyd.work); do not retry until fixed.
 IF HTTP 404 (not_found):         → verify the session/resource id; do not retry the same id.
 IF HTTP 422 (unprocessable):     → the input could not be processed (e.g. unreadable image); collect new/clearer input and retry.
 IF HTTP 429 (rate_limited):      → back off and retry later; you have exceeded public/demo limits.

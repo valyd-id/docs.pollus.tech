@@ -1,18 +1,18 @@
-> Source: https://docs.pollus.tech/verify#sdk
+> Source: https://docs.valyd.work/verify#sdk
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: SdkSection.tsx
 
 # Node SDK
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#sdk
+- Source URL: https://docs.valyd.work/verify#sdk
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WEBHOOK_SECRET (for hosted/webhook flows), VALYD_WORKFLOW_ID (for hosted sessions)
 - Files an integrator edits: .env, your server bootstrap (VerifyClient init), and a webhook route handler (e.g. Express)
 - Estimated steps: 3 (install, initialise, call resources)
-- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Developer Portal (https://dev.pollus.tech); these cannot be generated programmatically here.
+- Can complete without human input: NO — you must first obtain an API key, a webhook secret, and a workflow ID from the Valyd Developer Portal (https://dev.valyd.work); these cannot be generated programmatically here.
 - Prerequisites:
   - Node 18+ (the SDK relies on the built-in `fetch` and `crypto`)
-  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://dev.pollus.tech
+  - A Valyd Verify API key (X-API-Key) — get it from the dashboard: https://dev.valyd.work
   - For hosted/webhook flows: a webhook secret and a workflow ID from the dashboard
   - Server-side runtime only — the API key must never reach the browser
 
@@ -28,7 +28,7 @@ The official Node SDK for Valyd Verify: `valyd-verify-sdk` on npm (https://www.n
   node --version
   ```
   **Expected output:** `v18.x.x` or higher. If lower, upgrade Node before continuing.
-- Credentials from the Valyd Developer Portal (https://dev.pollus.tech):
+- Credentials from the Valyd Developer Portal (https://dev.valyd.work):
   - `VALYD_API_KEY` — sent as the `X-API-Key` header on every request.
   - `VALYD_WEBHOOK_SECRET` — needed to verify webhook signatures (hosted flow).
   - `VALYD_WORKFLOW_ID` — needed when creating hosted sessions.
@@ -39,7 +39,7 @@ IF you are building a hosted flow (redirect the user to a Valyd-hosted page):
 IF you are building a Core APIs flow (call individual checks server-side):
   → you only need VALYD_API_KEY
 IF unsure which credentials you have:
-  → log in to https://dev.pollus.tech and check your project's API keys / webhooks / workflows
+  → log in to https://dev.valyd.work and check your project's API keys / webhooks / workflows
 ```
 
 ### Steps
@@ -50,7 +50,7 @@ IF unsure which credentials you have:
    ```
    **Expected output:** npm adds `valyd-verify-sdk` to `dependencies` in `package.json` and reports `added 1 package`. Versions follow semver and are pinned per release — lock to `^x.y.z` for backwards-compatible upgrades.
 
-2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Developer Portal: https://dev.pollus.tech.
+2. **Set environment variables** (e.g. in a `.env` file or your process environment). Get each value from the Valyd Developer Portal: https://dev.valyd.work.
    ```bash
    VALYD_API_KEY=your_api_key_here          # X-API-Key for every request
    VALYD_WEBHOOK_SECRET=your_webhook_secret  # required for hosted/webhook flows
@@ -73,7 +73,7 @@ IF unsure which credentials you have:
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `apiKey` | string | — | Required. Sent as the `X-API-Key` header on every request. |
-| `baseUrl` | string | `https://idp.pollus.tech` | API base URL. Override only for staging/self-hosted. |
+| `baseUrl` | string | `https://idp.valyd.work` | API base URL. Override only for staging/self-hosted. |
 | `webhookSecret` | string | — | Optional. When set, `webhooks.constructEvent` / `verify` can be called without passing the secret explicitly. |
 | `timeoutMs` | number | `15000` | Per-request timeout. Increase for credential lookups (10–60s). |
 | `fetch` | typeof fetch | — | Custom fetch implementation (proxies, instrumentation, tests). |

@@ -1,11 +1,11 @@
-> Source: https://docs.pollus.tech/docs/changelog
+> Source: https://docs.valyd.work/docs/changelog
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: ChangelogSection.tsx
 
 # Changelog
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/changelog
+- Source URL: https://docs.valyd.work/docs/changelog
 - Credentials / env vars needed: none
 - Files an integrator edits: none — reference only
 - Estimated steps: 0 (read to confirm which SDK version introduces the helper you need)

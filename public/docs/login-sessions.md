@@ -1,11 +1,11 @@
-> Source: https://docs.pollus.tech/docs/login-sessions
+> Source: https://docs.valyd.work/docs/login-sessions
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: LoginSessionsSection.tsx
 
 # Login sessions (CSRF protection)
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/login-sessions
+- Source URL: https://docs.valyd.work/docs/login-sessions
 - Credentials / env vars needed: none directly (relies on the configured `valyd` client, which uses your client ID/secret — get these from the Valyd developer portal → your project → Credentials)
 - Files an integrator edits: server route handlers (the login redirect route and the callback route)
 - Estimated steps: 2

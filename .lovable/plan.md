@@ -14,7 +14,7 @@ The single Hosted page becomes a guide with these sub-sections (each an `<h2>`/`
 2. **The two hosted products**
    - **License Verification (license only)** — workflow services `[credential]`. Hosted UI: State → License type → first/last name + license number → submit. Returns verified / not-found against the official state registry. Use when you only need to confirm a professional license.
    - **KYC + License** — workflow services `[id_verification, liveness, face_match, credential]`. Hosted UI: scan ID (front/back) → selfie (OCR + passive liveness + 1:1 face match) → State + License type + license number. Name is auto-filled from the verified ID — user does NOT type it. A license belonging to a different person is rejected. Use when you need to prove the license belongs to the real, present person.
-   - Callout: "Integration code is identical for both products — only `workflow_id` differs." Workflow setup is in console (`verify.pollus.tech/dashboard → Workflows`), either via "License Verification" / "KYC + License" presets or via API.
+   - Callout: "Integration code is identical for both products — only `workflow_id` differs." Workflow setup is in console (`idp.valyd.work/dashboard → Workflows`), either via "License Verification" / "KYC + License" presets or via API.
 3. **Step-by-step integration** (shared)
    - Step 1 — Create a session (server-side): `POST /api/v2/session` with `X-API-Key`, body `{ workflow_id, redirect_url, callback, vendor_data }`. Response `{ session_id, session_token, url, features, expires_at, redirect_url }`. Copy-paste curl + Node (fetch) examples.
    - Step 2 — Redirect the user's browser to `data.url`. Valyd hosts the full capture UI; the steps differ automatically based on workflow services.

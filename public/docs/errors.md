@@ -1,11 +1,11 @@
-> Source: https://docs.pollus.tech/docs/errors
+> Source: https://docs.valyd.work/docs/errors
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: ErrorsSection.tsx
 
 # Error Codes Reference
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/errors
+- Source URL: https://docs.valyd.work/docs/errors
 - Credentials / env vars needed: none (reference page; fixes may require CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 - Files an integrator edits: none — reference only (apply fixes in your auth/route-handler code as indicated per error)
 - Estimated steps: 0 (look up the error code, apply the listed fix)
@@ -42,7 +42,7 @@ IF verifyLoginSession returns valid:false (no thrown error): → go to "Invalid 
 
 - **Status:** 401 Unauthorized
 - **Cause:** The `client_id` or `client_secret` is invalid or doesn't match.
-- **Fix:** Verify your credentials in the Developer Portal (https://dev.pollus.tech → your project → Credentials) and ensure you're using the correct values. The `client_id` comes from the portal; the `client_secret` is generated in the portal by a human.
+- **Fix:** Verify your credentials in the Developer Portal (https://dev.valyd.work → your project → Credentials) and ensure you're using the correct values. The `client_id` comes from the portal; the `client_secret` is generated in the portal by a human.
 
 Example response:
 
@@ -82,7 +82,7 @@ Example response:
 
 - **Status:** 403 Forbidden
 - **Cause:** The access token doesn't have the required scope for this endpoint.
-- **Fix:** Request the missing scope in your authorization URL (space-separated, URL-encoded `scope` parameter) and have the user re-authenticate. The scope must also be enabled for your project in the Developer Portal: https://dev.pollus.tech
+- **Fix:** Request the missing scope in your authorization URL (space-separated, URL-encoded `scope` parameter) and have the user re-authenticate. The scope must also be enabled for your project in the Developer Portal: https://dev.valyd.work
 
 Example response:
 
@@ -102,7 +102,7 @@ Example response:
 
 - **Status:** 400 Bad Request
 - **Cause:** The authorization code or refresh token is invalid, expired, already used, or the `redirect_uri` doesn't match the one registered in the portal.
-- **Fix:** Authorization codes expire after 5 minutes and can only be used once. Verify your redirect URI matches exactly the one registered in the Developer Portal (https://dev.pollus.tech). For refresh tokens, have the user re-authenticate.
+- **Fix:** Authorization codes expire after 5 minutes and can only be used once. Verify your redirect URI matches exactly the one registered in the Developer Portal (https://dev.valyd.work). For refresh tokens, have the user re-authenticate.
 
 Example response:
 

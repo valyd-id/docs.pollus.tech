@@ -1,11 +1,11 @@
-> Source: https://docs.pollus.tech/verify#statuses
+> Source: https://docs.valyd.work/verify#statuses
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: StatusesSection.tsx
 
 # Statuses & decisioning
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#statuses
+- Source URL: https://docs.valyd.work/verify#statuses
 - Credentials / env vars needed: none (reference only)
 - Files an integrator edits: none — reference only
 - Estimated steps: 0
@@ -50,7 +50,7 @@ IF status == APPROVED:      → fetch GET /api/v2/session/{id}/decision for the 
 IF status == DECLINED:      → fetch GET /api/v2/session/{id}/decision to see which checks failed; deny access and surface a retry path if your policy allows.
 IF status == ABANDONED:     → treat as not verified; prompt the user to restart verification (create a new session).
 IF status == EXPIRED:       → treat as not verified; the session TTL elapsed. Create a new session if the user still needs to verify.
-IF unsure of current state: → run `curl https://idp.pollus.tech/api/v2/session/{id} -H "X-API-Key: $VALYD_API_KEY"` to read the current status.
+IF unsure of current state: → run `curl https://idp.valyd.work/api/v2/session/{id} -H "X-API-Key: $VALYD_API_KEY"` to read the current status.
 ```
 
 ## Check status
@@ -69,7 +69,7 @@ Each individual check within a session reports one of three values:
 IF check == passed: → this check is satisfied. If all checks are passed, the session moves toward APPROVED.
 IF check == failed: → this check did not succeed. It typically drives the session toward DECLINED; inspect the decision for the failure reason.
 IF check == review: → inconclusive. The session typically sits in IN_REVIEW until a human or async process resolves it. Do not grant access on this check yet.
-IF unsure:          → run `curl https://idp.pollus.tech/api/v2/session/{id}/decision -H "X-API-Key: $VALYD_API_KEY"` to read per-check statuses.
+IF unsure:          → run `curl https://idp.valyd.work/api/v2/session/{id}/decision -H "X-API-Key: $VALYD_API_KEY"` to read per-check statuses.
 ```
 
 Relationship between check status and session status:

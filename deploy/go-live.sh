@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# Bring docs.pollus.tech live: install the nginx vhost + obtain TLS.
-# Prereqs: (1) DNS A record docs.pollus.tech -> 96.250.208.62 already resolves,
+# Bring docs.valyd.work live: install the nginx vhost + obtain TLS.
+# Prereqs: (1) DNS A record docs.valyd.work -> 96.250.208.62 already resolves,
 #          (2) the site is built (dist/ exists).
 #
-#   sudo bash /var/www/pollus_main_servers/docs.pollus.tech/deploy/go-live.sh
+#   sudo bash /var/www/pollus_main_servers/docs.valyd.work/deploy/go-live.sh
 #
 set -euo pipefail
 
-DEPLOY=/var/www/pollus_main_servers/docs.pollus.tech/deploy
+DEPLOY=/var/www/pollus_main_servers/docs.valyd.work/deploy
 SA=/etc/nginx/sites-available
 SE=/etc/nginx/sites-enabled
-DOMAIN=docs.pollus.tech
+DOMAIN=docs.valyd.work
 
-if [ ! -f /var/www/pollus_main_servers/docs.pollus.tech/dist/index.html ]; then
+if [ ! -f /var/www/pollus_main_servers/docs.valyd.work/dist/index.html ]; then
   echo "!! dist/ not built. Run 'bun run build' (or npm run build) first." >&2
   exit 1
 fi

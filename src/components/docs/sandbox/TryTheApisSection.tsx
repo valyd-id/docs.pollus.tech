@@ -175,7 +175,7 @@ export const TryTheApisSection = () => {
       <p className="text-muted-foreground mb-6">
         Call the live Pollus IDP APIs from your browser using shared sandbox credentials.
         No account, no proxy — every request goes straight to{" "}
-        <code className="text-foreground">idp.pollus.tech</code>.
+        <code className="text-foreground">idp.valyd.work</code>.
       </p>
 
       <div className="space-y-6">

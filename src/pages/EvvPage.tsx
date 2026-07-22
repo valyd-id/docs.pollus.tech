@@ -161,7 +161,7 @@ type EnvKey = "development" | "staging" | "production";
 interface EnvCfg { key: EnvKey; env: string; idp: string; verify: string; dev: string; docs: string; demo: string; }
 
 const ENVIRONMENTS: Record<EnvKey, EnvCfg> = {
-  development: { key: "development", env: "development", idp: "idp.pollus.tech", verify: "idp.pollus.tech", dev: "dev.pollus.tech", docs: "docs.pollus.tech", demo: "homehealth.pollus.tech" },
+  development: { key: "development", env: "development", idp: "idp.valyd.work", verify: "idp.valyd.work", dev: "dev.valyd.work", docs: "docs.valyd.work", demo: "homehealth.valyd.work" },
   staging:     { key: "staging",     env: "staging",     idp: "idp.pollus.online", verify: "idp.pollus.online", dev: "dev.pollus.online", docs: "docs.pollus.online", demo: "homehealth.pollus.online" },
   production:  { key: "production",  env: "production",  idp: "idp.valyd.id", verify: "idp.valyd.id", dev: "dev.valyd.id", docs: "docs.valyd.id", demo: "homehealth.valyd.id" },
 };

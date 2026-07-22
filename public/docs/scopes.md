@@ -1,17 +1,17 @@
-> Source: https://docs.pollus.tech/docs/scopes
+> Source: https://docs.valyd.work/docs/scopes
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: ScopesSection.tsx
 
 # OAuth2 Scopes
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/scopes
+- Source URL: https://docs.valyd.work/docs/scopes
 - Credentials / env vars needed: CLIENT_ID, REDIRECT_URI (access token also required to call scoped endpoints)
 - Files an integrator edits: the code that builds your authorization URL (e.g. server route handler or auth helper)
 - Estimated steps: 2 (choose scopes, add them space-separated and URL-encoded to the authorization URL)
-- Can complete without human input: NO — each requested scope must first be enabled for your project in the Developer Portal (https://dev.pollus.tech) by a human.
+- Can complete without human input: NO — each requested scope must first be enabled for your project in the Developer Portal (https://dev.valyd.work) by a human.
 - Prerequisites:
-  - A registered project in the Developer Portal: https://dev.pollus.tech
+  - A registered project in the Developer Portal: https://dev.valyd.work
   - The scopes you intend to request are enabled for that project in the portal
   - A `client_id` and registered `redirect_url` for the project
 
@@ -32,12 +32,12 @@ Valyd uses OAuth2 scope-based access control. When initiating the authorization 
 Include the `scope` parameter in your authorization URL. Multiple scopes must be **space-separated** and URL-encoded.
 
 ```javascript
-const clientId = "YOUR_CLIENT_ID";        // get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech
-const redirectUrl = "YOUR_REDIRECT_URI";  // must match a redirect URL registered for your project in the Developer Portal: https://dev.pollus.tech
+const clientId = "YOUR_CLIENT_ID";        // get this from the Developer Portal → your project → Credentials: https://dev.valyd.work
+const redirectUrl = "YOUR_REDIRECT_URI";  // must match a redirect URL registered for your project in the Developer Portal: https://dev.valyd.work
 
 const scopes = "profile verifications zkp"; // Space-separated
 
-const authURL = `https://idp.pollus.tech/auth?client_id=${clientId}&redirect_url=${redirectUrl}&scope=${encodeURIComponent(scopes)}`;
+const authURL = `https://idp.valyd.work/auth?client_id=${clientId}&redirect_url=${redirectUrl}&scope=${encodeURIComponent(scopes)}`;
 
 // Result: scope=profile%20verifications%20zkp
 ```
@@ -53,7 +53,7 @@ Expected output: a fully-formed authorization URL string. Redirecting the user t
 Decision tree when authorization or a scoped request fails:
 
 ```text
-IF authorization fails immediately (before the consent screen):  → the requested scope is not enabled for your project. Enable it in the Developer Portal → your project → Scopes: https://dev.pollus.tech
+IF authorization fails immediately (before the consent screen):  → the requested scope is not enabled for your project. Enable it in the Developer Portal → your project → Scopes: https://dev.valyd.work
 IF a scoped endpoint returns 403 with code "insufficient_scope": → the access token is missing that scope. Add the scope to your authorization URL and have the user re-authenticate.
 IF unsure which scopes a token carries:                          → re-run the authorization flow and confirm the requested `scope` parameter matches the scopes the endpoint requires.
 ```

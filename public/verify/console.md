@@ -1,20 +1,20 @@
-> Source: https://docs.pollus.tech/verify#console
+> Source: https://docs.valyd.work/verify#console
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ConsoleSection.tsx
 
 # The Developer Portal
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#console
+- Source URL: https://docs.valyd.work/verify#console
 - Credentials / env vars needed: none to read this page; using the Console produces the App ID, App API key, `workflow_id`, and webhook signing secret your integration will need
 - Files an integrator edits: none — reference only (the Console is a web UI)
 - Estimated steps: 0 (reference; the actions described are human-only UI steps)
-- Can complete without human input: NO — every action here is performed by a human in the web UI at https://dev.pollus.tech (Valyd SSO sign-in, creating Apps/Workflows, configuring webhooks, copying secrets)
+- Can complete without human input: NO — every action here is performed by a human in the web UI at https://dev.valyd.work (Valyd SSO sign-in, creating Apps/Workflows, configuring webhooks, copying secrets)
 - Prerequisites:
   - A Valyd SSO account
-  - A browser to reach https://dev.pollus.tech
+  - A browser to reach https://dev.valyd.work
 
-The console lives at https://dev.pollus.tech — **the Developer Portal is the one and only console**. There is no
+The console lives at https://dev.valyd.work — **the Developer Portal is the one and only console**. There is no
 separate Verify dashboard: one sign-in issues **everything** your integration needs.
 
 | What you get | Where |
@@ -37,7 +37,7 @@ apps such as Test and Production.
 ## Workflows
 Bundle services (ID, liveness, face match, and the other Verify services) into a reusable Workflow. Each Workflow has a `workflow_id` used when creating Hosted sessions.
 
-- The `workflow_id` is required as the `workflow_id` field when creating a Hosted session (see https://docs.pollus.tech/verify#quickstart).
+- The `workflow_id` is required as the `workflow_id` field when creating a Hosted session (see https://docs.valyd.work/verify#quickstart).
 
 ## Webhooks
 Configure a per-app endpoint URL and signing secret (rotatable). Valyd POSTs signed events to this URL when a session reaches a terminal state.
@@ -52,7 +52,7 @@ The console uses Valyd SSO. Your developer account is separate from end-users yo
 
 ```text
 IF you do not yet have an App API key:
-  → Sign in at https://dev.pollus.tech with Valyd SSO (one sign-in covers OAuth apps, Verify apps and workflows)
+  → Sign in at https://dev.valyd.work with Valyd SSO (one sign-in covers OAuth apps, Verify apps and workflows)
   → Open your App and copy the API key shown once at creation; store it server-side
 IF you lost the API key:
   → In the Console, rotate the App API key to generate a new one

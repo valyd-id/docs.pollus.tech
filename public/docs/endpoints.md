@@ -1,26 +1,26 @@
-> Source: https://docs.pollus.tech/docs/endpoints
+> Source: https://docs.valyd.work/docs/endpoints
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: EndpointsSection.tsx
 
 # API Reference
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/endpoints
+- Source URL: https://docs.valyd.work/docs/endpoints
 - Credentials / env vars needed: CLIENT_ID, CLIENT_SECRET, ACCESS_TOKEN, REFRESH_TOKEN, AUTH_CODE
 - Files an integrator edits: none — reference only (consumed by your backend route handlers)
 - Estimated steps: N/A (reference)
-- Can complete without human input: NO — CLIENT_ID and CLIENT_SECRET must be obtained by a human from the Developer Portal (https://dev.pollus.tech)
+- Can complete without human input: NO — CLIENT_ID and CLIENT_SECRET must be obtained by a human from the Developer Portal (https://dev.valyd.work)
 - Prerequisites:
-  - A registered application with a Client ID and Client Secret (get these from the Developer Portal: https://dev.pollus.tech)
+  - A registered application with a Client ID and Client Secret (get these from the Developer Portal: https://dev.valyd.work)
   - All requests must be made over HTTPS
   - Authenticated endpoints require a Bearer access token in the `Authorization` header
-  - The base URL for every endpoint below is `https://idp.pollus.tech/api/auth/tpsso`
+  - The base URL for every endpoint below is `https://idp.valyd.work/api/auth/tpsso`
 
 ## General notes
 - All API requests must be made over HTTPS.
 - Endpoints that require authentication expect a Bearer token in the `Authorization` header: `Authorization: Bearer YOUR_ACCESS_TOKEN`.
 - If you are using the SDK, prefer the typed helpers (`createLoginSession()`, `verifyLoginSession(marker)`, `getAuthorizationUrl()`, `exchangeCode`) — they call these endpoints for you.
-- Base URL (used by every endpoint below): `https://idp.pollus.tech/api/auth/tpsso`
+- Base URL (used by every endpoint below): `https://idp.valyd.work/api/auth/tpsso`
 
 ## SDK methods (v0.2.0)
 
@@ -40,8 +40,8 @@ Validates the marker on the callback, **before** `exchangeCode`. Returns `{ vali
 ## POST /token — Exchange Code for Tokens
 
 - **Method:** POST
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/token`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/token`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/token`
 - **Auth / required scope:** None (authenticated via `client_id` + `client_secret` in the request body)
 - **Required headers:**
@@ -55,8 +55,8 @@ Exchange the one-time authorization code you received on your callback URL for a
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `grant_type` | string | Yes | Must be "authorization_code" |
-| `client_id` | string | Yes | Your assigned Client ID (get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech) |
-| `client_secret` | string | Yes | Your Client Secret (server-side only!) (get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech) |
+| `client_id` | string | Yes | Your assigned Client ID (get this from the Developer Portal → your project → Credentials: https://dev.valyd.work) |
+| `client_secret` | string | Yes | Your Client Secret (server-side only!) (get this from the Developer Portal → your project → Credentials: https://dev.valyd.work) |
 | `code` | string | Yes | The authorization code from callback |
 
 ### Request body (application/json)
@@ -70,13 +70,13 @@ Exchange the one-time authorization code you received on your callback URL for a
 }
 ```
 
-`YOUR_CLIENT_ID` / `YOUR_CLIENT_SECRET`: get these from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+`YOUR_CLIENT_ID` / `YOUR_CLIENT_SECRET`: get these from the Developer Portal → your project → Credentials: https://dev.valyd.work
 `AUTH_CODE_FROM_CALLBACK`: the one-time authorization code delivered to your registered callback URL after the user authenticates.
 
 ### Code examples
 
 ```bash
-curl -X POST "https://idp.pollus.tech/api/auth/tpsso/token" \
+curl -X POST "https://idp.valyd.work/api/auth/tpsso/token" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -88,7 +88,7 @@ curl -X POST "https://idp.pollus.tech/api/auth/tpsso/token" \
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/token", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/token", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const { access_token, refresh_token } = data.data;
 import requests
 
 response = requests.post(
-    "https://idp.pollus.tech/api/auth/tpsso/token",
+    "https://idp.valyd.work/api/auth/tpsso/token",
     json={
         "grant_type": "authorization_code",
         "client_id": "YOUR_CLIENT_ID",
@@ -133,7 +133,7 @@ refresh_token = data["data"]["refresh_token"]
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/token",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/token",
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         "grant_type" => "authorization_code",
@@ -167,7 +167,7 @@ String body = """
 """.formatted(authCode);
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/token"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/token"))
     .header("Content-Type", "application/json")
     .header("Accept", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(body))
@@ -221,8 +221,8 @@ HttpResponse<String> response = client.send(request,
 ## GET /userinfo — Get User Profile
 
 - **Method:** GET
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/userinfo`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/userinfo`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/userinfo`
 - **Auth / required scope:** Bearer access token required; required scope: `profile`
 - **Required headers:**
@@ -236,13 +236,13 @@ Retrieve the authenticated user's profile information including name, email, and
 ### Code examples
 
 ```bash
-curl -X GET "https://idp.pollus.tech/api/auth/tpsso/userinfo" \
+curl -X GET "https://idp.valyd.work/api/auth/tpsso/userinfo" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/userinfo", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/userinfo", {
   method: "GET",
   headers: {
     "Accept": "application/json",
@@ -259,7 +259,7 @@ console.log(user.full_name, user.email);
 import requests
 
 response = requests.get(
-    "https://idp.pollus.tech/api/auth/tpsso/userinfo",
+    "https://idp.valyd.work/api/auth/tpsso/userinfo",
     headers={
         "Accept": "application/json",
         "Authorization": f"Bearer {access_token}"
@@ -275,7 +275,7 @@ print(user["full_name"], user["email"])
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/userinfo",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/userinfo",
     CURLOPT_HTTPHEADER => [
         "Accept: application/json",
         "Authorization: Bearer " . $accessToken
@@ -293,7 +293,7 @@ echo $user["full_name"];
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/userinfo"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/userinfo"))
     .header("Accept", "application/json")
     .header("Authorization", "Bearer " + accessToken)
     .GET()
@@ -340,8 +340,8 @@ HttpResponse<String> response = client.send(request,
 ## GET /licenses — Get Professional Licenses
 
 - **Method:** GET
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/licenses`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/licenses`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/licenses`
 - **Auth / required scope:** Bearer access token required (no specific scope declared on this endpoint in the source)
 - **Required headers:**
@@ -355,13 +355,13 @@ Returns a snapshot of the user's professional licenses as verified by Valyd. Inc
 ### Code examples
 
 ```bash
-curl -X GET "https://idp.pollus.tech/api/auth/tpsso/licenses" \
+curl -X GET "https://idp.valyd.work/api/auth/tpsso/licenses" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/licenses", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/licenses", {
   method: "GET",
   headers: {
     "Accept": "application/json",
@@ -381,7 +381,7 @@ licenses.forEach(license => {
 import requests
 
 response = requests.get(
-    "https://idp.pollus.tech/api/auth/tpsso/licenses",
+    "https://idp.valyd.work/api/auth/tpsso/licenses",
     headers={
         "Accept": "application/json",
         "Authorization": f"Bearer {access_token}"
@@ -398,7 +398,7 @@ for license in licenses:
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/licenses",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/licenses",
     CURLOPT_HTTPHEADER => [
         "Accept: application/json",
         "Authorization: Bearer " . $accessToken
@@ -419,7 +419,7 @@ foreach ($licenses as $license) {
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/licenses"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/licenses"))
     .header("Accept", "application/json")
     .header("Authorization", "Bearer " + accessToken)
     .GET()
@@ -476,8 +476,8 @@ HttpResponse<String> response = client.send(request,
 ## GET /verifications — Get Identity Verifications
 
 - **Method:** GET
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/verifications`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/verifications`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/verifications`
 - **Auth / required scope:** Bearer access token required; required scope: `verifications`
 - **Required headers:**
@@ -491,13 +491,13 @@ Returns identity and verification results including ID verification status, face
 ### Code examples
 
 ```bash
-curl -X GET "https://idp.pollus.tech/api/auth/tpsso/verifications" \
+curl -X GET "https://idp.valyd.work/api/auth/tpsso/verifications" \
   -H "Accept: application/json" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/verifications", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/verifications", {
   method: "GET",
   headers: {
     "Accept": "application/json",
@@ -517,7 +517,7 @@ if (id_verified && face_match > 0.9) {
 import requests
 
 response = requests.get(
-    "https://idp.pollus.tech/api/auth/tpsso/verifications",
+    "https://idp.valyd.work/api/auth/tpsso/verifications",
     headers={
         "Accept": "application/json",
         "Authorization": f"Bearer {access_token}"
@@ -534,7 +534,7 @@ if verifications["id_verified"] and verifications["face_match"] > 0.9:
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/verifications",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/verifications",
     CURLOPT_HTTPHEADER => [
         "Accept: application/json",
         "Authorization: Bearer " . $accessToken
@@ -555,7 +555,7 @@ if ($verifications["id_verified"] && $verifications["face_match"] > 0.9) {
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/verifications"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/verifications"))
     .header("Accept", "application/json")
     .header("Authorization", "Bearer " + accessToken)
     .GET()
@@ -601,8 +601,8 @@ HttpResponse<String> response = client.send(request,
 ## POST /refresh — Refresh Access Token
 
 - **Method:** POST
-- **Full URL:** `https://idp.pollus.tech/api/auth/tpsso/refresh`
-- **Base URL:** `https://idp.pollus.tech/api/auth/tpsso`
+- **Full URL:** `https://idp.valyd.work/api/auth/tpsso/refresh`
+- **Base URL:** `https://idp.valyd.work/api/auth/tpsso`
 - **Path:** `/refresh`
 - **Auth / required scope:** None (authenticated via the `refresh_token` in the request body)
 - **Required headers:**
@@ -632,7 +632,7 @@ Use your `refresh_token` to obtain a new `access_token` when it expires. Optiona
 ### Code examples
 
 ```bash
-curl -X POST "https://idp.pollus.tech/api/auth/tpsso/refresh" \
+curl -X POST "https://idp.valyd.work/api/auth/tpsso/refresh" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -642,7 +642,7 @@ curl -X POST "https://idp.pollus.tech/api/auth/tpsso/refresh" \
 ```
 
 ```javascript
-const response = await fetch("https://idp.pollus.tech/api/auth/tpsso/refresh", {
+const response = await fetch("https://idp.valyd.work/api/auth/tpsso/refresh", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -666,7 +666,7 @@ localStorage.setItem("refresh_token", refresh_token);
 import requests
 
 response = requests.post(
-    "https://idp.pollus.tech/api/auth/tpsso/refresh",
+    "https://idp.valyd.work/api/auth/tpsso/refresh",
     json={
         "refresh_token": refresh_token,
         "rotate_refresh": True  # Recommended for security
@@ -687,7 +687,7 @@ refresh_token = tokens["refresh_token"]
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://idp.pollus.tech/api/auth/tpsso/refresh",
+    CURLOPT_URL => "https://idp.valyd.work/api/auth/tpsso/refresh",
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         "refresh_token" => $refreshToken,
@@ -718,7 +718,7 @@ String body = """
 """.formatted(refreshToken);
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://idp.pollus.tech/api/auth/tpsso/refresh"))
+    .uri(URI.create("https://idp.valyd.work/api/auth/tpsso/refresh"))
     .header("Content-Type", "application/json")
     .header("Accept", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(body))

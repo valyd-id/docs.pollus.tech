@@ -7,16 +7,16 @@
     "description": "REST API for Valyd ID. Two endpoint families share one host:\n\n- **TPSSO** (`/api/auth/tpsso/*`) — Valyd's first-party SSO flow. Responses are wrapped in a `{ success, data }` envelope; errors are `{ success:false, error:{ code, message } }`.\n- **OIDC** (`/api/auth/oidc/*` + discovery) — standards-based OpenID Connect. UserInfo/discovery return bare JSON (no envelope).\n\nCredentials (`client_id` / `client_secret`) cannot be created via API — a human creates them in the Developer Portal. Token exchange and refresh MUST run server-side; never expose `client_secret` to a browser.",
     "contact": {
       "name": "Valyd Developer Docs",
-      "url": "https://docs.pollus.tech/docs/overview.md"
+      "url": "https://docs.valyd.work/docs/overview.md"
     },
     "license": {
       "name": "Proprietary",
-      "url": "https://docs.pollus.tech"
+      "url": "https://docs.valyd.work"
     }
   },
   "servers": [
     {
-      "url": "https://idp.pollus.tech",
+      "url": "https://idp.valyd.work",
       "description": "Valyd ID host"
     }
   ],
@@ -312,11 +312,11 @@
                   "$ref": "#/components/schemas/OidcDiscovery"
                 },
                 "example": {
-                  "issuer": "https://idp.pollus.tech",
-                  "authorization_endpoint": "https://idp.pollus.tech/api/auth/oidc/authorize",
-                  "token_endpoint": "https://idp.pollus.tech/api/auth/oidc/token",
-                  "userinfo_endpoint": "https://idp.pollus.tech/api/auth/oidc/userinfo",
-                  "jwks_uri": "https://idp.pollus.tech/api/auth/oidc/jwks.json",
+                  "issuer": "https://idp.valyd.work",
+                  "authorization_endpoint": "https://idp.valyd.work/api/auth/oidc/authorize",
+                  "token_endpoint": "https://idp.valyd.work/api/auth/oidc/token",
+                  "userinfo_endpoint": "https://idp.valyd.work/api/auth/oidc/userinfo",
+                  "jwks_uri": "https://idp.valyd.work/api/auth/oidc/jwks.json",
                   "response_types_supported": [
                     "code",
                     "id_token",

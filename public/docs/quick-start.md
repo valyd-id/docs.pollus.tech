@@ -1,11 +1,11 @@
-> Source: https://docs.pollus.tech/docs/quick-start
+> Source: https://docs.valyd.work/docs/quick-start
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: QuickStartSection.tsx
 
 # Quick start — Login with Valyd
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/quick-start
+- Source URL: https://docs.valyd.work/docs/quick-start
 - Credentials / env vars needed: VALYD_CLIENT_ID, VALYD_CLIENT_SECRET, VALYD_REDIRECT_URI
 - Files an integrator edits: .env, server route handlers (e.g. server.ts: /login and /callback)
 - Estimated steps: 6
@@ -49,7 +49,7 @@
 
    **Expected output:** A `.env` file on disk with the three keys set. No command output; verify the file contents are correct.
 
-3. **Initialize the client.** Construct a `ValydClient` from your environment variables. `baseUrl` defaults to `https://idp.pollus.tech`.
+3. **Initialize the client.** Construct a `ValydClient` from your environment variables. `baseUrl` defaults to `https://idp.valyd.work`.
 
    ```typescript
    // server.ts
@@ -59,7 +59,7 @@
      clientId: process.env.VALYD_CLIENT_ID!,
      clientSecret: process.env.VALYD_CLIENT_SECRET!,
      redirectUri: process.env.VALYD_REDIRECT_URI!, // e.g. http://localhost:8080/callback
-     // baseUrl defaults to https://idp.pollus.tech
+     // baseUrl defaults to https://idp.valyd.work
    });
    ```
 

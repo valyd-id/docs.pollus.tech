@@ -1,17 +1,17 @@
-> Source: https://docs.pollus.tech/docs/overview
+> Source: https://docs.valyd.work/docs/overview
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: OverviewSection.tsx
 
 # Valyd Third-Party SSO API
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/overview
+- Source URL: https://docs.valyd.work/docs/overview
 - Credentials / env vars needed: client_id, client_secret (obtain from the Developer Portal — see Prerequisites)
 - Files an integrator edits: none — reference / orientation page only
 - Estimated steps: 6 (the end-to-end OAuth2 SSO flow described below)
-- Can complete without human input: NO — obtaining credentials requires signing up at https://dev.pollus.tech and creating a project (a human-only web step)
+- Can complete without human input: NO — obtaining credentials requires signing up at https://dev.valyd.work and creating a project (a human-only web step)
 - Prerequisites:
-  - A basic Valyd account (sign up at https://dev.pollus.tech — no KYC verification required)
+  - A basic Valyd account (sign up at https://dev.valyd.work — no KYC verification required)
   - A registered project in the Developer Portal that provides your `client_id` and `client_secret`
   - A backend capable of making server-side HTTPS requests (to keep `client_secret` secret)
 
@@ -20,16 +20,16 @@ Integrate secure identity verification and authentication into your application 
 ## Base URL
 
 ```text
-https://idp.pollus.tech/api/auth/tpsso
+https://idp.valyd.work/api/auth/tpsso
 ```
 
 ## Integration Flow
 
-Access to the Developer Portal requires a basic Valyd account. No KYC verification needed — just sign up at https://dev.pollus.tech to get your API credentials.
+Access to the Developer Portal requires a basic Valyd account. No KYC verification needed — just sign up at https://dev.valyd.work to get your API credentials.
 
 The end-to-end OAuth2 SSO flow has six steps:
 
-1. **Create Project** — Register your application at https://dev.pollus.tech to get your client credentials (`client_id` and `client_secret`).
+1. **Create Project** — Register your application at https://dev.valyd.work to get your client credentials (`client_id` and `client_secret`).
 2. **Redirect to Authorization** — When a user clicks "Login with Valyd", redirect them to the authorization URL with your `client_id` and requested `scope`s.
 3. **User Consent** — The user sees the consent screen with the requested permissions and approves access.
 4. **Receive Authorization Code** — After approval, the user is redirected to your callback URL with a one-time code (valid for 5 minutes).
@@ -38,13 +38,13 @@ The end-to-end OAuth2 SSO flow has six steps:
 
 ### Authorization URL shape
 
-The authorization URL is built from the IdP base host `https://idp.pollus.tech`, the `/auth` path, and query parameters. `scope` is a space-separated list, URL-encoded.
+The authorization URL is built from the IdP base host `https://idp.valyd.work`, the `/auth` path, and query parameters. `scope` is a space-separated list, URL-encoded.
 
 ```text
-https://idp.pollus.tech/auth?client_id=YOUR_CLIENT_ID&redirect_url=YOUR_REDIRECT_URI&scope=profile%20verifications
+https://idp.valyd.work/auth?client_id=YOUR_CLIENT_ID&redirect_url=YOUR_REDIRECT_URI&scope=profile%20verifications
 ```
 
-- `YOUR_CLIENT_ID` — get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+- `YOUR_CLIENT_ID` — get this from the Developer Portal → your project → Credentials: https://dev.valyd.work
 - `YOUR_REDIRECT_URI` — the Redirect URL you registered for the project in the Developer Portal (must NOT end with a trailing slash)
 - `scope` — space-separated scope list (e.g. `profile verifications zkp`), URL-encoded so the space becomes `%20`
 

@@ -3,7 +3,7 @@
 // All environment-specific URLs are read from Vite build-time env vars
 // (import.meta.env.VITE_*). Each server keeps its own `.env` (see `.env.example`)
 // and runs `npm run build` / `bun run build` there:
-//   - dev      docs.pollus.tech   -> *.pollus.tech
+//   - dev      docs.valyd.work   -> *.pollus.tech
 //   - testing  docs.pollus.online -> *.pollus.online
 //   - prod     docs.valyd.id      -> *.valyd.id
 // The defaults below are the development (.pollus.tech) values, so a build with
@@ -11,14 +11,14 @@
 
 const env = import.meta.env;
 
-const IDP_BASE_URL = env.VITE_IDP_BASE_URL ?? "https://idp.pollus.tech";
-const DOCS_BASE_URL = env.VITE_DOCS_BASE_URL ?? "https://docs.pollus.tech";
+const IDP_BASE_URL = env.VITE_IDP_BASE_URL ?? "https://idp.valyd.work";
+const DOCS_BASE_URL = env.VITE_DOCS_BASE_URL ?? "https://docs.valyd.work";
 
 export const API_CONFIG = {
   // Base URLs
   IDP_BASE_URL,
   API_BASE_URL: env.VITE_API_BASE_URL ?? `${IDP_BASE_URL}/api/auth/tpsso`,
-  DEV_PORTAL_URL: env.VITE_DEV_PORTAL_URL ?? "https://dev.pollus.tech",
+  DEV_PORTAL_URL: env.VITE_DEV_PORTAL_URL ?? "https://dev.valyd.work",
   DOCS_BASE_URL,
 
   // Brand name

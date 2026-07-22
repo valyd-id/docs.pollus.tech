@@ -1,15 +1,15 @@
-> Source: https://docs.pollus.tech/verify#quickstart
+> Source: https://docs.valyd.work/verify#quickstart
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: QuickstartSection.tsx
 
 # Valyd Verify Quickstart
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#quickstart
+- Source URL: https://docs.valyd.work/verify#quickstart
 - Credentials / env vars needed: VALYD_API_KEY, VALYD_WORKFLOW_ID (Hosted only)
 - Files an integrator edits: .env (to store VALYD_API_KEY and VALYD_WORKFLOW_ID), server route handler (to make the API call and, for Hosted, handle the webhook)
 - Estimated steps: 6
-- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Portal (https://dev.pollus.tech). The API call itself (steps 5-6) can be automated once credentials exist.
+- Can complete without human input: NO — steps 1-4 require a human to sign in with Valyd SSO, copy the one-time API key, create a Workflow, and configure the webhook in the Developer Portal (https://dev.valyd.work). The API call itself (steps 5-6) can be automated once credentials exist.
 - Prerequisites:
   - A Valyd SSO account able to sign in to the Developer Portal
   - An App API key copied from the Console (shown once at creation)
@@ -17,7 +17,7 @@
   - For Hosted: a publicly reachable webhook URL and signing secret
 
 ### Prerequisites
-- Access to the Developer Portal at https://dev.pollus.tech (sign in with Valyd SSO).
+- Access to the Developer Portal at https://dev.valyd.work (sign in with Valyd SSO).
 - The App API key, copied at App creation (shown once). Store it server-side only.
 - For the Hosted snippet: a `workflow_id` from a Workflow you created in the Console.
 
@@ -26,7 +26,7 @@
 1. Sign in to the Developer Portal with Valyd SSO. The Developer Portal is the ONE console: the same sign-in issues your OAuth app (client_id / client_secret), your Verify app (API key) and your workflows. (Human-only step.)
 
    ```text
-   Open https://dev.pollus.tech and sign in with Valyd SSO.
+   Open https://dev.valyd.work and sign in with Valyd SSO.
    ```
 
    **Expected output:** You are signed in and a default App is visible in the Console.
@@ -37,7 +37,7 @@
    export VALYD_API_KEY="paste-the-one-time-app-api-key-here"
    ```
 
-   (Get the API key from the Developer Portal → your App → it is shown once at creation: https://dev.pollus.tech)
+   (Get the API key from the Developer Portal → your App → it is shown once at creation: https://dev.valyd.work)
 
    **Expected output:** `VALYD_API_KEY` is set in your shell/`.env`. The key cannot be retrieved again after creation — rotate it in the Console if lost.
 
@@ -47,7 +47,7 @@
    export VALYD_WORKFLOW_ID="paste-your-workflow-id-here"
    ```
 
-   (Get the `workflow_id` from the Developer Portal → Workflows → your Workflow: https://dev.pollus.tech)
+   (Get the `workflow_id` from the Developer Portal → Workflows → your Workflow: https://dev.valyd.work)
 
    **Expected output:** `VALYD_WORKFLOW_ID` is set. Required only for the Hosted session call in step 6.
 
@@ -63,7 +63,7 @@
 5. Run your first Core APIs call (age verification) to confirm your API key works.
 
    ```bash
-   curl -X POST https://idp.pollus.tech/api/v2/age-verification \
+   curl -X POST https://idp.valyd.work/api/v2/age-verification \
      -H "X-API-Key: $VALYD_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{ "dob": "1995-06-01", "bands": ["is_18_plus"] }'
@@ -74,7 +74,7 @@
 6. (Hosted only) Create a Hosted session from your server, then redirect the user's browser to the returned URL.
 
    ```javascript
-   const res = await fetch("https://idp.pollus.tech/api/v2/session", {
+   const res = await fetch("https://idp.valyd.work/api/v2/session", {
      method: "POST",
      headers: {
        "X-API-Key": process.env.VALYD_API_KEY,
@@ -97,7 +97,7 @@
 - Core APIs: the curl in step 5 returns HTTP `200` and a body where `success` is `true`.
 
   ```bash
-  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://idp.pollus.tech/api/v2/age-verification \
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://idp.valyd.work/api/v2/age-verification \
     -H "X-API-Key: $VALYD_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{ "dob": "1995-06-01", "bands": ["is_18_plus"] }'

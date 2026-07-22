@@ -1,20 +1,20 @@
-> Source: https://docs.pollus.tech/verify#api-sessions
+> Source: https://docs.valyd.work/verify#api-sessions
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ApiReferenceSection.tsx
 
 # API Reference
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#api-sessions
+- Source URL: https://docs.valyd.work/verify#api-sessions
 - Credentials / env vars needed: VALYD_API_KEY (your App API key, sent as the `X-API-Key` header)
 - Files an integrator edits: none — reference only (server code uses these endpoints)
 - Estimated steps: 0
 - Can complete without human input: YES — this is a reference page; no actions required.
 - Prerequisites:
-  - An App API key from the Valyd Developer Portal (https://dev.pollus.tech)
+  - An App API key from the Valyd Developer Portal (https://dev.valyd.work)
   - For workflow-based sessions, a `workflow_id` configured in the Developer Portal
 
-Base URL for all endpoints: `https://idp.pollus.tech`
+Base URL for all endpoints: `https://idp.valyd.work`
 
 ### Authentication (applies to every call)
 Every call uses the header:
@@ -29,7 +29,7 @@ A Bearer token is also accepted:
 Authorization: Bearer <App API key>
 ```
 
-Get your App API key from the Valyd Developer Portal (https://dev.pollus.tech). Authenticated endpoints are billed per call against your App.
+Get your App API key from the Valyd Developer Portal (https://dev.valyd.work). Authenticated endpoints are billed per call against your App.
 
 ## Sessions
 
@@ -42,25 +42,25 @@ Get your App API key from the Valyd Developer Portal (https://dev.pollus.tech). 
 
 ### POST /api/v2/session — create a hosted verification session
 
-Full URL: `https://idp.pollus.tech/api/v2/session`
+Full URL: `https://idp.valyd.work/api/v2/session`
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/session \
+curl -X POST https://idp.valyd.work/api/v2/session \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "workflow_id": "WORKFLOW_ID", "vendor_data": "user-123" }'
 ```
 
-`workflow_id` (get it from the Developer Portal: https://dev.pollus.tech) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
+`workflow_id` (get it from the Developer Portal: https://dev.valyd.work) selects the bundle of services to run. `vendor_data` is your own correlation string, echoed back on webhooks and the decision.
 
 **Expected output:** HTTP 200/201 with a created session object including its session id and a hosted verification URL to send the user to.
 
 ### GET /api/v2/session — list sessions
 
-Full URL: `https://idp.pollus.tech/api/v2/session`
+Full URL: `https://idp.valyd.work/api/v2/session`
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session \
+curl https://idp.valyd.work/api/v2/session \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -68,10 +68,10 @@ curl https://idp.pollus.tech/api/v2/session \
 
 ### GET /api/v2/session/{id} — retrieve a session
 
-Full URL: `https://idp.pollus.tech/api/v2/session/{id}`
+Full URL: `https://idp.valyd.work/api/v2/session/{id}`
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/SES_ID \
+curl https://idp.valyd.work/api/v2/session/SES_ID \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -79,12 +79,12 @@ curl https://idp.pollus.tech/api/v2/session/SES_ID \
 
 ### PATCH /api/v2/session/{id}/status — manual override
 
-Full URL: `https://idp.pollus.tech/api/v2/session/{id}/status`
+Full URL: `https://idp.valyd.work/api/v2/session/{id}/status`
 
 Manually force a terminal decision. Body must set `status` to `APPROVED` or `DECLINED`.
 
 ```bash
-curl -X PATCH https://idp.pollus.tech/api/v2/session/SES_ID/status \
+curl -X PATCH https://idp.valyd.work/api/v2/session/SES_ID/status \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "status": "APPROVED" }'
@@ -94,7 +94,7 @@ curl -X PATCH https://idp.pollus.tech/api/v2/session/SES_ID/status \
 
 ## Workflows
 
-Workflows are configured in the Developer Portal (https://dev.pollus.tech). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
+Workflows are configured in the Developer Portal (https://dev.valyd.work). A workflow bundles services and exposes a stable `workflow_id` that you pass when creating a session.
 
 Available services that a workflow can bundle:
 - `id_verification`
@@ -120,7 +120,7 @@ Run a single check directly without a hosted session.
 Each is called with the `X-API-Key` header. Example:
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/id-verification \
+curl -X POST https://idp.valyd.work/api/v2/id-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "...": "service-specific input" }'
@@ -129,11 +129,11 @@ curl -X POST https://idp.pollus.tech/api/v2/id-verification \
 **Expected output:** HTTP 200 with the check result, including a per-check status of `passed`, `failed`, or `review` (see statuses.md).
 
 Full URLs:
-- `https://idp.pollus.tech/api/v2/id-verification`
-- `https://idp.pollus.tech/api/v2/liveness`
-- `https://idp.pollus.tech/api/v2/face-match`
-- `https://idp.pollus.tech/api/v2/age-verification`
-- `https://idp.pollus.tech/api/v2/credential-verification`
+- `https://idp.valyd.work/api/v2/id-verification`
+- `https://idp.valyd.work/api/v2/liveness`
+- `https://idp.valyd.work/api/v2/face-match`
+- `https://idp.valyd.work/api/v2/age-verification`
+- `https://idp.valyd.work/api/v2/credential-verification`
 
 ## Decision
 
@@ -141,10 +141,10 @@ Full URLs:
 |--------|-------------------------------------|-----------------------------------|
 | GET    | `/api/v2/session/{id}/decision`     | Full decision and per-check data  |
 
-Full URL: `https://idp.pollus.tech/api/v2/session/{id}/decision`
+Full URL: `https://idp.valyd.work/api/v2/session/{id}/decision`
 
 ```bash
-curl https://idp.pollus.tech/api/v2/session/SES_ID/decision -H "X-API-Key: $VALYD_API_KEY"
+curl https://idp.valyd.work/api/v2/session/SES_ID/decision -H "X-API-Key: $VALYD_API_KEY"
 ```
 
 **Expected output:** HTTP 200 with the full decision and per-check data for the session. Call this after a terminal webhook to retrieve all extracted data (the webhook is only a notification).
@@ -165,7 +165,7 @@ What the `status` means depends on what you asked for:
 Request:
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/location \
+curl -X POST https://idp.valyd.work/api/v2/location \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -230,7 +230,7 @@ Rate limits and billing:
 
 ```text
 IF HTTP 400 (validation_error):  → fix the request body / add the missing required field, then retry.
-IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://dev.pollus.tech); do not retry until fixed.
+IF HTTP 401 (invalid_api_key):   → set the X-API-Key header to a valid App API key (from https://dev.valyd.work); do not retry until fixed.
 IF HTTP 404 (not_found):         → verify the session/resource id; do not retry the same id.
 IF HTTP 422 (unprocessable):     → the input could not be processed (e.g. unreadable image); collect new/clearer input and retry.
 IF HTTP 429 (rate_limited):      → back off and retry later; you have exceeded public/demo limits.

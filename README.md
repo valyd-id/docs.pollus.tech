@@ -1,4 +1,4 @@
-# Valyd Docs (docs.pollus.tech)
+# Valyd Docs (docs.valyd.work)
 
 The Valyd developer documentation site — API reference and integration guides for
 **Login with Valyd** (OAuth2 / TPSSO) and **Valyd Verify** (hosted sessions, the
@@ -32,7 +32,7 @@ npm run preview
 Runtime URLs are env-driven (`VITE_*`) so the same build works across environments.
 Copy `.env.example` to `.env` and adjust as needed, e.g.:
 
-- `VITE_VERIFY_BASE_URL` — Verify API base (default `https://verify.pollus.tech`)
+- `VITE_VERIFY_BASE_URL` — Verify API base (default `https://idp.valyd.work`)
 - `VITE_VERIFY_CONSOLE_URL` — Verify console (default `{verify}/dashboard`)
 
 ## Structure

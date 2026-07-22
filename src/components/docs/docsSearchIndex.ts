@@ -132,7 +132,7 @@ export const DOCS_SEARCH_INDEX: DocsSearchEntry[] = [
 
   // ── Valyd MCP ────────────────────────────────────────────────────────────
   { title: "Valyd MCP — Overview",          icon: "🤖", group: "Valyd MCP", href: "/mcp",                               keywords: ["mcp", "model context protocol", "ai agent", "verification", "web agent", "streamable http", "oauth"] },
-  { title: "MCP — Authentication",          icon: "🤖", group: "Valyd MCP", href: "/mcp#mcp-auth",                      keywords: ["oauth 2.1", "pkce", "bearer token", "idp.pollus.tech", "rfc 9728", "scope mcp"] },
+  { title: "MCP — Authentication",          icon: "🤖", group: "Valyd MCP", href: "/mcp#mcp-auth",                      keywords: ["oauth 2.1", "pkce", "bearer token", "idp.valyd.work", "rfc 9728", "scope mcp"] },
   { title: "MCP — verification_request",    icon: "🤖", group: "Valyd MCP", href: "/mcp#mcp-verification-request",      keywords: ["verification_request", "human in the loop", "face scan", "approve action", "PENDING"] },
   { title: "MCP — verification_status",     icon: "🤖", group: "Valyd MCP", href: "/mcp#mcp-verification-status",       keywords: ["verification_status", "poll", "APPROVED", "DENIED", "DECLINED", "EXPIRED", "assurance_level"] },
   { title: "MCP — do_task",                 icon: "🤖", group: "Valyd MCP", href: "/mcp#mcp-do-task",                   keywords: ["do_task", "web agent", "browser", "task", "start_url", "user_uuid"] },

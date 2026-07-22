@@ -5,7 +5,7 @@ import { VERIFY_CONFIG } from "@/lib/verify-config";
 const BASE = VERIFY_CONFIG.API_BASE_URL;
 // The live, no-signup verification playground. Each button below opens a SPECIFIC flow directly
 // (via ?flow=<id>) in a new tab — the exact experience your end users get, no embedded iframe.
-const DEMO_URL = import.meta.env.VITE_DEMOS_BASE_URL ?? "https://demos.pollus.tech";
+const DEMO_URL = import.meta.env.VITE_DEMOS_BASE_URL ?? "https://demos.valyd.work";
 
 type Demo = {
   id: string;
@@ -14,7 +14,7 @@ type Demo = {
   icon: typeof ScanFace;
 };
 
-// ids map 1:1 to the workflow ids the sandbox understands (see demos.pollus.tech/src/lib/workflows).
+// ids map 1:1 to the workflow ids the sandbox understands (see demos.valyd.work/src/lib/workflows).
 const DEMOS: Demo[] = [
   { id: "core-kyc", label: "Core KYC", desc: "ID + liveness + face match", icon: IdCard },
   { id: "kyc-license", label: "KYC + License", desc: "Full KYC plus a professional license", icon: BadgeCheck },

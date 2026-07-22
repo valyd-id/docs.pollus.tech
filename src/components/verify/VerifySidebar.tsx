@@ -57,9 +57,16 @@ const guides: Item[] = [
   { id: "managed-reuse", label: "Reuse APIs", indent: true, modes: ["managed"] },
   { id: "consent", label: "Consent Core API", indent: true, modes: ["managed"] },
 
-  // Core APIs
+  // Core APIs — one entry per check, so every endpoint is reachable from the nav (matches Node SDK)
   { id: "standalone", label: "Core APIs", icon: <Server className="h-4 w-4" />, modes: ["standalone"] },
   { id: "core-account-vs-fresh", label: "Account vs Non-account", indent: true, modes: ["standalone"] },
+  { id: "core-id-verification", label: "ID Verification", indent: true, modes: ["standalone"] },
+  { id: "core-liveness", label: "Liveness", indent: true, modes: ["standalone"] },
+  { id: "core-face-match", label: "Face Match", indent: true, modes: ["standalone"] },
+  { id: "core-age-verification", label: "Age Verification", indent: true, modes: ["standalone"] },
+  { id: "core-credential-verification", label: "Credential Verification", indent: true, modes: ["standalone"] },
+  { id: "core-kyc-credential", label: "KYC + Credential", indent: true, modes: ["standalone"] },
+  { id: "core-location", label: "Location", indent: true, modes: ["standalone"] },
 
   // Shared
   { id: "sdk", label: "Node SDK", icon: <Package className="h-4 w-4" /> },

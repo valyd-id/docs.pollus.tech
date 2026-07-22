@@ -1,9 +1,9 @@
 import { AlertTriangle, Info } from "lucide-react";
 import { CodeBlock } from "@/components/docs/CodeBlock";
 
-const MCP_BASE     = import.meta.env.VITE_MCP_BASE_URL ?? "https://mcp.pollus.tech";
+const MCP_BASE     = import.meta.env.VITE_MCP_BASE_URL ?? "https://mcp.valyd.work";
 const MCP_ENDPOINT = `${MCP_BASE}/verification/mcp`;
-const IDP_BASE     = import.meta.env.VITE_IDP_BASE_URL ?? "https://idp.pollus.tech";
+const IDP_BASE     = import.meta.env.VITE_IDP_BASE_URL ?? "https://idp.valyd.work";
 
 const Callout = ({
   type,

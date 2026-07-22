@@ -1,40 +1,40 @@
-> Source: https://docs.pollus.tech/docs/create-project
+> Source: https://docs.valyd.work/docs/create-project
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: GettingStartedSection.tsx
 
 # Create a Project & Get Your Credentials
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/create-project
+- Source URL: https://docs.valyd.work/docs/create-project
 - Credentials / env vars needed: produces `client_id` and `client_secret` (these are the OUTPUT of this page, not a prerequisite)
 - Files an integrator edits: your backend environment file (e.g. `.env`) to store `client_secret` after you obtain it
 - Estimated steps: 3
 - Can complete without human input: NO — every step is a manual action in the Developer Portal web UI (sign up, create project, copy the one-time-shown secret). An automated agent cannot perform these; a human must do them and then hand the agent the resulting `client_id` and `client_secret`.
 - Prerequisites:
-  - A basic Valyd account (sign up at https://dev.pollus.tech — no KYC verification required)
-  - Access to a browser to use the Developer Portal at https://dev.pollus.tech
+  - A basic Valyd account (sign up at https://dev.valyd.work — no KYC verification required)
+  - Access to a browser to use the Developer Portal at https://dev.valyd.work
   - The exact production domain(s) your app sends requests from (for Allowed Web Origins)
   - Your callback/redirect URL, with NO trailing slash (e.g. `https://myapp.com/callback`)
 
-Before integrating with Valyd SSO, you need to register your application in the Developer Portal to obtain your client credentials. Access to the Developer Portal requires a basic Valyd account; no KYC verification is needed — just sign up at https://dev.pollus.tech.
+Before integrating with Valyd SSO, you need to register your application in the Developer Portal to obtain your client credentials. Access to the Developer Portal requires a basic Valyd account; no KYC verification is needed — just sign up at https://dev.valyd.work.
 
 ## Prerequisites
 
-- A Valyd account. Sign up at https://dev.pollus.tech if you do not have one. No KYC verification is required for portal access.
+- A Valyd account. Sign up at https://dev.valyd.work if you do not have one. No KYC verification is required for portal access.
 - The list of domains your application sends requests from (used for Allowed Web Origins).
 - Your redirect/callback URL, without a trailing slash.
 - A decision on which data scopes your application needs (`profile`, `verifications`, `zkp` — detailed below).
 
 ## Steps
 
-This is a portal-driven setup. All steps below are performed by a human in the web UI at https://dev.pollus.tech — there is no API to automate project creation.
+This is a portal-driven setup. All steps below are performed by a human in the web UI at https://dev.valyd.work — there is no API to automate project creation.
 
 ### Step 1 — Visit the Developer Portal and log in
 
 Open the Developer Portal in a browser and log in with your Valyd account.
 
 ```text
-https://dev.pollus.tech
+https://dev.valyd.work
 ```
 
 **Expected output:** You are signed in and see the Developer Portal dashboard with an option to create a new project.
@@ -118,7 +118,7 @@ VALYD_CLIENT_SECRET=sk_live_a1b2c3d4e5f6g7h8i9j0...
 With your Client ID and Client Secret you can now integrate Valyd SSO into your application:
 
 1. Store your `client_secret` securely in your backend environment variables.
-2. Implement the "Login with Valyd" button that redirects to the authorization URL (`https://idp.pollus.tech/auth?client_id=...&redirect_url=...&scope=...`).
+2. Implement the "Login with Valyd" button that redirects to the authorization URL (`https://idp.valyd.work/auth?client_id=...&redirect_url=...&scope=...`).
 3. Handle the callback and exchange the one-time code for tokens using your `client_secret` (backend only).
 4. Use the `access_token` to fetch user data.
 
@@ -127,7 +127,7 @@ With your Client ID and Client Secret you can now integrate Valyd SSO into your 
 There is no CLI/API check for project creation; verify manually in the portal:
 
 ```text
-IF you can see your project listed in the Developer Portal at https://dev.pollus.tech  → project was created
+IF you can see your project listed in the Developer Portal at https://dev.valyd.work  → project was created
 IF the credentials modal showed a Client ID and Client Secret                       → credentials were issued
 IF you saved the Client Secret before closing the modal                             → you can proceed
 IF you closed the modal without copying the Client Secret                           → regenerate it from project settings (it is shown only once per generation)

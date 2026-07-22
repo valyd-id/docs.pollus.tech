@@ -1,17 +1,17 @@
-> Source: https://docs.pollus.tech/docs/authentication
+> Source: https://docs.valyd.work/docs/authentication
 > Part of: Valyd ID API documentation — static copy generated for AI agents
 > Generated from repo component: AuthenticationSection.tsx
 
 # Authentication (OAuth2 / TPSSO Flow)
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/docs/authentication
+- Source URL: https://docs.valyd.work/docs/authentication
 - Credentials / env vars needed: VALYD_CLIENT_ID, VALYD_CLIENT_SECRET, VALYD_REDIRECT_URI
 - Files an integrator edits: .env (credentials), server route handler for `/callback`, login/redirect route handler
 - Estimated steps: 6
-- Can complete without human input: NO — a human must register the app and obtain a Client ID + Client Secret from the Developer Portal (https://dev.pollus.tech), and register the exact redirect/callback URL.
+- Can complete without human input: NO — a human must register the app and obtain a Client ID + Client Secret from the Developer Portal (https://dev.valyd.work), and register the exact redirect/callback URL.
 - Prerequisites:
-  - A Valyd application registered in the Developer Portal (https://dev.pollus.tech) with a Client ID and Client Secret.
+  - A Valyd application registered in the Developer Portal (https://dev.valyd.work) with a Client ID and Client Secret.
   - The exact callback/redirect URL (e.g. `https://yourapp.com/callback`) registered on that application — it must match the `redirect_url` you send.
   - A server-side environment that can keep `VALYD_CLIENT_SECRET` private (token exchange MUST happen server-side).
   - (Recommended) Node project with the official SDK: `npm install valyd-idp-sdk@^0.2.0`
@@ -23,11 +23,11 @@ Valyd uses the OAuth2 Authorization Code flow (referred to internally as TPSSO).
 CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `state` back on the callback. The `state` returned to your callback is Valyd's own opaque session id. Do NOT use it for CSRF protection by comparing it to a value you sent. Instead, create a login session up front, store its marker, and verify the marker on the callback.
 
 ### Prerequisites
-- Client ID and Client Secret (get these from the Developer Portal → your project → Credentials: https://dev.pollus.tech).
+- Client ID and Client Secret (get these from the Developer Portal → your project → Credentials: https://dev.valyd.work).
 - A registered redirect/callback URL matching what you send as `redirect_url`.
 - Environment variables set on your server:
-  - `VALYD_CLIENT_ID` (get from Developer Portal: https://dev.pollus.tech)
-  - `VALYD_CLIENT_SECRET` (get from Developer Portal: https://dev.pollus.tech)
+  - `VALYD_CLIENT_ID` (get from Developer Portal: https://dev.valyd.work)
+  - `VALYD_CLIENT_SECRET` (get from Developer Portal: https://dev.valyd.work)
   - `VALYD_REDIRECT_URI` (the exact callback URL you registered, e.g. `https://yourapp.com/callback`)
 
 ### Steps
@@ -35,14 +35,14 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
 1. **Construct the authorization URL.** Redirect users to the Valyd authorization endpoint with your client credentials and requested scopes. The exact URL format is:
 
    ```text
-   https://idp.pollus.tech/auth?client_id={client_id}&redirect_url={redirect_url}&scope={scopes}
+   https://idp.valyd.work/auth?client_id={client_id}&redirect_url={redirect_url}&scope={scopes}
    ```
 
    Parameters:
 
    | Parameter | Required | Description |
    | --- | --- | --- |
-   | `client_id` | Yes | Your application's Client ID from the Developer Portal (https://dev.pollus.tech). |
+   | `client_id` | Yes | Your application's Client ID from the Developer Portal (https://dev.valyd.work). |
    | `redirect_url` | Yes | The URL to redirect to after authentication. Must match the URL registered on your application. |
    | `scope` | Yes | Space-separated list of scopes, URL-encoded. Example: `profile%20verifications`. |
    | `state` | Optional | Pass `session.authorizeState` from `createLoginSession()`. NOT echoed on the callback for TPSSO — do not use it for CSRF on its own. |
@@ -50,7 +50,7 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
    **Expected output:** A fully-formed URL string. Example with encoded scopes `profile verifications`:
 
    ```text
-   https://idp.pollus.tech/auth?client_id=YOUR_CLIENT_ID&redirect_url=https://yourapp.com/callback&scope=profile%20verifications
+   https://idp.valyd.work/auth?client_id=YOUR_CLIENT_ID&redirect_url=https://yourapp.com/callback&scope=profile%20verifications
    ```
 
 2. **Issue a login session and redirect (recommended: use the SDK).** On your login route, create a login session, store its marker (httpOnly cookie or server session), build the authorization URL, and redirect the user:
@@ -76,7 +76,7 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
    res.redirect(url);
    ```
 
-   **Expected output:** HTTP 302 redirect sending the user's browser to `https://idp.pollus.tech/auth?...`. The login session marker is now stored on the user's side (cookie/session) for the CSRF check in step 5.
+   **Expected output:** HTTP 302 redirect sending the user's browser to `https://idp.valyd.work/auth?...`. The login session marker is now stored on the user's side (cookie/session) for the CSRF check in step 5.
 
 3. **User consents on the Valyd consent screen.** Valyd shows the consent screen with the requested scopes and, on approval, issues a one-time authorization `code`.
 
@@ -146,13 +146,13 @@ CRITICAL behavioral difference from standard OAuth2: Valyd does NOT echo your `s
 
 #### Token exchange without the SDK (raw HTTP)
 
-The token endpoint is `POST https://idp.pollus.tech/api/auth/tpsso/token` with a JSON body. The response wraps the tokens under a `data` key (i.e. `response.data.access_token`).
+The token endpoint is `POST https://idp.valyd.work/api/auth/tpsso/token` with a JSON body. The response wraps the tokens under a `data` key (i.e. `response.data.access_token`).
 
 Request shape:
 
 ```http
 POST /api/auth/tpsso/token HTTP/1.1
-Host: idp.pollus.tech
+Host: idp.valyd.work
 Content-Type: application/json
 
 {
@@ -180,7 +180,7 @@ def callback():
         return "missing code", 400
 
     response = requests.post(
-        "https://idp.pollus.tech/api/auth/tpsso/token",
+        "https://idp.valyd.work/api/auth/tpsso/token",
         json={
             "grant_type": "authorization_code",
             "client_id": "YOUR_CLIENT_ID",
@@ -202,7 +202,7 @@ if (!$code) { http_response_code(400); exit('missing code'); }
 
 $ch = curl_init();
 curl_setopt_array($ch, [
-    CURLOPT_URL => 'https://idp.pollus.tech/api/auth/tpsso/token',
+    CURLOPT_URL => 'https://idp.valyd.work/api/auth/tpsso/token',
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         'grant_type' => 'authorization_code',
@@ -233,13 +233,13 @@ public ResponseEntity<?> callback(@RequestParam String code) {
     );
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    rt.postForEntity("https://idp.pollus.tech/api/auth/tpsso/token",
+    rt.postForEntity("https://idp.valyd.work/api/auth/tpsso/token",
         new HttpEntity<>(body, headers), String.class);
     return ResponseEntity.status(302).header("Location", "/dashboard").build();
 }
 ```
 
-In all raw-HTTP examples, replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your real values (get these from the Developer Portal → your project → Credentials: https://dev.pollus.tech). Never expose `YOUR_CLIENT_SECRET` in client-side code — the token exchange must run on your server.
+In all raw-HTTP examples, replace `YOUR_CLIENT_ID` and `YOUR_CLIENT_SECRET` with your real values (get these from the Developer Portal → your project → Credentials: https://dev.valyd.work). Never expose `YOUR_CLIENT_SECRET` in client-side code — the token exchange must run on your server.
 
 ### Auth-flow decision tree
 
@@ -269,18 +269,18 @@ Token exchange:
     → res.clearCookie("valyd_login"), set your own app session, redirect to /dashboard.
 
 IF you are not using Node / the SDK:
-    → POST https://idp.pollus.tech/api/auth/tpsso/token with JSON
+    → POST https://idp.valyd.work/api/auth/tpsso/token with JSON
       { grant_type: "authorization_code", client_id, client_secret, code }
       and read the token from response.data.access_token.
 ```
 
 ### Verification
-- Confirm the redirect: opening your login route returns HTTP 302 with a `Location` header beginning `https://idp.pollus.tech/auth?client_id=...&redirect_url=...&scope=...`.
+- Confirm the redirect: opening your login route returns HTTP 302 with a `Location` header beginning `https://idp.valyd.work/auth?client_id=...&redirect_url=...&scope=...`.
 - After consenting, confirm your `/callback` route receives a `code` query parameter.
 - Confirm the token exchange succeeds:
 
   ```bash
-  curl -i -X POST https://idp.pollus.tech/api/auth/tpsso/token \
+  curl -i -X POST https://idp.valyd.work/api/auth/tpsso/token \
     -H "Content-Type: application/json" \
     -d '{"grant_type":"authorization_code","client_id":"YOUR_CLIENT_ID","client_secret":"YOUR_CLIENT_SECRET","code":"AUTH_CODE_HERE"}'
   ```
@@ -299,4 +299,4 @@ IF you are not using Node / the SDK:
 
 3. **`redirect_url` mismatch (authorization rejected by Valyd).**
    - Cause: The `redirect_url` sent on the authorization request does not exactly match the URL registered for your application.
-   - Fix: Set `VALYD_REDIRECT_URI` (and the SDK `redirectUri`) to the exact callback URL registered in the Developer Portal (https://dev.pollus.tech), matching scheme, host, and path.
+   - Fix: Set `VALYD_REDIRECT_URI` (and the SDK `redirectUri`) to the exact callback URL registered in the Developer Portal (https://dev.valyd.work), matching scheme, host, and path.

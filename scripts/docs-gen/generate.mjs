@@ -105,14 +105,18 @@ async function main() {
   // So a staging build injected its own correct hosts and then failed its own check. Compare
   // against what this build actually targets rather than hardcoding one domain as dead.
   const targeted = Object.values(TOKENS);
-  for (const domain of ["pollus.tech", "pollus.online", "valyd.id"]) {
+  for (const domain of ["pollus.tech", "pollus.online", "valyd.id", "valyd.work"]) {
     const isThisEnv = targeted.some((h) => String(h).endsWith(domain));
     if (!isThisEnv) await assertAbsent(domain);
   }
 
   // Guardrail: the retired standalone Verify host + its dashboard must never reappear.
   // Verify runs on the IdP, and the dev portal is the one console.
+  // NOTE: this asserts the RETIRED host is absent. It must never be rewritten to the
+  // current host by a domain migration — that inverts the check into "the host we
+  // actually target must not appear", which fails every build.
   await assertAbsent("verify.pollus.tech");
+  await assertAbsent("verify.valyd.work");
   await assertAbsent("/verify/dashboard");
 
   console.log(`docs-gen: wrote ${written} files to public/`);

@@ -1,12 +1,12 @@
-> Source: https://docs.pollus.tech/verify?mode=managed#managed
+> Source: https://docs.valyd.work/verify?mode=managed#managed
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: ManagedSection.tsx
 
 # Account (Managed by Valyd)
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify?mode=managed
-- Credentials / env vars needed: ONE app from the Developer Portal (https://dev.pollus.tech) — it gives you both the OAuth `client_id`/`client_secret` for "Login with Valyd" AND the Verify API key (`X-API-Key`) and `workflow_id`. There is no second console.
+- Source URL: https://docs.valyd.work/verify?mode=managed
+- Credentials / env vars needed: ONE app from the Developer Portal (https://dev.valyd.work) — it gives you both the OAuth `client_id`/`client_secret` for "Login with Valyd" AND the Verify API key (`X-API-Key`) and `workflow_id`. There is no second console.
 - Auth: the end user logs in with Valyd (OAuth2/TPSSO); you pass their `valyd_access_token` when creating a session or calling a reuse/core API
 - Prerequisites: the user has (or creates) a Valyd account
 
@@ -41,11 +41,11 @@ Account ("Managed by Valyd") is one of the two Valyd API types. The other is Non
 
 ## Hosted flow (Account × Hosted)
 
-1. Register your app at the Developer Portal (https://dev.pollus.tech) → `client_id` / `client_secret`, and in the same portal create a Verify project → API key (`vrf_…`, shown once) + `workflow_id`. One console, all credentials.
+1. Register your app at the Developer Portal (https://dev.valyd.work) → `client_id` / `client_secret`, and in the same portal create a Verify project → API key (`vrf_…`, shown once) + `workflow_id`. One console, all credentials.
 2. Log the user in with Valyd (OAuth2/TPSSO), exchange the code → `valyd_access_token` + identity.
 3. If KYC is required and not done, **redirect the user to Valyd** to complete it (raw KYC is stored
    under the user's per-user key; it can't be a plain API write).
-4. Create a session: `POST https://idp.pollus.tech/api/v2/session` with `workflow_id`, `valyd_access_token`,
+4. Create a session: `POST https://idp.valyd.work/api/v2/session` with `workflow_id`, `valyd_access_token`,
    `vendor_data`, and (for redirect) `redirect_url` + `callback`.
 5. Redirect the user to the returned hosted `url`. Reuse skips already-completed steps.
 6. Read the result via the signed webhook and/or `GET /api/v2/session/{id}/decision` — **proofs only**
@@ -67,7 +67,7 @@ The only way to obtain raw account attributes:
 
 ```bash
 # 1) Request specific attributes, sending your X25519 public key
-curl -X POST https://idp.pollus.tech/api/auth/attribute-request \
+curl -X POST https://idp.valyd.work/api/auth/attribute-request \
   -H "Authorization: Bearer $CLIENT_TOKEN" -H "Content-Type: application/json" \
   -d '{ "client_id": "$CLIENT_ID",
         "attributes": ["legal_name","dob","id_verified"],
@@ -75,7 +75,7 @@ curl -X POST https://idp.pollus.tech/api/auth/attribute-request \
 # → { data: { request_id, status: "pending" } }
 
 # 2) The USER approves in their Valyd app. Then:
-curl https://idp.pollus.tech/api/auth/attribute-request/<request_id>/result \
+curl https://idp.valyd.work/api/auth/attribute-request/<request_id>/result \
   -H "Authorization: Bearer $CLIENT_TOKEN"
 # → { data: { status: "approved", sealed_box: "<base64>" } }  # decrypt with your X25519 private key
 ```

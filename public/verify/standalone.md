@@ -1,19 +1,19 @@
-> Source: https://docs.pollus.tech/verify#standalone
+> Source: https://docs.valyd.work/verify#standalone
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: StandaloneSection.tsx
 
 # Core APIs (server-to-server verification)
 
-> **Raw data vs proofs.** Without a Valyd user token these are **Non-account (Fresh)** checks: you did the capture, nothing is retained, and the response contains the **raw** extracted data (document `fields`, `dob`, portrait, OCR). Pass a `valyd_access_token` (or `valyd_id`) and the same endpoints run in **Account (Managed by Valyd)** mode — answering from the user's stored identity and returning **proofs only** (`id_verified`, match + score, license badges, age bands), never raw KYC. Raw account attributes come only from the consent Core API. See [Account (Managed by Valyd)](https://docs.pollus.tech/verify/managed.md).
+> **Raw data vs proofs.** Without a Valyd user token these are **Non-account (Fresh)** checks: you did the capture, nothing is retained, and the response contains the **raw** extracted data (document `fields`, `dob`, portrait, OCR). Pass a `valyd_access_token` (or `valyd_id`) and the same endpoints run in **Account (Managed by Valyd)** mode — answering from the user's stored identity and returning **proofs only** (`id_verified`, match + score, license badges, age bands), never raw KYC. Raw account attributes come only from the consent Core API. See [Account (Managed by Valyd)](https://docs.valyd.work/verify/managed.md).
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#standalone
+- Source URL: https://docs.valyd.work/verify#standalone
 - Credentials / env vars needed: VALYD_API_KEY (App API key — keep server-side, never ship to the browser)
 - Files an integrator edits: server route handler / backend service, .env (for VALYD_API_KEY)
 - Estimated steps: 3 (install SDK or use cURL, set VALYD_API_KEY, call the endpoint)
-- Can complete without human input: NO — you must obtain an App API key from the Valyd Developer Portal (https://dev.pollus.tech) before any call will authenticate.
+- Can complete without human input: NO — you must obtain an App API key from the Valyd Developer Portal (https://dev.valyd.work) before any call will authenticate.
 - Prerequisites:
-  - A Valyd App API key. Pass it as the HTTP header `X-API-Key: <App API key>` on every request. Get this from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+  - A Valyd App API key. Pass it as the HTTP header `X-API-Key: <App API key>` on every request. Get this from the Developer Portal → your project → Credentials: https://dev.valyd.work
   - A server/backend to make the call from (these are server-to-server APIs; never call them from the browser, because the API key would be exposed).
   - (SDK path only) Node.js with the `valyd-verify-sdk` npm package installed.
 
@@ -21,7 +21,7 @@
 
 Direct, synchronous, server-to-server checks. You build your own UI and call these endpoints from your backend. Every request uses the header `X-API-Key: <App API key>` — keep this server-side, never ship it to the browser.
 
-Base URL for every endpoint below: `https://idp.pollus.tech`
+Base URL for every endpoint below: `https://idp.valyd.work`
 
 Every response uses the standard envelope and includes a `check` object:
 
@@ -62,13 +62,13 @@ import { VerifyClient, readImage } from "valyd-verify-sdk";
 
 const verify = new VerifyClient({ apiKey: process.env.VALYD_API_KEY! });
 // keep VALYD_API_KEY on the server — never in browser code
-// get the API key from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+// get the API key from the Developer Portal → your project → Credentials: https://dev.valyd.work
 ```
 
 Set the API key in your environment before running:
 
 ```bash
-export VALYD_API_KEY="<your App API key from https://dev.pollus.tech>"
+export VALYD_API_KEY="<your App API key from https://dev.valyd.work>"
 ```
 
 ---
@@ -78,7 +78,7 @@ export VALYD_API_KEY="<your App API key from https://dev.pollus.tech>"
 OCR + authenticity from a government ID.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/id-verification`
+**Full URL:** `https://idp.valyd.work/api/v2/id-verification`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -88,7 +88,7 @@ OCR + authenticity from a government ID.
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/id-verification \
+curl -X POST https://idp.valyd.work/api/v2/id-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "front_image=@./id_front.jpg" \
   -F "back_image=@./id_back.jpg"
@@ -137,7 +137,7 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);
 Passive liveness check. Passes when `live_score === 1`.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/liveness`
+**Full URL:** `https://idp.valyd.work/api/v2/liveness`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -146,7 +146,7 @@ Passive liveness check. Passes when `live_score === 1`.
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/liveness \
+curl -X POST https://idp.valyd.work/api/v2/liveness \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "image=@./selfie.jpg"
 ```
@@ -178,7 +178,7 @@ const { check } = await verify.standalone.liveness({
 Compare two images. Passes when similarity ≥ threshold (default ~0.95).
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/face-match`
+**Full URL:** `https://idp.valyd.work/api/v2/face-match`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -188,7 +188,7 @@ Compare two images. Passes when similarity ≥ threshold (default ~0.95).
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/face-match \
+curl -X POST https://idp.valyd.work/api/v2/face-match \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "image1=@./id_portrait.jpg" \
   -F "image2=@./selfie.jpg"
@@ -217,7 +217,7 @@ const { check } = await verify.standalone.faceMatch({
 JSON body. Computes age from DOB and verifies the requested age bands (no ZKP).
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/age-verification`
+**Full URL:** `https://idp.valyd.work/api/v2/age-verification`
 **Auth header:** `X-API-Key: <App API key>`
 **Content-Type:** `application/json`
 
@@ -228,7 +228,7 @@ JSON body. Computes age from DOB and verifies the requested age bands (no ZKP).
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/age-verification \
+curl -X POST https://idp.valyd.work/api/v2/age-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "dob": "1995-06-01", "bands": ["is_18_plus","is_21_plus"] }'
@@ -263,7 +263,7 @@ const { check } = await verify.standalone.ageVerification({
 Look up a professional license in the provider registry. Registry lookups can take 10–60s — use a generous timeout.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/credential-verification`
+**Full URL:** `https://idp.valyd.work/api/v2/credential-verification`
 **Auth header:** `X-API-Key: <App API key>`
 **Content-Type:** `application/json`
 
@@ -278,7 +278,7 @@ Look up a professional license in the provider registry. Registry lookups can ta
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/credential-verification \
+curl -X POST https://idp.valyd.work/api/v2/credential-verification \
   -H "X-API-Key: $VALYD_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -327,7 +327,7 @@ const { check } = await verify.standalone.credentialVerification({
 Combined ID verification + liveness + face match + license lookup, in one call. The license is matched against the name OCR'd from the ID — never a client-supplied name — so the holder cannot impersonate someone else's license.
 
 **Method:** POST
-**Full URL:** `https://idp.pollus.tech/api/v2/kyc-credential`
+**Full URL:** `https://idp.valyd.work/api/v2/kyc-credential`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Fields:**
@@ -342,7 +342,7 @@ Combined ID verification + liveness + face match + license lookup, in one call. 
 **Request (cURL):**
 
 ```bash
-curl -X POST https://idp.pollus.tech/api/v2/kyc-credential \
+curl -X POST https://idp.valyd.work/api/v2/kyc-credential \
   -H "X-API-Key: $VALYD_API_KEY" \
   -F "front_image=@./id_front.jpg" \
   -F "selfie=@./selfie.jpg" \
@@ -394,13 +394,13 @@ Use these endpoints to build state and license-type pickers in your UI before ca
 ### GET /api/v2/credential/states — list states
 
 **Method:** GET
-**Full URL:** `https://idp.pollus.tech/api/v2/credential/states`
+**Full URL:** `https://idp.valyd.work/api/v2/credential/states`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Request (cURL):**
 
 ```bash
-curl https://idp.pollus.tech/api/v2/credential/states \
+curl https://idp.valyd.work/api/v2/credential/states \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -422,13 +422,13 @@ const { states } = await verify.credentials.states();
 `{state}` is a 2-letter state code (e.g. `CA`).
 
 **Method:** GET
-**Full URL:** `https://idp.pollus.tech/api/v2/credential/states/{state}/providers`
+**Full URL:** `https://idp.valyd.work/api/v2/credential/states/{state}/providers`
 **Auth header:** `X-API-Key: <App API key>`
 
 **Request (cURL):**
 
 ```bash
-curl https://idp.pollus.tech/api/v2/credential/states/CA/providers \
+curl https://idp.valyd.work/api/v2/credential/states/CA/providers \
   -H "X-API-Key: $VALYD_API_KEY"
 ```
 
@@ -494,7 +494,7 @@ try {
 
 1. **HTTP 401 — invalid or missing API key.**
    - Cause: The `X-API-Key` header is absent or holds a wrong/revoked key.
-   - Fix: Set `X-API-Key: <App API key>` on the request (or `apiKey` in the SDK client). Obtain a valid key from the Developer Portal → your project → Credentials: https://dev.pollus.tech
+   - Fix: Set `X-API-Key: <App API key>` on the request (or `apiKey` in the SDK client). Obtain a valid key from the Developer Portal → your project → Credentials: https://dev.valyd.work
 
 2. **Client timeout on credential / kyc-credential calls.**
    - Cause: Registry lookups can take 10–60 seconds; the default client timeout aborts first.

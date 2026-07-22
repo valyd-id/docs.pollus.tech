@@ -42,7 +42,18 @@ const HOSTED_IDS = [
   "api-demo",
   "api-errors",
 ];
-const STANDALONE_IDS = ["standalone", ...SDK_IDS, "api-standalone", "api-demo", "api-errors"];
+// One anchor per Core API check — keeps the sidebar highlight in sync while reading them.
+const CORE_IDS = [
+  "core-account-vs-fresh",
+  "core-id-verification",
+  "core-liveness",
+  "core-face-match",
+  "core-age-verification",
+  "core-credential-verification",
+  "core-kyc-credential",
+  "core-location",
+];
+const STANDALONE_IDS = ["standalone", ...CORE_IDS, ...SDK_IDS, "api-standalone", "api-demo", "api-errors"];
 const MANAGED_IDS = [
   "managed",
   "managed-overview",

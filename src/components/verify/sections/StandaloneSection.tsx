@@ -231,6 +231,7 @@ curl -X POST ${BASE}/api/v2/id-verification \\
 
     {/* 1. ID Verification */}
     <Endpoint
+      id="core-id-verification"
       method="POST"
       path="/api/v2/id-verification"
       title="ID Verification"
@@ -273,6 +274,7 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);`}
 
     {/* 2. Liveness */}
     <Endpoint
+      id="core-liveness"
       method="POST"
       path="/api/v2/liveness"
       title="Liveness"
@@ -297,6 +299,7 @@ console.log(check.data.fields.full_name, check.data.fields.document_number);`}
 
     {/* 3. Face match */}
     <Endpoint
+      id="core-face-match"
       method="POST"
       path="/api/v2/face-match"
       title="Face Match"
@@ -326,6 +329,7 @@ await standalone.faceMatch({ valydAccessToken, selfie: readImage("./selfie.jpg")
 
     {/* 4. Age */}
     <Endpoint
+      id="core-age-verification"
       method="POST"
       path="/api/v2/age-verification"
       title="Age Verification"
@@ -356,6 +360,7 @@ await standalone.faceMatch({ valydAccessToken, selfie: readImage("./selfie.jpg")
 
     {/* 5. Credential */}
     <Endpoint
+      id="core-credential-verification"
       method="POST"
       path="/api/v2/credential-verification"
       title="Credential Verification"
@@ -400,6 +405,7 @@ await standalone.faceMatch({ valydAccessToken, selfie: readImage("./selfie.jpg")
 
     {/* 6. KYC + Credential */}
     <Endpoint
+      id="core-kyc-credential"
       method="POST"
       path="/api/v2/kyc-credential"
       title="KYC + Credential"

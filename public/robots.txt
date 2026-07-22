@@ -42,6 +42,6 @@ Allow: /
 Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 # Agent-readable documentation
-Sitemap: https://docs.pollus.tech/sitemap.xml
-# LLM index: https://docs.pollus.tech/llms.txt
-# Full corpus: https://docs.pollus.tech/llms-full.txt
+Sitemap: https://docs.valyd.work/sitemap.xml
+# LLM index: https://docs.valyd.work/llms.txt
+# Full corpus: https://docs.valyd.work/llms-full.txt

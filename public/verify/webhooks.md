@@ -1,18 +1,18 @@
-> Source: https://docs.pollus.tech/verify#webhooks
+> Source: https://docs.valyd.work/verify#webhooks
 > Part of: Valyd Verify API documentation — static copy generated for AI agents
 > Generated from repo component: WebhooksSection.tsx
 
 # Webhooks
 
 ## Agent Quick-Start
-- Source URL: https://docs.pollus.tech/verify#webhooks
+- Source URL: https://docs.valyd.work/verify#webhooks
 - Credentials / env vars needed: VALYD_WEBHOOK_SECRET (the webhook signing secret), VALYD_API_KEY (App API key, to fetch the full decision)
 - Files an integrator edits: server route handler (e.g. an Express handler), .env (to store VALYD_WEBHOOK_SECRET and VALYD_API_KEY)
 - Estimated steps: 4
-- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Developer Portal (https://dev.pollus.tech), which is a human/portal action.
+- Can complete without human input: NO — you must obtain the webhook signing secret and register a callback URL in the Valyd Developer Portal (https://dev.valyd.work), which is a human/portal action.
 - Prerequisites:
   - A publicly reachable HTTPS endpoint to receive POST callbacks
-  - A webhook signing secret configured on your App or session (from the Developer Portal: https://dev.pollus.tech)
+  - A webhook signing secret configured on your App or session (from the Developer Portal: https://dev.valyd.work)
   - An App API key to call the decision endpoint
   - Ability to read the raw (unparsed) request body in your web framework
 
@@ -24,12 +24,12 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
 ### Prerequisites
 - A publicly reachable HTTPS URL for your webhook handler.
-- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Developer Portal (https://dev.pollus.tech). Store it as `VALYD_WEBHOOK_SECRET`.
+- A webhook signing secret. Configure the callback URL and obtain the signing secret in the Valyd Developer Portal (https://dev.valyd.work). Store it as `VALYD_WEBHOOK_SECRET`.
 - An App API key stored as `VALYD_API_KEY`, used to fetch the full decision after a webhook arrives.
 
 ### Steps
 
-1. **Register your callback URL.** In the Developer Portal (https://dev.pollus.tech) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
+1. **Register your callback URL.** In the Developer Portal (https://dev.valyd.work) set the app-level callback URL, or pass a per-session callback URL when creating the session. Note the webhook signing secret shown there.
 
    **Expected output:** The console shows your callback URL saved and a signing secret. There is no HTTP response to capture for this step — it is a portal action.
 
@@ -37,8 +37,8 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 
    ```bash
    # .env
-   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://dev.pollus.tech)
-   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://dev.pollus.tech)
+   VALYD_WEBHOOK_SECRET=whsec_...   # the webhook signing secret from the Developer Portal (https://dev.valyd.work)
+   VALYD_API_KEY=...                # your App API key from the Developer Portal (https://dev.valyd.work)
    ```
 
    **Expected output:** Both variables are available to your process via `process.env`.
@@ -91,7 +91,7 @@ Valyd POSTs to your app or session callback URL when a verification session reac
 4. **Fetch the full decision after acknowledging the webhook.** The webhook body is a notification; retrieve the complete extracted data with the decision endpoint using the session id from the event.
 
    ```bash
-   curl https://idp.pollus.tech/api/v2/session/SES_ID/decision \
+   curl https://idp.valyd.work/api/v2/session/SES_ID/decision \
      -H "X-API-Key: $VALYD_API_KEY"
    ```
 
