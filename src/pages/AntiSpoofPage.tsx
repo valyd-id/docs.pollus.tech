@@ -21,16 +21,12 @@ import {
 
 type DemoState = "idle" | "opening" | "waiting" | "human" | "spoof" | "error";
 
-const TERMINAL_OK = new Set(["approved", "verified", "passed", "completed", "human"]);
-const TERMINAL_BAD = new Set(["declined", "failed", "rejected", "spoof", "expired"]);
+// Session status vocabulary (VerificationSession::STATUS_*). Terminal states end the poll.
+const STATUS_APPROVED = "APPROVED";
+const TERMINAL = new Set(["APPROVED", "DECLINED", "ABANDONED", "EXPIRED"]);
 
-function isPass(status?: string, decision?: string): boolean {
-  const d = (decision ?? "").toLowerCase();
-  const s = (status ?? "").toLowerCase();
-  if (TERMINAL_OK.has(d)) return true;
-  if (s === "completed" && !TERMINAL_BAD.has(d)) return true;
-  return false;
-}
+const isTerminal = (status?: string) => !!status && TERMINAL.has(status.toUpperCase());
+const isPass = (status?: string) => (status ?? "").toUpperCase() === STATUS_APPROVED;
 
 function LiveDemo() {
   const [state, setState] = useState<DemoState>("idle");
@@ -58,31 +54,33 @@ function LiveDemo() {
         return;
       }
       const url = json?.data?.url;
-      if (!url) { setState("error"); setDetail("No hosted URL returned."); return; }
+      const sessionId = json?.data?.session_id;
+      if (!url || !sessionId) { setState("error"); setDetail("No hosted session returned."); return; }
 
       // Open the hosted liveness capture in a new tab.
       window.open(url, "_blank", "noopener,noreferrer");
       setState("waiting");
 
-      // Poll the session list (app-key auth) filtered by our unique vendor_data.
+      // Poll this session's decision (app-key auth) until it reaches a terminal state.
       let ticks = 0;
       pollRef.current = window.setInterval(async () => {
         ticks += 1;
         if (ticks > 150) { stopPolling(); setState("error"); setDetail("Timed out waiting for a result."); return; }
         try {
           const p = await fetch(
-            `${ANTISPOOF_IDP_BASE_URL}/api/v2/session?vendor_data=${encodeURIComponent(vendorData)}&limit=1`,
+            `${ANTISPOOF_IDP_BASE_URL}/api/v2/session/${encodeURIComponent(sessionId)}/decision`,
             { headers: { "X-API-Key": ANTISPOOF_APP_KEY } },
           );
           const pj = await p.json().catch(() => ({}));
-          const row = Array.isArray(pj?.data) ? pj.data[0] : (pj?.data?.[0] ?? pj?.data);
-          if (!row) return;
-          const status = row.status as string | undefined;
-          const decision = (typeof row.decision === "string" ? row.decision : row?.decision?.status) as string | undefined;
-          if (status && (status === "completed" || TERMINAL_BAD.has(status.toLowerCase()) || TERMINAL_OK.has((decision ?? "").toLowerCase()) || TERMINAL_BAD.has((decision ?? "").toLowerCase()))) {
-            stopPolling();
-            if (isPass(status, decision)) { setState("human"); setDetail("Live human confirmed — liveness passed."); }
-            else { setState("spoof"); setDetail(`Not verified (status: ${status}${decision ? `, decision: ${decision}` : ""}).`); }
+          const status: string | undefined = pj?.data?.status;
+          if (!isTerminal(status)) return;
+          stopPolling();
+          if (isPass(status)) {
+            setState("human");
+            setDetail("Live human confirmed — liveness passed.");
+          } else {
+            setState("spoof");
+            setDetail(`Not verified (status: ${status}).`);
           }
         } catch { /* transient — keep polling */ }
       }, 2000);
@@ -208,17 +206,21 @@ app.get("/verify-face", async (_req, res) => {
     body: JSON.stringify({ workflow_id: WORKFLOW_ID, vendor_data: "demo-" + Date.now() }),
   });
   const { data } = await r.json();
-  res.json({ open: data.url });   // open this URL in the browser for the capture
+  // data = { session_id, status, url, session_token, features, expires_at }
+  res.json({ sessionId: data.session_id, open: data.url });  // open this URL for the capture
 });
 
-// 4) Poll the result once the user returns (app-key auth).
-app.get("/result/:vendorData", async (req, res) => {
-  const r = await fetch(IDP + "/api/v2/session?vendor_data=" + req.params.vendorData + "&limit=1", {
+// 4) Poll the decision until it reaches a terminal state.
+//    status ∈ NOT_STARTED | IN_PROGRESS | IN_REVIEW | APPROVED | DECLINED | ABANDONED | EXPIRED
+app.get("/result/:sessionId", async (req, res) => {
+  const r = await fetch(IDP + "/api/v2/session/" + req.params.sessionId + "/decision", {
     headers: { "X-API-Key": APP_KEY },
   });
   const { data } = await r.json();
-  const s = data?.[0];
-  res.json({ status: s?.status, decision: s?.decision });   // decision → human / not
+  res.json({
+    status: data.status,
+    human: data.status === "APPROVED",   // APPROVED → a real, live person
+  });
 });
 
 app.listen(PORT, () => console.log("Anti-spoof demo on http://localhost:" + PORT + "/login"));`;
