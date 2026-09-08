@@ -69,10 +69,17 @@ In the Developer Portal, the org owner/admin sees the full roster with each memb
 **Organization → Members** tab, and can re-send invites, deactivate/reactivate, or **Remove** a
 member outright (permanent, same as the API's `permanent: true`).
 
-## Account recovery — coming soon
+## Account recovery
 
-If a member loses access to their Valyd identity (new phone, device lost), an org-assisted
-**recovery** flow is on the roadmap: the admin triggers it, the member re-verifies, access is
-restored — without deleting the seat or its history. Until it ships, the working path is
-deactivate → re-invite. If recovery matters for your rollout, tell us:
-[javi@valyd.id](mailto:javi@valyd.id).
+If a member is locked out of **your app** — they forgot the email/password they sign in with — you
+don't delete the seat or its history. You start an **identity-backed recovery**: Valyd re-verifies
+the person (liveness + face match against their enrolled face, and a document/KYC check on the
+`with_id` variant) and returns a **pass/fail** to your Verify webhook. On a pass, **your** app lets
+them set a new password — Valyd stores and sets nothing.
+
+```ts
+await client.startAccountRecovery({ email: "jane@acme.com", variant: "with_id", deliverEmail: true });
+```
+
+See **[Account recovery](/docs/organizations/recovery)** for the full flow, the
+`startAccountRecovery` / `bindMember` functions, their responses, and the webhook contract.
