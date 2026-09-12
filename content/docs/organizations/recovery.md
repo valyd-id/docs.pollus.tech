@@ -104,7 +104,7 @@ returns `{ eligible, recoveryUrl, emailed, sessionId, status, expiresAt }`.
 | Field | Meaning |
 |---|---|
 | `eligible` | `false` when no claimed, active, face-enrolled member matched — no session was started. |
-| `recoveryUrl` | The hosted verification URL (null when not eligible). |
+| `recoveryUrl` | URL of the verification page where the member completes recovery (null when not eligible). |
 | `emailed` | `true` when `deliverEmail` was set and Valyd emailed the member the link. |
 | `sessionId` | The Verify session id — correlate it to the webhook. |
 | `status` | Initial session status (`NOT_STARTED`). |
