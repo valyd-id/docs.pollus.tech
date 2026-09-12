@@ -45,7 +45,7 @@ providers: [
 | Token endpoint | `https://idp.valyd.work/api/auth/oidc/token` |
 | Userinfo endpoint | `https://idp.valyd.work/api/auth/oidc/userinfo` |
 | JWKS URI | `https://idp.valyd.work/api/auth/oidc/jwks.json` |
-| Scopes | `openid profile` (add `email`, `verifications`, `doctor_license` as needed) |
+| Scopes | `openid profile` (add `email`, `phone`, `verifications`, `doctor_license` as needed) |
 | Auth method | `client_secret_post` or `client_secret_basic` |
 | ID token algorithm | `RS256` |
 | PKCE | S256 supported |
@@ -56,7 +56,8 @@ providers: [
 | --- | --- |
 | Username / unique key | `sub` (stable `valyd_` id — use this as the primary key) |
 | Display username | `preferred_username` |
-| Email | `email` |
+| Email | `email` (requires the `email` scope) |
+| Phone | `phone_number` (requires the `phone` scope) |
 | Full name | `name` |
 | First / last name | `first_name` / `last_name` |
 | Identity verified | `id_verified` |

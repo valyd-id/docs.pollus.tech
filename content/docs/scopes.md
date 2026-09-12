@@ -10,6 +10,8 @@ language:
 | Scope | Required | Description | Grants access to |
 | --- | --- | --- | --- |
 | `profile` | Yes (Mandatory) | User profile: legal name, username, country, and verification status (no photo is shared) | `/userinfo` |
+| `email` | Optional | User's email address (a private relay address, unless your app is a trusted first party) | `/userinfo` |
+| `phone` | Optional | User's phone number (a private relay number, unless your app is a trusted first party) | `/userinfo` |
 | `verifications` | Optional | Identity verification status: human (liveness) check, ID/KYC verification, and linked professional licenses | `/verifications` |
 | `doctor_license` | Optional | Medical/nursing license details for verified healthcare practitioners | Doctor/nursing license endpoints |
 | `zkp` | Optional | Zero-Knowledge Proof age verification data | ZKP-related endpoints |
@@ -60,7 +62,6 @@ User profile: legal name, username, country, and verification status. No photo i
 | Field | Description |
 | --- | --- |
 | `sub` | Unique user identifier |
-| `email` | User's email address |
 | `first_name` | User's first name |
 | `last_name` | User's last name |
 | `full_name` | User's full name |
@@ -77,6 +78,68 @@ User profile: legal name, username, country, and verification status. No photo i
   "error": {
     "code": "insufficient_scope",
     "message": "The request requires the profile scope"
+  }
+}
+```
+
+---
+
+## `email` scope (Optional)
+
+The user's email address. By default this is a **private relay address** (the user's real email stays
+hidden); trusted first-party apps receive the real address. Request `email` as its own scope — it is
+**not** part of `profile`.
+
+### Grants access to
+
+- `/userinfo` (and the ID token)
+
+### Response fields
+
+| Field | Description |
+| --- | --- |
+| `email` | The user's email address (relay address unless your app is a trusted first party) |
+| `email_verified` | Whether the email/identity is verified (boolean) |
+
+### Missing scope error (403 Forbidden)
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "insufficient_scope",
+    "message": "The request requires the email scope"
+  }
+}
+```
+
+---
+
+## `phone` scope (Optional)
+
+The user's phone number. By default this is a **private relay number** (the user's real number stays
+hidden); trusted first-party apps receive the real number. Request `phone` as its own scope — it is
+**not** part of `profile`.
+
+### Grants access to
+
+- `/userinfo` (and the ID token)
+
+### Response fields
+
+| Field | Description |
+| --- | --- |
+| `phone_number` | The user's phone number (relay number unless your app is a trusted first party) |
+| `phone_number_verified` | Always `false` — Valyd does not verify phone numbers |
+
+### Missing scope error (403 Forbidden)
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "insufficient_scope",
+    "message": "The request requires the phone scope"
   }
 }
 ```
